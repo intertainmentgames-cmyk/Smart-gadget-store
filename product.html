@@ -169,7 +169,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             localStorage.setItem('user_chat_id', userUUID);
         }
 
-        // Live status update function
         function sendLiveSignal(productName = "Product Page") {
             database.ref(`live_status/${userUUID}`).set({
                 currentPage: productName,
