@@ -1,25 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- TikTok Pixel Code Start -->
 <script>
 !function (w, d, t) {
   w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
 var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
 ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
 
-
   ttq.load('D8KE8PRC77UA5Q9SJTBG');
   ttq.page();
 }(window, document, 'ttq');
 </script>
-<!-- TikTok Pixel Code End -->
-    <meta charset="UTF-8">
-    <script
-      src="https://js.sentry-cdn.com/e8b693c77ef64ddf7ea2d61e0cfcc1bd.min.js"
-      crossorigin="anonymous"
-    ></script>
-
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Product Details | Waleed Store</title>
     
@@ -41,7 +33,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
         .sidebar { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 80%; max-width: 300px; background: white; height: 100vh; position: fixed; left: -110%; top: 0; z-index: 6000; }
         .sidebar.active { left: 0; }
-        .sidebar-header { background: #2563eb; color: white; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 18px; }
+        /* Header Match: Dark Yellow theme implementation */
+        .sidebar-header { background: #d97706; color: white; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 18px; }
         
         .cart-drawer { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 85%; max-width: 350px; background: white; height: 100dvh; position: fixed; right: -110%; top: 0; z-index: 6000; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
         .cart-drawer.active { right: 0; }
@@ -59,11 +52,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         .slide { flex: 0 0 100%; width: 100%; scroll-snap-align: start; scroll-snap-stop: always; display: flex; align-items: center; justify-content: center; position: relative; }
         .slide img { max-height: 100%; max-width: 100%; object-fit: contain; }
         
-        /* Thumbnails style aur unke active states */
+        /* Thumbnails style with dark yellow accent colors */
         .thumb-img, .thumb-video { width: 55px; height: 55px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: border-color 0.2s ease; }
         .thumb-img { object-fit: cover; }
-        .thumb-video { background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #2563eb; border: 2px dashed #cbd5e1; }
-        .thumb-img.active, .thumb-video.active { border-color: #2563eb; border-style: solid; background: #dbeafe; }
+        .thumb-video { background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #d97706; border: 2px dashed #cbd5e1; }
+        .thumb-img.active, .thumb-video.active { border-color: #d97706; border-style: solid; background: #fef3c7; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -74,18 +67,18 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <nav class="main-nav">
         <div class="nav-grid">
             <div class="flex justify-start">
-                <button onclick="toggleSidebar()" class="text-blue-600 text-xl p-2">
+                <button onclick="toggleSidebar()" class="text-slate-900 text-xl p-2">
                     <i class="fa-solid fa-bars-staggered"></i>
                 </button>
             </div>
             <div class="flex flex-col items-center">
                 <img src="https://i.ibb.co/rRbDwhRk/42980-removebg-preview.png" class="brand-icon">
-                <div class="brand-text">WALEED <span class="text-blue-600">STORE</span></div>
+                <div class="brand-text">WALEED <span class="text-amber-500">STORE</span></div>
             </div>
             <div class="flex justify-end">
                 <div class="relative p-2 cursor-pointer" onclick="toggleCart()">
                     <i class="fa-solid fa-cart-shopping text-xl text-slate-800"></i>
-                    <span id="cart-count" class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border border-white font-bold">0</span>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-amber-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border border-white font-bold">0</span>
                 </div>
             </div>
         </div>
@@ -98,10 +91,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         </div>
         <nav class="p-4">
             <a href="https://waleedstore.me" class="flex items-center gap-4 p-4 text-slate-700 font-semibold border-b border-slate-50">
-                <i class="fa-solid fa-house text-blue-600 w-5"></i> Home
+                <i class="fa-solid fa-house text-amber-500 w-5"></i> Home
             </a>
             <a href="https://waleedstore.me/#contact-section" class="flex items-center gap-4 p-4 text-slate-700 font-semibold border-b border-slate-50">
-                <i class="fa-solid fa-envelope text-blue-600 w-5"></i> Contact Us
+                <i class="fa-solid fa-envelope text-amber-500 w-5"></i> Contact Us
             </a>
         </nav>
     </div>
@@ -117,7 +110,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         <div class="cart-footer">
             <div class="flex justify-between items-center mb-4">
                 <span class="text-slate-500 font-bold uppercase text-xs tracking-widest">Total</span>
-                <span id="cartTotal" class="text-xl font-black text-blue-600">Rs. 0</span>
+                <span id="cartTotal" class="text-xl font-black text-amber-500">Rs. 0</span>
             </div>
             <button onclick="window.location.href='checkout.html'" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest">Check Out</button>
         </div>
@@ -135,7 +128,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             <h1 id="pName" class="text-lg font-bold text-slate-900 mb-1">Loading...</h1>
             <div class="flex items-center gap-3 mb-4">
                 <span id="pOldPrice" class="text-sm text-slate-400 line-through"></span>
-                <span id="pPrice" class="text-xl font-black text-blue-600"></span>
+                <span id="pPrice" class="text-xl font-black text-slate-900"></span>
             </div>
 
             <div id="variationsSection" class="mb-6 hidden">
@@ -145,22 +138,17 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
             <div class="pt-5 border-t border-slate-100">
                 <h3 class="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] mb-3">Product Description</h3>
-                <p id="pDesc" class="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap"></p>
+                <p id="pDesc" class="text-slate-700 text-[15px] leading-relaxed whitespace-pre-wrap"></p>
             </div>
         </div>
     </div>
 
     <div class="fixed bottom-0 left-0 w-full p-4 bg-white/95 backdrop-blur-md border-t border-slate-100 flex gap-3 z-40">
         <button onclick="handleAddToCart()" class="flex-1 bg-slate-100 text-slate-900 py-4 rounded-xl font-bold text-sm">Add to Cart</button>
-        <button onclick="handleBuyNow()" class="flex-1 bg-blue-600 text-white py-4 rounded-xl font-bold text-sm shadow-lg shadow-blue-200">Buy Now</button>
+        <button onclick="handleBuyNow()" class="flex-1 bg-amber-500 text-white py-4 rounded-xl font-bold text-sm shadow-lg shadow-amber-100">Buy Now</button>
     </div>
 
     <script>
-        function triggerSentryTest() {
-          console.log("Triggering Sentry Test for Product Page...");
-          throw new Error("Waleed Store Sentry Test Error - Product Page");
-        }
-
         const firebaseConfig = {
             apiKey: "AIzaSyBYrmozXYLHxCmLsc8FX6aN6xSvORxXypo",
             authDomain: "waleed-store-f7369.firebaseapp.com",
@@ -174,8 +162,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         const database = firebase.database();
 
         let currentProduct = null; 
-        let selectedVariationName = ""; // Active variation store karne k liye
-        let selectedVariationPrice = ""; // DYNAMIC CHANGE: Active variation ki price store karne ke liye
+        let selectedVariationName = ""; 
+        let selectedVariationPrice = ""; 
 
         // =================== LIVE TRAFFIC BACKGROUND ENGINE ===================
         let userUUID = localStorage.getItem('user_chat_id');
@@ -191,7 +179,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             });
         }
 
-        // Window exit handle track log cleaner
         window.addEventListener('beforeunload', function () {
             database.ref(`live_status/${userUUID}`).remove();
         });
@@ -218,11 +205,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             document.getElementById('overlay').classList.remove('active');
         }
 
-        // AKHRI ILAJ: Paka YouTube ID Extractor 
         function getYouTubeEmbedUrl(url) {
             if (!url) return null;
             
-            // Har tarah ke youtube link format ko support karne ke liye logic
             let videoId = null;
             try {
                 if (url.includes('youtu.be/')) {
@@ -238,7 +223,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 console.error("Error parsing YouTube URL", e);
             }
 
-            // Agar 11 characters ki accurate ID mil jaye to embed url return karo
             if (videoId && videoId.trim().length === 11) {
                 return "https://www.youtube.com/embed/" + videoId.trim() + "?rel=0&modestbranding=1";
             }
@@ -258,7 +242,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     if(p.originalPrice) document.getElementById('pOldPrice').innerText = 'Rs. ' + p.originalPrice;
                     document.getElementById('pDesc').innerText = p.desc;
                     
-                    // Live status mein product ka actual name bhej rahe hain
                     sendLiveSignal(`Viewing: ${p.name}`);
                     setInterval(() => { sendLiveSignal(`Viewing: ${p.name}`); }, 25000);
 
@@ -271,8 +254,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     const thumbContainer = document.getElementById('thumbContainer');
 
                     let slideCount = 0;
-
-                    // TABDEELI 2: Pehle hum aik temporary array banayenge jisme sari main images aur variations ki alag images jama ho sakein
                     let totalImagesToLoad = [];
                     const mainImages = p.images || [p.image];
                     
@@ -282,11 +263,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         }
                     });
 
-                    // Variations ki alag images ko load array mein append karna takay woh gallery aur thumb me dikhein
                     if (p.variations && p.variations.length > 0) {
                         p.variations.forEach((v) => {
                             if (v.image && v.image.trim() !== '') {
-                                // Duplicate check takay agar wahi image pehle se ho to dubara add na ho
                                 if (!totalImagesToLoad.includes(v.image)) {
                                     totalImagesToLoad.push(v.image);
                                 }
@@ -294,7 +273,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         });
                     }
 
-                    // Saari jama shuda images ko loop chala kar slider aur thumbnails track me render karna
                     totalImagesToLoad.forEach((img) => {
                         const slide = document.createElement('div');
                         slide.className = 'slide';
@@ -313,13 +291,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         slideCount++;
                     });
 
-                    // 2. Agar YouTube Video link mojood hai to usko Aakhri Slide banao
                     if (p.video && p.video.trim() !== '') {
                         const embedUrl = getYouTubeEmbedUrl(p.video);
                         if (embedUrl) {
                             const videoIndex = slideCount;
 
-                            // Create Full Size Video Slide
                             const videoSlide = document.createElement('div');
                             videoSlide.className = 'slide bg-black';
                             videoSlide.innerHTML = `
@@ -328,7 +304,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                                 </div>`;
                             slider.appendChild(videoSlide);
 
-                            // Create Video Thumbnail Button
                             const videoThumb = document.createElement('div');
                             videoThumb.className = 'thumb-video thumb-item';
                             videoThumb.innerHTML = `<i class="fa-solid fa-play text-lg"></i>`;
@@ -339,7 +314,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         }
                     }
 
-                    // --- VARIATIONS LOGIC CHANGER ENGINE ---
                     if (p.variations && p.variations.length > 0) {
                         document.getElementById('variationsSection').classList.remove('hidden');
                         const varContainer = document.getElementById('variationsContainer');
@@ -347,9 +321,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         p.variations.forEach((v, index) => {
                             const btn = document.createElement('button');
                             btn.innerText = v.name;
-                            btn.className = `var-btn px-4 py-2 text-xs font-semibold rounded-lg border transition-all ${index === 0 ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-slate-200 text-slate-700 bg-white'}`;
+                            btn.className = `var-btn px-4 py-2 text-xs font-semibold rounded-lg border transition-all ${index === 0 ? 'border-amber-500 bg-amber-50 text-amber-600' : 'border-slate-200 text-slate-700 bg-white'}`;
                             
-                            // DYNAMIC CHANGE: Default price load time par set karna agar variation database mein price rakhta hai
                             if(index === 0) {
                                 selectedVariationName = v.name;
                                 if (v.price && v.price.trim() !== '') {
@@ -359,17 +332,15 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                             }
 
                             btn.onclick = () => {
-                                // Buttons ka active border style change karne k liye
                                 document.querySelectorAll('.var-btn').forEach(b => {
-                                    b.classList.remove('border-blue-600', 'bg-blue-50', 'text-blue-600');
+                                    b.classList.remove('border-amber-500', 'bg-amber-50', 'text-amber-600');
                                     b.classList.add('border-slate-200', 'text-slate-700', 'bg-white');
                                 });
                                 btn.classList.remove('border-slate-200', 'text-slate-700', 'bg-white');
-                                btn.classList.add('border-blue-600', 'bg-blue-50', 'text-blue-600');
+                                btn.classList.add('border-amber-500', 'bg-amber-50', 'text-amber-600');
                                 
                                 selectedVariationName = v.name;
 
-                                // DYNAMIC CHANGE: Button click par page ki Price change karna
                                 if (v.price && v.price.trim() !== '') {
                                     selectedVariationPrice = v.price;
                                     document.getElementById('pPrice').innerText = 'Rs. ' + v.price;
@@ -378,7 +349,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                                     document.getElementById('pPrice').innerText = 'Rs. ' + p.price;
                                 }
 
-                                // Slider ko specific variation index par swipe karne ka dynamic logic
                                 if (v.image && v.image.trim() !== '') {
                                     const matchedIndex = totalImagesToLoad.indexOf(v.image);
                                     if (matchedIndex !== -1) {
@@ -392,7 +362,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         });
                     }
 
-                    // Scroll hone par active indicator blue box shifting smooth control
                     let isScrolling;
                     slider.addEventListener('scroll', () => {
                         window.clearTimeout(isScrolling);
@@ -431,8 +400,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         <img src="${item.img}" class="w-14 h-14 rounded-lg object-cover bg-white border">
                         <div class="flex-1 min-w-0">
                             <h4 class="text-xs font-bold text-slate-800 truncate">${item.name}</h4>
-                            <p class="text-blue-600 font-black text-sm">${item.price}</p>
-                            ${item.variation ? `<p class="text-blue-500 font-medium">Option: ${item.variation}</p>` : ''}
+                            <p class="text-amber-600 font-black text-sm">${item.price}</p>
+                            ${item.variation ? `<p class="text-amber-500 font-medium">Option: ${item.variation}</p>` : ''}
                             <p class="text-[10px] text-slate-400">Qty: ${item.quantity || 1}</p>
                         </div>
                         <button onclick="removeFromCart(${index})" class="text-slate-300 hover:text-red-500"><i class="fa-solid fa-trash-can text-sm"></i></button>
@@ -453,8 +422,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             if(!currentProduct) return;
             
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            
-            // DYNAMIC CHANGE: Agar koi variation select hai aur uski apni customized price hai, toh cart mein wahi specialized price save ho.
             let finalPrice = (selectedVariationPrice && selectedVariationPrice.trim() !== '') ? 'Rs. ' + selectedVariationPrice : currentProduct.price;
 
             cart.push({ 
@@ -463,7 +430,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 img: (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : (currentProduct.image || ''),
                 deliveryCharges: currentProduct.delivery || 0,
                 codFee: currentProduct.cod_fee || 0,
-                variation: selectedVariationName, // Cart me select ki hui variation save ho rahi hai
+                variation: selectedVariationName,
                 quantity: 1
             });
             
