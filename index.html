@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-    <script
-      src="https://js.sentry-cdn.com/e8b693c77ef64ddf7ea2d61e0cfcc1bd.min.js"
-      crossorigin="anonymous"
-    ></script>
-
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Waleed Store | Premium Quality</title>
+    <title>Smart Gadget | Premium Quality</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -28,14 +23,11 @@
         });
       }
 
-      // Browser default install prompt listener
       let deferredPrompt;
       window.addEventListener('beforeinstallprompt', (e) => {
-        // Yeh browser ke native banner ko trigger karne ke liye save kar leta hai
         deferredPrompt = e;
       });
 
-      // Page load hote hi bina kisi localStorage check ke banner show karne ki logic
       window.addEventListener('load', () => {
         const customBanner = document.getElementById('pwa-custom-banner');
         if (customBanner) {
@@ -49,13 +41,12 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         html, body { max-width: 100%; overflow-x: hidden; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
         .glass { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); }
-        .hero-bg { background: radial-gradient(circle at top right, #1e3a8a, #020617); position: relative; }
+        
+        /* NEW CUSTOM YELLOW/ORANGE GRADIENT ACCORDING TO THE SCREENSHOT */
+        .hero-bg { background: radial-gradient(circle at top right, #ffb01c, #9c6200, #020617); position: relative; }
+        
         .fixed-wa { position: fixed; bottom: 20px; right: 15px; z-index: 9999; background-color: #25D366; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(37,211,102,0.3); animation: floating 3s ease-in-out infinite; }
         @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        
-        /* Floating animation for Sell With Us button */
-        .btn-float { animation: btnFloating 3s ease-in-out infinite; }
-        @keyframes btnFloating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
 
         #side-cart, #side-menu { position: fixed; top: 0; height: 100%; background: white; z-index: 10000; transition: 0.4s ease-in-out; box-shadow: 0 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         #side-cart { right: -100%; width: 85%; max-width: 400px; }
@@ -68,15 +59,15 @@
 
         #chat-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 20000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
         #chat-modal.active { display: flex; }
-        .chat-bubble-admin { background: #eff6ff; color: #1e3a8a; align-self: flex-start; border-radius: 0 15px 15px 15px; border: 1px solid #dbeafe; }
-        .chat-bubble-user { background: #2563eb; color: white; align-self: flex-end; border-radius: 15px 15px 0 15px; }
+        .chat-bubble-admin { background: #fffbeb; color: #9c6200; align-self: flex-start; border-radius: 0 15px 15px 15px; border: 1px solid #fef3c7; }
+        .chat-bubble-user { background: #ffb01c; color: #0f172a; font-weight: 600; align-self: flex-end; border-radius: 15px 15px 0 15px; }
 
         .chat-input-container { padding: 12px; border-top: 1px solid #eee; background: white; display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 8px; align-items: center; width: 100%; overflow: hidden; }
         #userReplyInput { flex: 1 !important; min-width: 0; }
 
         .nav-btn { width: 100%; padding: 15px; text-align: left; font-weight: 600; border-bottom: 1px solid #f1f5f9; transition: all 0.3s; color: #1e293b; }
-        .nav-btn i { color: #2563eb !important; }
-        .nav-btn:active { background: #f8fafc; color: #2563eb; }
+        .nav-btn i { color: #ffb01c !important; }
+        .nav-btn:active { background: #f8fafc; color: #ffb01c; }
 
         .slider-container { width: 100%; position: relative; border-radius: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.4); aspect-ratio: 1/1; background: #020617; overflow: hidden; cursor: pointer; }
         .slider-wrapper { position: relative; width: 100%; height: 100%; }
@@ -85,22 +76,22 @@
 
         .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
         .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.4s ease; cursor: default; }
-        .dot.active { background: #3b82f6; width: 24px; border-radius: 10px; }
+        .dot.active { background: #ffb01c; width: 24px; border-radius: 10px; }
 
         .badge-box { background: white; padding: 12px 2px; border-radius: 1rem; border: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .badge-box i { font-size: 1.3rem; margin-bottom: 4px; color: #2563eb; } 
+        .badge-box i { font-size: 1.3rem; margin-bottom: 4px; color: #ffb01c; } 
         .badge-box h4 { font-size: 9px; font-weight: 800; color: #0f172a; margin-bottom: 1px; text-transform: uppercase; }
         .badge-box span { font-size: 7px; font-weight: 700; color: #64748b; text-transform: uppercase; }
 
         .product-card { background: white; border-radius: 1.2rem; border: 1px solid #f1f5f9; transition: all 0.3s ease; overflow: hidden; display: flex; flex-direction: column; }
-        .add-to-cart-btn { background: #1e3a8a; color: white; width: 100%; padding: 10px; border-radius: 0.8rem; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-top: 8px; cursor: pointer; }
+        .add-to-cart-btn { background: #ffb01c; color: #0f172a; width: 100%; padding: 10px; border-radius: 0.8rem; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 8px; cursor: pointer; }
         
-        .premium-text { background: linear-gradient(to right, #60a5fa, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+        .premium-text { background: linear-gradient(to right, #ffb01c, #ffe082, #ffb01c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
 
         .brand-logo { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; gap: 1px; }
         .brand-icon { width: 46px; height: auto; display: block; margin-bottom: 2px; } 
         .brand-name { font-size: 11px; font-weight: 900; line-height: 1; display: flex; align-items: center; letter-spacing: -0.2px; white-space: nowrap; }
-        .brand-name span.text-blue-600 { margin-left: 2px !important; }
+        .brand-name span.text-custom-yellow { margin-left: 2px !important; color: #ffb01c; }
 
         .qty-btn { background: #f1f5f9; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px; font-weight: bold; }
         .qty-input { width: 25px; text-align: center; font-size: 12px; font-weight: 700; }
@@ -121,7 +112,6 @@
         .scrolling-content { display: inline-block; white-space: nowrap; padding-right: 50px; animation: infinite-scroll 12s linear infinite; }
         @keyframes infinite-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-        /* --- Custom Chrome-Style Install PWA Banner --- */
         #pwa-custom-banner {
             display: none;
             position: absolute;
@@ -130,7 +120,7 @@
             background: #0f172a;
             color: white;
             z-index: 6000;
-            border-bottom: 2px solid #1e3a8a;
+            border-bottom: 2px solid #ffb01c;
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
             touch-action: translateY;
         }
@@ -144,17 +134,15 @@
                 <button onclick="dismissPWABanner()" class="text-slate-400 hover:text-white p-1 text-sm active:scale-75 transition">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
-                <!-- FIXED LOGO BOX: Added overflow-hidden to handle the perfect rounded curve -->
                 <div class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center border border-white/10 overflow-hidden">
-                    <!-- FIXED LOGO IMAGE: Changed to w-full h-full object-cover to eliminate side spaces and fit perfectly -->
                     <img src="https://i.ibb.co/hxWnL5QM/file-0000000016bc7246b7187faccdc83f85.png" alt="App Icon" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h4 class="text-xs font-bold tracking-wide text-white uppercase">Waleed Store</h4>
-                    <p class="text-[9px] text-slate-400">Fast & Premium Shopping App</p>
+                    <h4 class="text-xs font-bold tracking-wide text-white uppercase">Smart Gadget</h4>
+                    <p class="text-[9px] text-slate-400">Fast & Premium Tech Store</p>
                 </div>
             </div>
-            <button id="pwa-install-action" class="bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-extrabold uppercase px-4 py-2 rounded-lg shadow-md active:scale-95 transition">
+            <button id="pwa-install-action" class="bg-[#ffb01c] text-slate-900 text-[10px] font-extrabold uppercase px-4 py-2 rounded-lg shadow-md active:scale-95 transition">
                 Install
             </button>
         </div>
@@ -166,12 +154,12 @@
 
     <div id="chat-modal">
         <div class="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[70vh]">
-            <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
+            <div class="bg-[#ffb01c] p-4 text-slate-900 flex justify-between items-center">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-headset text-xl"></i>
                     <div>
-                        <h3 class="font-bold text-sm">Store Support</h3>
-                        <p class="text-[10px] opacity-80">Online | We're here to help</p>
+                        <h3 class="font-bold text-sm text-slate-900">Store Support</h3>
+                        <p class="text-[10px] text-slate-800 font-semibold">Online | We're here to help</p>
                     </div>
                 </div>
                 <button onclick="closeChat()"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -179,7 +167,7 @@
             <div id="chat-messages" class="flex-1 p-4 overflow-y-auto flex flex-col gap-3 bg-slate-50"></div>
             <div class="chat-input-container">
                 <input type="text" id="userReplyInput" class="flex-1 bg-slate-100 border-none p-3 rounded-xl outline-none text-xs" placeholder="Write a reply...">
-                <button onclick="sendReplyBack()" class="bg-blue-600 text-white p-3 rounded-xl min-w-[50px] flex-shrink-0 flex items-center justify-center active:scale-95 transition">
+                <button onclick="sendReplyBack()" class="bg-[#ffb01c] text-slate-900 p-3 rounded-xl min-w-[50px] flex-shrink-0 flex items-center justify-center active:scale-95 transition">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
@@ -187,7 +175,7 @@
     </div>
 
     <div id="side-menu">
-        <div class="p-6 border-b flex justify-between items-center bg-[#2563eb] text-white">
+        <div class="p-6 border-b flex justify-between items-center bg-[#ffb01c] text-slate-900">
             <h2 class="font-bold text-lg tracking-tight">Menu</h2>
             <button onclick="closeAllDrawers()"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
@@ -206,7 +194,7 @@
         <div class="p-4 border-t bg-slate-50">
             <div class="flex justify-between items-center mb-4">
                 <span class="text-slate-500 font-semibold">Total:</span>
-                <span id="cart-total" class="font-bold text-blue-600">Rs. 0</span>
+                <span id="cart-total" class="font-bold text-[#ffb01c]">Rs. 0</span>
             </div>
             <button onclick="window.location.href='checkout.html'" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold uppercase tracking-widest active:scale-95 transition">Check Out</button>
         </div>
@@ -220,51 +208,41 @@
         <div class="container mx-auto grid grid-cols-3 items-center">
             <div class="flex justify-start">
                 <button onclick="toggleMenu()" class="p-2">
-                    <i class="fa-solid fa-bars-staggered text-xl text-blue-600"></i>
+                    <i class="fa-solid fa-bars-staggered text-xl text-[#ffb01c]"></i>
                 </button>
             </div>
             <div class="flex justify-center">
                 <a href="#" class="brand-logo">
-                    <!-- UNTOUCHED BRAND LOGO AS ORDERED -->
-                    <img src="https://i.ibb.co/rRbDwhRk/42980-removebg-preview.png" alt="Waleed Store Logo" class="brand-icon">
+                    <img src="https://i.ibb.co/rRbDwhRk/42980-removebg-preview.png" alt="Logo" class="brand-icon">
                     <div class="brand-name">
-                        <span class="text-slate-900 uppercase">Waleed</span>
-                        <span class="text-blue-600 ml-1 uppercase">Store</span>
+                        <span class="text-slate-900 uppercase">Smart</span>
+                        <span class="text-custom-yellow ml-1 uppercase">Gadget</span>
                     </div>
                 </a>
             </div>
             <div class="flex justify-end items-center gap-3">
                 <div id="bell-container" class="relative hidden p-1 cursor-pointer" onclick="openChat()">
-                    <i class="fa-solid fa-bell text-xl text-blue-600"></i>
+                    <i class="fa-solid fa-bell text-xl text-[#ffb01c]"></i>
                     <span class="absolute top-0 right-0 bg-red-500 w-2.5 h-2.5 rounded-full border-2 border-white animate-pulse"></span>
                 </div>
                 <div class="relative p-1 cursor-pointer" onclick="toggleCart()">
                     <i class="fa-solid fa-cart-shopping text-xl text-slate-800"></i>
-                    <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-white text-[9px] px-1.5 rounded-full border border-white font-bold">0</span>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-[#ffb01c] text-slate-900 text-[9px] px-1.5 rounded-full border border-white font-bold">0</span>
                 </div>
             </div>
         </div>
     </nav>
 
-    <header id="top" class="hero-bg pt-32 pb-10 text-white text-center px-4">
+    <header id="top" class="hero-bg pt-32 pb-14 text-white text-center px-4">
         <div data-aos="fade-down" class="mb-6">
             <h1 class="text-3xl font-extrabold mb-2"><span class="premium-text">Premium Quality</span></h1>
             <p class="text-slate-300 text-xs opacity-80">Your trust is our priority. Order now.</p>
         </div>
-        <div class="max-w-sm mx-auto mb-6" data-aos="zoom-in">
+        <div class="max-w-sm mx-auto mb-2" data-aos="zoom-in">
             <div class="slider-container" onclick="nextSlide()">
                 <div id="sliderWrapper" class="slider-wrapper"></div>
             </div>
             <div id="dotsWrapper" class="dots-container"></div>
-        </div>
-
-        <div class="text-center mt-6">
-            <p class="text-slate-300 text-xs font-semibold mb-3">Want To Sell Your Products,Click Here?</p>
-            <div class="flex justify-center">
-                <button onclick="window.location.href='sellerform.html'" class="btn-float bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold uppercase tracking-wider py-3 px-8 rounded-xl shadow-lg active:scale-95 transition flex items-center justify-center gap-1.5 w-[160px]">
-                    <i class="fa-solid fa-shop text-[9px]"></i> Sell With Us
-                </button>
-            </div>
         </div>
     </header>
 
@@ -291,7 +269,7 @@
     <section id="products" class="py-4 pt-2 px-4">
         <div class="text-center mb-8">
             <h2 class="text-2xl font-bold text-slate-800">New Products</h2>
-            <div class="h-1 w-10 bg-blue-600 mx-auto mt-2 rounded-full"></div>
+            <div class="h-1 w-10 bg-[#ffb01c] mx-auto mt-2 rounded-full"></div>
         </div>
         <div id="product-grid" class="grid grid-cols-2 gap-4"></div>
     </section>
@@ -302,13 +280,13 @@
             <div class="bg-white/5 p-6 rounded-2xl border border-white/10 mb-6 text-left">
                 <input type="text" id="userName" placeholder="Your Full Name" class="w-full bg-transparent border-b border-white/20 py-3 outline-none text-white text-sm mb-4">
                 <textarea id="userMsg" placeholder="Type your order details here..." class="w-full bg-transparent border-b border-white/20 py-3 outline-none h-20 text-white text-sm mb-6 resize-none"></textarea>
-                <button onclick="sendSupportMessage()" class="w-full bg-blue-600 py-4 rounded-xl font-bold text-xs uppercase tracking-widest active:scale-95 transition">Send Message</button>
+                <button onclick="sendSupportMessage()" class="w-full bg-[#ffb01c] text-slate-900 py-4 rounded-xl font-bold text-xs uppercase tracking-widest active:scale-95 transition">Send Message</button>
             </div>
             
             <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-6 border-b border-white/10 pb-6">
                 <div class="flex flex-col items-center">
-                    <i class="fa-solid fa-location-dot text-blue-500 text-lg mb-1"></i>
-                    <h4 class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Location</h4>
+                    <i class="fa-solid fa-location-dot text-[#ffb01c] text-lg mb-1"></i>
+                    <h4 class="text-[10px] font-bold text-[#ffb01c] uppercase tracking-widest">Location</h4>
                     <p class="text-xs opacity-80">Punjab, Pakistan</p>
                 </div>
                 <div class="flex flex-col items-center">
@@ -353,25 +331,21 @@
     </div>
 
     <footer class="py-8 text-center text-slate-500 text-[9px] bg-slate-900 tracking-widest uppercase border-t border-white/5">
-        © 2026 WALEED STORE. All rights reserved.
+        © 2026 SMART GADGET. All rights reserved.
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Sentry Test Function (Only for Debugging)
-        function triggerSentryTest() {
-          console.log("Triggering Sentry Test...");
-          throw new Error("Waleed Store Sentry Test Error - Index Page");
-        }
-
+        // NEW FIREBASE CONFIG FOR SMART GADGET
         const firebaseConfig = {
-            apiKey: "AIzaSyBYrmozXYLHxCmLsc8FX6aN6xSvORxXypo",
-            authDomain: "waleed-store-f7369.firebaseapp.com",
-            databaseURL: "https://waleed-store-f7369-default-rtdb.firebaseio.com/",
-            projectId: "waleed-store-f7369",
-            storageBucket: "waleed-store-f7369.firebasestorage.app",
-            messagingSenderId: "766742927418",
-            appId: "1:766742927418:web:310f0cb6afd311a4a93d03"
+            apiKey: "AIzaSyAfYl3nFIp59A_qCnWdNaIOxliZ2YlJMLM",
+            authDomain: "smart-gadget-dcce3.firebaseapp.com",
+            databaseURL: "https://smart-gadget-dcce3-default-rtdb.firebaseio.com",
+            projectId: "smart-gadget-dcce3",
+            storageBucket: "smart-gadget-dcce3.firebasestorage.app",
+            messagingSenderId: "710583742192",
+            appId: "1:710583742192:web:281c2b50b5f65cb6ba9c35",
+            measurementId: "G-MGPQ1GJ5CN"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -382,7 +356,6 @@
             localStorage.setItem('user_chat_id', userUUID);
         }
 
-        // =================== LIVE TRAFFIC BACKGROUND ENGINE ===================
         function sendLiveSignal() {
             database.ref(`live_status/${userUUID}`).set({
                 currentPage: "Home Page",
@@ -400,9 +373,7 @@
             page: "Home Page",
             timestamp: Date.now()
         });
-        // =================== END LIVE TRAFFIC BACKGROUND ENGINE ===================
 
-        // Clean & Perfect Layout Position Engine for PWA Banner -> Announcement -> Nav Hierarchy
         function adjustNavPosition() {
             const nav = document.getElementById('main-nav');
             const bar = document.getElementById('announcement-bar');
@@ -412,14 +383,12 @@
             let pwaHeight = 0;
             let barHeight = 0;
             
-            // 1. PWA Install Banner (Top layer)
             if (pwaBanner && pwaBanner.style.display === 'block') {
                 pwaBanner.style.position = "absolute";
                 pwaBanner.style.top = "0px";
                 pwaHeight = pwaBanner.offsetHeight;
             }
             
-            // 2. Announcement Bar (Directly beneath PWA banner)
             if (bar && !bar.classList.contains('hidden')) {
                 bar.style.position = "absolute";
                 bar.style.top = pwaHeight + "px";
@@ -428,7 +397,6 @@
 
             let totalHeaderOffset = pwaHeight + barHeight;
             
-            // 3. Main Navigation Sticky/Fixed Position Control Logic
             if (window.pageYOffset > totalHeaderOffset) {
                 nav.style.position = "fixed";
                 nav.style.top = "0px";
@@ -439,7 +407,6 @@
                 nav.classList.remove('box-shadow');
             }
 
-            // Adjust Header padding dynamically to prevent clipping hero components
             if (heroHeader) {
                 let navHeight = nav.offsetHeight || 55;
                 heroHeader.style.paddingTop = (totalHeaderOffset + navHeight + 20) + "px";
@@ -635,16 +602,6 @@
             else cart.push({ id, name, price, img, quantity: 1, originalPrice: originalPrice });
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount(); toggleCart();
-            
-            if (typeof fbq === 'function') {
-                fbq('track', 'AddToCart', {
-                    content_ids: [id],
-                    content_type: 'product',
-                    content_name: name,
-                    value: parseFloat(price),
-                    currency: 'PKR'
-                });
-            }
         }
 
         function updateQuantity(index, change) {
@@ -674,7 +631,7 @@
                         <img src="${item.img}" class="w-16 h-16 object-cover rounded-lg">
                         <div class="flex-grow">
                             <h4 class="font-bold text-[11px] truncate w-32">${item.name}</h4>
-                            <p class="text-blue-600 font-bold text-xs">Rs. ${item.price}</p>
+                            <p class="text-[#ffb01c] font-bold text-xs">Rs. ${item.price}</p>
                             <div class="flex items-center mt-1 gap-2">
                                 <button onclick="updateQuantity(${index}, -1)" class="qty-btn"> - </button>
                                 <span class="qty-input">${item.quantity}</span>
@@ -715,20 +672,15 @@
                             <h3 class="font-bold text-[11px] text-slate-800 truncate">${p.name}</h3>
                             <div class="mt-1">
                                 ${showOriginalPrice ? `<span class="text-[10px] text-slate-400 line-through">Rs. ${p.originalPrice}</span>` : ''}
-                                <div class="text-sm font-extrabold text-blue-600">Rs. ${p.price}</div>
+                                <div class="text-sm font-extrabold text-[#ffb01c]">Rs. ${p.price}</div>
                             </div>
                             <button onclick="addToCart('${id}', '${p.name}', '${p.price}', '${firstImage}', '${finalOriginalPrice}')" class="add-to-cart-btn active:scale-95 transition">Add To Cart</button>
                         </div>
                     </div>`;
             });
-            
-            if (typeof fbq === 'function') {
-                fbq('track', 'ViewContent', { content_type: 'product_group' });
-            }
             setTimeout(adjustNavPosition, 100);
         });
 
-        // --- PWA Custom Smart Banner Interactive JavaScript Logic ---
         const pwaBanner = document.getElementById('pwa-custom-banner');
         const pwaBtn = document.getElementById('pwa-install-action');
 
@@ -774,9 +726,7 @@
             }, { passive: true });
         }
 
-        // Initialize adjustments post render layout configurations execution
         setTimeout(adjustNavPosition, 200);
-
         AOS.init({ duration: 1000, once: true });
     </script>
 </body>
