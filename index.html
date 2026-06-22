@@ -41,12 +41,17 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         html, body { max-width: 100%; overflow-x: hidden; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
         
-        /* FIX: Defined standard premium yellow color variable */
         :root { --primary-color: #ffb01c; }
         .glass { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); }
         
-        /* FIX: Replaced strange dark radial-gradient with the premium solid color matching aab33651-f0d8-4ad3-95c4-938bfe60ecbc */
-        .hero-bg { background-color: var(--primary-color); position: relative; }
+        /* FIX: Added seamless gradient to the entire body for megaabazar look */
+        body { 
+            background: linear-gradient(to bottom, #ffb01c 0%, #fffcf5 35%, #fffdf4 70%, #ffffff 100%); 
+            background-attachment: scroll;
+        }
+        
+        /* FIX: Header background is now transparent so the body gradient flows seamlessly underneath */
+        .hero-bg { position: relative; background: transparent; }
         
         .fixed-wa { position: fixed; bottom: 20px; right: 15px; z-index: 9999; background-color: #25D366; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(37,211,102,0.3); animation: floating 3s ease-in-out infinite; }
         @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
@@ -72,21 +77,22 @@
         .nav-btn i { color: var(--primary-color) !important; }
         .nav-btn:active { background: #f8fafc; color: var(--primary-color); }
 
-        .slider-container { width: 100%; position: relative; border-radius: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.4); aspect-ratio: 1/1; background: #020617; overflow: hidden; cursor: pointer; }
+        .slider-container { width: 100%; position: relative; border-radius: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.25); aspect-ratio: 1/1; background: #020617; overflow: hidden; cursor: pointer; }
         .slider-wrapper { position: relative; width: 100%; height: 100%; }
         .slider-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.8s ease-in-out; z-index: 1; }
         .slider-img.active { opacity: 1; z-index: 10; }
 
         .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.4s ease; cursor: default; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(0,0,0,0.15); transition: all 0.4s ease; cursor: default; }
         .dot.active { background: var(--primary-color); width: 24px; border-radius: 10px; }
 
-        .badge-box { background: white; padding: 12px 2px; border-radius: 1rem; border: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        /* FIX: Soft transparent backgrounds on badges for flawless blending */
+        .badge-box { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); padding: 12px 2px; border-radius: 1rem; border: 1px solid rgba(226, 232, 240, 0.8); display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         .badge-box i { font-size: 1.3rem; margin-bottom: 4px; color: var(--primary-color); } 
         .badge-box h4 { font-size: 9px; font-weight: 800; color: #0f172a; margin-bottom: 1px; text-transform: uppercase; }
         .badge-box span { font-size: 7px; font-weight: 700; color: #64748b; text-transform: uppercase; }
 
-        .product-card { background: white; border-radius: 1.2rem; border: 1px solid #f1f5f9; transition: all 0.3s ease; overflow: hidden; display: flex; flex-direction: column; }
+        .product-card { background: white; border-radius: 1.2rem; border: 1px solid #f1f5f9; transition: all 0.3s ease; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .add-to-cart-btn { background: var(--primary-color); color: #0f172a; width: 100%; padding: 10px; border-radius: 0.8rem; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 8px; cursor: pointer; }
 
         .brand-logo { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; gap: 1px; }
@@ -127,7 +133,7 @@
         }
     </style>
 </head>
-<body class="bg-white">
+<body>
 
     <div id="pwa-custom-banner">
         <div class="flex items-center justify-between px-4 py-2.5 max-w-md mx-auto">
@@ -205,11 +211,11 @@
         <i class="fa-brands fa-whatsapp text-2xl"></i>
     </a>
 
-    <nav id="main-nav" class="glass fixed w-full z-[5000] px-4 py-1 border-b border-slate-100">
+    <nav id="main-nav" class="glass fixed w-full z-[5000] px-4 py-1 border-b border-slate-100/50">
         <div class="container mx-auto grid grid-cols-3 items-center">
             <div class="flex justify-start">
                 <button onclick="toggleMenu()" class="p-2">
-                    <i class="fa-solid fa-bars-staggered text-xl text-[#ffb01c]"></i>
+                    <i class="fa-solid fa-bars-staggered text-xl text-slate-800"></i>
                 </button>
             </div>
             <div class="flex justify-center">
@@ -234,11 +240,10 @@
         </div>
     </nav>
 
-    <!-- FIX: Changed header to solid .hero-bg and typography color for seamless integration -->
     <header id="top" class="hero-bg pt-32 pb-14 text-center px-4">
         <div data-aos="fade-down" class="mb-6">
             <h1 class="text-3xl font-extrabold mb-2 text-slate-900">Premium Quality</h1>
-            <p class="text-slate-800 text-xs font-semibold opacity-90">Your trust is our priority. Order now.</p>
+            <p class="text-slate-800 text-xs font-semibold opacity-80">Your trust is our priority. Order now.</p>
         </div>
         <div class="max-w-sm mx-auto mb-2" data-aos="zoom-in">
             <div class="slider-container" onclick="nextSlide()">
@@ -338,7 +343,6 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // FIREBASE CONFIG FOR SMART GADGET
         const firebaseConfig = {
             apiKey: "AIzaSyAfYl3nFIp59A_qCnWdNaIOxliZ2YlJMLM",
             authDomain: "smart-gadget-dcce3.firebaseapp.com",
