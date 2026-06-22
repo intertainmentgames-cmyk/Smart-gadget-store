@@ -40,10 +40,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         html, body { max-width: 100%; overflow-x: hidden; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+        
+        /* FIX: Defined standard premium yellow color variable */
+        :root { --primary-color: #ffb01c; }
         .glass { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); }
         
-        /* NEW CUSTOM YELLOW/ORANGE GRADIENT ACCORDING TO THE SCREENSHOT */
-        .hero-bg { background: radial-gradient(circle at top right, #ffb01c, #9c6200, #020617); position: relative; }
+        /* FIX: Replaced strange dark radial-gradient with the premium solid color matching aab33651-f0d8-4ad3-95c4-938bfe60ecbc */
+        .hero-bg { background-color: var(--primary-color); position: relative; }
         
         .fixed-wa { position: fixed; bottom: 20px; right: 15px; z-index: 9999; background-color: #25D366; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(37,211,102,0.3); animation: floating 3s ease-in-out infinite; }
         @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
@@ -60,14 +63,14 @@
         #chat-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 20000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
         #chat-modal.active { display: flex; }
         .chat-bubble-admin { background: #fffbeb; color: #9c6200; align-self: flex-start; border-radius: 0 15px 15px 15px; border: 1px solid #fef3c7; }
-        .chat-bubble-user { background: #ffb01c; color: #0f172a; font-weight: 600; align-self: flex-end; border-radius: 15px 15px 0 15px; }
+        .chat-bubble-user { background: var(--primary-color); color: #0f172a; font-weight: 600; align-self: flex-end; border-radius: 15px 15px 0 15px; }
 
         .chat-input-container { padding: 12px; border-top: 1px solid #eee; background: white; display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 8px; align-items: center; width: 100%; overflow: hidden; }
         #userReplyInput { flex: 1 !important; min-width: 0; }
 
         .nav-btn { width: 100%; padding: 15px; text-align: left; font-weight: 600; border-bottom: 1px solid #f1f5f9; transition: all 0.3s; color: #1e293b; }
-        .nav-btn i { color: #ffb01c !important; }
-        .nav-btn:active { background: #f8fafc; color: #ffb01c; }
+        .nav-btn i { color: var(--primary-color) !important; }
+        .nav-btn:active { background: #f8fafc; color: var(--primary-color); }
 
         .slider-container { width: 100%; position: relative; border-radius: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.4); aspect-ratio: 1/1; background: #020617; overflow: hidden; cursor: pointer; }
         .slider-wrapper { position: relative; width: 100%; height: 100%; }
@@ -76,22 +79,20 @@
 
         .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
         .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.4s ease; cursor: default; }
-        .dot.active { background: #ffb01c; width: 24px; border-radius: 10px; }
+        .dot.active { background: var(--primary-color); width: 24px; border-radius: 10px; }
 
         .badge-box { background: white; padding: 12px 2px; border-radius: 1rem; border: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .badge-box i { font-size: 1.3rem; margin-bottom: 4px; color: #ffb01c; } 
+        .badge-box i { font-size: 1.3rem; margin-bottom: 4px; color: var(--primary-color); } 
         .badge-box h4 { font-size: 9px; font-weight: 800; color: #0f172a; margin-bottom: 1px; text-transform: uppercase; }
         .badge-box span { font-size: 7px; font-weight: 700; color: #64748b; text-transform: uppercase; }
 
         .product-card { background: white; border-radius: 1.2rem; border: 1px solid #f1f5f9; transition: all 0.3s ease; overflow: hidden; display: flex; flex-direction: column; }
-        .add-to-cart-btn { background: #ffb01c; color: #0f172a; width: 100%; padding: 10px; border-radius: 0.8rem; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 8px; cursor: pointer; }
-        
-        .premium-text { background: linear-gradient(to right, #ffb01c, #ffe082, #ffb01c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+        .add-to-cart-btn { background: var(--primary-color); color: #0f172a; width: 100%; padding: 10px; border-radius: 0.8rem; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 8px; cursor: pointer; }
 
         .brand-logo { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; gap: 1px; }
         .brand-icon { width: 46px; height: auto; display: block; margin-bottom: 2px; } 
         .brand-name { font-size: 11px; font-weight: 900; line-height: 1; display: flex; align-items: center; letter-spacing: -0.2px; white-space: nowrap; }
-        .brand-name span.text-custom-yellow { margin-left: 2px !important; color: #ffb01c; }
+        .brand-name span.text-custom-yellow { margin-left: 2px !important; color: var(--primary-color); }
 
         .qty-btn { background: #f1f5f9; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px; font-weight: bold; }
         .qty-input { width: 25px; text-align: center; font-size: 12px; font-weight: 700; }
@@ -120,7 +121,7 @@
             background: #0f172a;
             color: white;
             z-index: 6000;
-            border-bottom: 2px solid #ffb01c;
+            border-bottom: 2px solid var(--primary-color);
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
             touch-action: translateY;
         }
@@ -233,10 +234,11 @@
         </div>
     </nav>
 
-    <header id="top" class="hero-bg pt-32 pb-14 text-white text-center px-4">
+    <!-- FIX: Changed header to solid .hero-bg and typography color for seamless integration -->
+    <header id="top" class="hero-bg pt-32 pb-14 text-center px-4">
         <div data-aos="fade-down" class="mb-6">
-            <h1 class="text-3xl font-extrabold mb-2"><span class="premium-text">Premium Quality</span></h1>
-            <p class="text-slate-300 text-xs opacity-80">Your trust is our priority. Order now.</p>
+            <h1 class="text-3xl font-extrabold mb-2 text-slate-900">Premium Quality</h1>
+            <p class="text-slate-800 text-xs font-semibold opacity-90">Your trust is our priority. Order now.</p>
         </div>
         <div class="max-w-sm mx-auto mb-2" data-aos="zoom-in">
             <div class="slider-container" onclick="nextSlide()">
@@ -336,7 +338,7 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // NEW FIREBASE CONFIG FOR SMART GADGET
+        // FIREBASE CONFIG FOR SMART GADGET
         const firebaseConfig = {
             apiKey: "AIzaSyAfYl3nFIp59A_qCnWdNaIOxliZ2YlJMLM",
             authDomain: "smart-gadget-dcce3.firebaseapp.com",
@@ -495,7 +497,6 @@
             renderCart();
         }
 
-        // Drawer utility close handler execution logic
         function closeAllDrawers() {
             document.getElementById('side-menu').classList.remove('active');
             document.getElementById('side-cart').classList.remove('active');
