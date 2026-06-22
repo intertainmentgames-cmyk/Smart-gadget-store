@@ -44,13 +44,19 @@
         :root { --primary-color: #ffb01c; }
         .glass { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); }
         
-        /* FIX: Header top to badge section is kept dark vibrant yellow, fading gradually till buttons so they merge beautifully */
+        /* FIX: Poori web ka background clear solid white jaisa 63488_2.jpg me tha */
         body { 
-            background: linear-gradient(to bottom, #ffb01c 0%, #ffb01c 25%, #ffc043 45%, #fff5d1 55%, #ffffff 65%, #ffffff 100%); 
-            background-attachment: scroll;
+            background: #ffffff; 
         }
         
-        .hero-bg { position: relative; background: transparent; }
+        /* FIX: Yellow color srf header block me rahay ga aur badges ke center pr aakay khatam hoga flat shape me */
+        header {
+            background-color: #ffb01c;
+            position: relative;
+            padding-bottom: 70px; /* Badges ke liye gap taake half unke peeche yellow aaye */
+        }
+        
+        .hero-bg { position: relative; }
         
         .fixed-wa { position: fixed; bottom: 20px; right: 15px; z-index: 9999; background-color: #25D366; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(37,211,102,0.3); animation: floating 3s ease-in-out infinite; }
         @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
@@ -85,8 +91,8 @@
         .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(0,0,0,0.15); transition: all 0.4s ease; cursor: default; }
         .dot.active { background: var(--primary-color); width: 24px; border-radius: 10px; }
 
-        /* FIX: Blends beautifully over the fading yellow section */
-        .badge-box { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); padding: 12px 2px; border-radius: 1rem; border: 1px solid rgba(255, 255, 255, 0.5); display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        /* FIX: Grid layout overlapping exact half yellow half white background */
+        .badge-box { background: rgba(255, 255, 255, 1); padding: 12px 2px; border-radius: 1rem; border: 1px solid #f1f5f9; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
         .badge-box i { font-size: 1.3rem; margin-bottom: 4px; color: var(--primary-color); } 
         .badge-box h4 { font-size: 9px; font-weight: 800; color: #0f172a; margin-bottom: 1px; text-transform: uppercase; }
         .badge-box span { font-size: 7px; font-weight: 700; color: #64748b; text-transform: uppercase; }
@@ -239,7 +245,8 @@
         </div>
     </nav>
 
-    <header id="top" class="hero-bg pt-32 pb-14 text-center px-4">
+    <!-- Header containing the solid yellow section -->
+    <header id="top" class="hero-bg pt-32 text-center px-4">
         <div data-aos="fade-down" class="mb-6">
             <h1 class="text-3xl font-extrabold mb-2 text-slate-900">Premium Quality</h1>
             <p class="text-slate-800 text-xs font-semibold opacity-80">Your trust is our priority. Order now.</p>
@@ -252,7 +259,8 @@
         </div>
     </header>
 
-    <div class="relative z-20 max-w-md mx-auto px-4 -translate-y-1/2">
+    <!-- FIX: Negative margin keeps badges overlapping perfectly half-yellow, half-white exactly like image 63488_2.jpg -->
+    <div class="relative z-20 max-w-md mx-auto px-4 -mt-10">
         <div class="grid grid-cols-3 gap-3" data-aos="fade-up">
             <div class="badge-box">
                 <i class="fa-solid fa-truck-fast"></i>
@@ -272,7 +280,8 @@
         </div>
     </div>
 
-    <section id="products" class="py-4 pt-2 px-4">
+    <!-- The rest of the page remains fully clean solid white -->
+    <section id="products" class="py-4 pt-12 px-4">
         <div class="text-center mb-8">
             <h2 class="text-2xl font-bold text-slate-800">New Products</h2>
             <div class="h-1 w-10 bg-[#ffb01c] mx-auto mt-2 rounded-full"></div>
