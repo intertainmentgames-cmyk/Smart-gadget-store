@@ -21,15 +21,18 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
         
         body { font-family: 'Poppins', sans-serif !important; background: #ffffff; color: #0f172a; overflow-x: hidden; width: 100%; position: relative; }
         
         .main-nav { height: 65px; background: white; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; padding: 0 15px; position: fixed; top: 0; width: 100%; z-index: 5000; }
         .nav-grid { display: grid; grid-template-columns: 1fr auto 1fr; width: 100%; align-items: center; }
         
-        .brand-icon { width: 44px; height: auto; object-fit: contain; }
-        .brand-text { font-size: 14px; font-weight: 800 !important; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; margin-top: 5px; color: #0f172a; }
+        /* PICKED & OPTIMIZED FROM INDEX: Logo & Name Styling exactly matching weight and size constraints */
+        .brand-logo { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; gap: 1px; }
+        .brand-icon { width: 46px; height: auto; display: block; margin-bottom: 2px; object-fit: contain; } 
+        .brand-name { font-size: 11px; font-weight: 900 !important; line-height: 1; display: flex; align-items: center; letter-spacing: -0.2px; white-space: nowrap; }
+        .brand-name span.text-custom-yellow { margin-left: 2px !important; color: #ffb01c; }
 
         .sidebar { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 80%; max-width: 300px; background: white; height: 100vh; position: fixed; left: -110%; top: 0; z-index: 6000; }
         .sidebar.active { left: 0; }
@@ -69,10 +72,18 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     <i class="fa-solid fa-bars-staggered"></i>
                 </button>
             </div>
-            <div class="flex flex-col items-center">
-                <img src="https://i.ibb.co/rRbDwhRk/42980-removebg-preview.png" class="brand-icon">
-                <div class="brand-text">SMART <span class="text-[#ffb01c]">GADGET</span></div>
+            
+            <!-- PICKED FROM INDEX.HTML: Logo image source, heavy layout styles, text alignments and sizes embedded directly -->
+            <div class="flex justify-center">
+                <a href="#" class="brand-logo">
+                    <img src="https://i.ibb.co/rRbDwhRk/42980-removebg-preview.png" alt="Logo" class="brand-icon">
+                    <div class="brand-name">
+                        <span class="text-slate-900 uppercase">Smart</span>
+                        <span class="text-custom-yellow uppercase">Gadget</span>
+                    </div>
+                </a>
             </div>
+            
             <div class="flex justify-end">
                 <div class="relative p-2 cursor-pointer" onclick="toggleCart()">
                     <i class="fa-solid fa-cart-shopping text-xl text-slate-800"></i>
