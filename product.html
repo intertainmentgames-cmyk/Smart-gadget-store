@@ -13,6 +13,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </script>
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Title Updated -->
     <title>Product Details | Smart Gadget</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,6 +22,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
     <style>
+        /* Restored classic weights to prevent extreme sharpness */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
         
         body { font-family: 'Poppins', sans-serif !important; background: #ffffff; color: #0f172a; overflow-x: hidden; width: 100%; position: relative; }
@@ -29,6 +31,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         .nav-grid { display: grid; grid-template-columns: 1fr auto 1fr; width: 100%; align-items: center; }
         
         .brand-icon { width: 46px; height: auto; object-fit: contain; }
+        /* Balanced brand text matching old profile */
         .brand-text { font-size: 10px; font-weight: 700 !important; text-transform: uppercase; letter-spacing: -0.3px; line-height: 1; margin-top: 2px; }
 
         .sidebar { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 80%; max-width: 300px; background: white; height: 100vh; position: fixed; left: -110%; top: 0; z-index: 6000; }
@@ -71,7 +74,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             </div>
             <div class="flex flex-col items-center">
                 <img src="https://i.ibb.co/rRbDwhRk/42980-removebg-preview.png" class="brand-icon">
-                <!-- Branding changed to Smart Gadget -->
+                <!-- Logo text changed to Smart Gadget -->
                 <div class="brand-text">SMART <span class="text-[#ffb01c]">GADGET</span></div>
             </div>
             <div class="flex justify-end">
@@ -124,8 +127,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         </div>
 
         <div class="pb-32">
-            <!-- Loading text: Balanced font-semibold and correct size as 63575_2.jpg -->
-            <h1 id="pName" class="text-lg font-600 text-slate-900 mb-1 tracking-tight">Loading...</h1>
+            <!-- Loading Title: Reduced size and weight to match image 63575_2.jpg perfectly -->
+            <h1 id="pName" class="text-[17px] font-semibold text-slate-900 mb-1 tracking-tight">Loading...</h1>
             <div class="flex items-center gap-3 mb-4">
                 <span id="pOldPrice" class="text-sm text-slate-400 line-through"></span>
                 <span id="pPrice" class="text-xl font-bold text-slate-900"></span>
@@ -143,10 +146,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         </div>
     </div>
 
-    <!-- Fixed Bottom Buttons: Normal casing and balanced font weight matching 63575_2.jpg -->
+    <!-- Bottom Buttons: Restored to normal casing and soft font-medium weight from 63575_2.jpg -->
     <div class="fixed bottom-0 left-0 w-full p-4 bg-white/95 backdrop-blur-md border-t border-slate-100 flex gap-3 z-40">
-        <button onclick="handleAddToCart()" class="flex-1 bg-slate-100 text-slate-900 py-4 rounded-xl font-semibold text-sm">Add to Cart</button>
-        <button onclick="handleBuyNow()" class="flex-1 bg-[#ffb01c] text-white py-4 rounded-xl font-semibold text-sm shadow-lg shadow-amber-100/50">Buy Now</button>
+        <button onclick="handleAddToCart()" class="flex-1 bg-slate-100 text-slate-900 py-4 rounded-xl font-medium text-sm">Add to Cart</button>
+        <button onclick="handleBuyNow()" class="flex-1 bg-[#ffb01c] text-white py-4 rounded-xl font-medium text-sm shadow-lg shadow-amber-100/50">Buy Now</button>
     </div>
 
     <script>
@@ -318,8 +321,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         p.variations.forEach((v, index) => {
                             const btn = document.createElement('button');
                             btn.innerText = v.name;
-                            // Clean variations button styles matching old version weight
-                            btn.className = `var-btn px-4 py-2 text-xs font-semibold rounded-lg border transition-all ${index === 0 ? 'border-[#ffb01c] bg-amber-50 text-slate-900 font-semibold' : 'border-slate-200 text-slate-700 bg-white'}`;
+                            btn.className = `var-btn px-4 py-2 text-xs font-semibold rounded-lg border transition-all ${index === 0 ? 'border-[#ffb01c] bg-amber-50 text-slate-900' : 'border-slate-200 text-slate-700 bg-white'}`;
                             
                             if(index === 0) {
                                 selectedVariationName = v.name;
@@ -331,11 +333,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
                             btn.onclick = () => {
                                 document.querySelectorAll('.var-btn').forEach(b => {
-                                    b.classList.remove('border-[#ffb01c]', 'bg-amber-50', 'text-slate-900', 'font-semibold');
+                                    b.classList.remove('border-[#ffb01c]', 'bg-amber-50', 'text-slate-900');
                                     b.classList.add('border-slate-200', 'text-slate-700', 'bg-white');
                                 });
                                 btn.classList.remove('border-slate-200', 'text-slate-700', 'bg-white');
-                                btn.classList.add('border-[#ffb01c]', 'bg-amber-50', 'text-slate-900', 'font-semibold');
+                                btn.classList.add('border-[#ffb01c]', 'bg-amber-50', 'text-slate-900');
                                 
                                 selectedVariationName = v.name;
 
