@@ -21,7 +21,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght=400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         body { font-family: 'Poppins', sans-serif; background: #ffffff; color: #0f172a; overflow-x: hidden; width: 100%; position: relative; }
         
@@ -33,7 +33,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
         .sidebar { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 80%; max-width: 300px; background: white; height: 100vh; position: fixed; left: -110%; top: 0; z-index: 6000; }
         .sidebar.active { left: 0; }
-        /* Header Match: Custom Primary Yellow theme execution */
+        /* Header Match: Custom Primary Yellow Theme (#ffb01c) Implementation */
         .sidebar-header { background: #ffb01c; color: #0f172a; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 18px; }
         
         .cart-drawer { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 85%; max-width: 350px; background: white; height: 100dvh; position: fixed; right: -110%; top: 0; z-index: 6000; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
@@ -52,7 +52,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         .slide { flex: 0 0 100%; width: 100%; scroll-snap-align: start; scroll-snap-stop: always; display: flex; align-items: center; justify-content: center; position: relative; }
         .slide img { max-height: 100%; max-width: 100%; object-fit: contain; }
         
-        /* Thumbnails style with specific custom yellow accent colors */
+        /* Thumbnails style matched with #ffb01c theme color */
         .thumb-img, .thumb-video { width: 55px; height: 55px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: border-color 0.2s ease; }
         .thumb-img { object-fit: cover; }
         .thumb-video { background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #ffb01c; border: 2px dashed #cbd5e1; }
@@ -112,7 +112,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 <span class="text-slate-500 font-bold uppercase text-xs tracking-widest">Total</span>
                 <span id="cartTotal" class="text-xl font-black text-[#ffb01c]">Rs. 0</span>
             </div>
-            <button onclick="window.location.href='checkout.html'" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-slate-800 transition-colors">Check Out</button>
+            <button onclick="window.location.href='checkout.html'" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest">Check Out</button>
         </div>
     </div>
 
@@ -144,8 +144,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     </div>
 
     <div class="fixed bottom-0 left-0 w-full p-4 bg-white/95 backdrop-blur-md border-t border-slate-100 flex gap-3 z-40">
-        <button onclick="handleAddToCart()" class="flex-1 bg-slate-100 text-slate-900 py-4 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors">Add to Cart</button>
-        <button onclick="handleBuyNow()" class="flex-1 bg-[#ffb01c] text-slate-900 py-4 rounded-xl font-bold text-sm shadow-lg shadow-amber-100/50 hover:bg-[#e09810] transition-colors">Buy Now</button>
+        <button onclick="handleAddToCart()" class="flex-1 bg-slate-100 text-slate-900 py-4 rounded-xl font-bold text-sm">Add to Cart</button>
+        <button onclick="handleBuyNow()" class="flex-1 bg-[#ffb01c] text-slate-900 py-4 rounded-xl font-bold text-sm shadow-lg shadow-amber-100/50">Buy Now</button>
     </div>
 
     <script>
@@ -322,7 +322,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         p.variations.forEach((v, index) => {
                             const btn = document.createElement('button');
                             btn.innerText = v.name;
-                            btn.className = `var-btn px-4 py-2 text-xs font-semibold rounded-lg border transition-all ${index === 0 ? 'border-[#ffb01c] bg-amber-50/40 text-slate-900 font-bold' : 'border-slate-200 text-slate-700 bg-white'}`;
+                            btn.className = `var-btn px-4 py-2 text-xs font-semibold rounded-lg border transition-all ${index === 0 ? 'border-[#ffb01c] bg-amber-50 text-slate-900' : 'border-slate-200 text-slate-700 bg-white'}`;
                             
                             if(index === 0) {
                                 selectedVariationName = v.name;
@@ -334,11 +334,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
                             btn.onclick = () => {
                                 document.querySelectorAll('.var-btn').forEach(b => {
-                                    b.classList.remove('border-[#ffb01c]', 'bg-amber-50/40', 'text-slate-900', 'font-bold');
+                                    b.classList.remove('border-[#ffb01c]', 'bg-amber-50', 'text-slate-900');
                                     b.classList.add('border-slate-200', 'text-slate-700', 'bg-white');
                                 });
                                 btn.classList.remove('border-slate-200', 'text-slate-700', 'bg-white');
-                                btn.classList.add('border-[#ffb01c]', 'bg-amber-50/40', 'text-slate-900', 'font-bold');
+                                btn.classList.add('border-[#ffb01c]', 'bg-amber-50', 'text-slate-900');
                                 
                                 selectedVariationName = v.name;
 
@@ -402,7 +402,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         <div class="flex-1 min-w-0">
                             <h4 class="text-xs font-bold text-slate-800 truncate">${item.name}</h4>
                             <p class="text-[#ffb01c] font-black text-sm">${item.price}</p>
-                            ${item.variation ? `<p class="text-slate-500 font-medium text-[11px]">Option: ${item.variation}</p>` : ''}
+                            ${item.variation ? `<p class="text-slate-500 font-medium">Option: ${item.variation}</p>` : ''}
                             <p class="text-[10px] text-slate-400">Qty: ${item.quantity || 1}</p>
                         </div>
                         <button onclick="removeFromCart(${index})" class="text-slate-300 hover:text-red-500"><i class="fa-solid fa-trash-can text-sm"></i></button>
