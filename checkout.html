@@ -8,7 +8,6 @@
 var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
 ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
 
-
   ttq.load('D8KE8PRC77UA5Q9SJTBG');
   ttq.page();
 }(window, document, 'ttq');
@@ -16,24 +15,25 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <!-- TikTok Pixel Code End -->
     <meta charset="UTF-8">
     <script src="https://js.sentry-cdn.com/e8b693c77ef64ddf7ea2d61e0cfcc1bd.min.js" crossorigin="anonymous"></script>
-
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <meta name="viewport" style="content" content="width=device-width, initial-scale=1.0">
-    <title>Checkout | Waleed Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Smart Gadget</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Poppins', sans-serif !important; }
+        
         .payment-card { transition: 0.3s; border: 2px solid #f1f5f9; cursor: pointer; }
-        .payment-radio:checked + .payment-card { border-color: #2563eb; background: #eff6ff; }
-        .payment-radio:checked + .payment-card .fa-circle-check { color: #2563eb; }
+        .payment-radio:checked + .payment-card { border-color: #ffb01c; background: #fffbeb; }
+        .payment-radio:checked + .payment-card .fa-circle-check { color: #ffb01c; }
         .upload-dashed { border: 2px dashed #cbd5e1; transition: 0.3s; }
-        .upload-dashed:hover { border-color: #2563eb; background: #f8fafc; }
+        .upload-dashed:hover { border-color: #ffb01c; background: #f8fafc; }
         .loader { border: 2px solid #f3f3f3; border-top: 2px solid #ffffff; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .qty-btn { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 8px; font-weight: bold; font-size: 16px; transition: 0.2s; }
@@ -59,7 +59,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             </svg>
         </div>
         <h2 class="mt-8 text-3xl font-black text-white tracking-widest animate-pulse">ORDER COMPLETED</h2>
-        <p class="mt-2 text-blue-400 font-bold">Redirecting to WhatsApp...</p>
+        <p class="mt-2 text-[#ffb01c] font-bold">Redirecting to WhatsApp...</p>
     </div>
 
     <nav class="p-4 bg-white border-b border-slate-100 flex items-center gap-4 sticky top-0 z-50">
@@ -70,7 +70,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <div class="p-4 space-y-6 max-w-lg mx-auto">
         <div id="billing-summary" class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
             <h2 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-bag-shopping text-blue-600"></i> Your Items
+                <i class="fa-solid fa-bag-shopping text-[#ffb01c]"></i> Your Items
             </h2>
             <div id="checkout-items" class="space-y-4"></div>
             
@@ -83,36 +83,36 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     <span>Delivery Charges</span>
                     <span id="delivery-total" class="font-semibold text-slate-800">Rs. 0</span>
                 </div>
-                <div id="cod-row" class="flex justify-between text-blue-600 font-bold hidden">
+                <div id="cod-row" class="flex justify-between text-slate-900 font-bold hidden">
                     <span>COD Service Fee</span>
                     <span id="cod-total-display">Rs. 0</span>
                 </div>
                 <div class="flex justify-between font-extrabold text-xl text-slate-900 pt-2 border-t border-dashed mt-2">
                     <span>Grand Total</span>
-                    <span id="grand-total">Rs. 0</span>
+                    <span id="grand-total" class="text-[#ffb01c]">Rs. 0</span>
                 </div>
             </div>
         </div>
 
         <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-4">
             <h2 class="font-bold text-slate-800 flex items-center gap-2">
-                <i class="fa-solid fa-location-dot text-blue-600"></i> Shipping Details
+                <i class="fa-solid fa-location-dot text-[#ffb01c]"></i> Shipping Details
             </h2>
             <div class="grid grid-cols-2 gap-3">
-                <input type="text" id="firstName" placeholder="First name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-blue-500">
-                <input type="text" id="lastName" placeholder="Last name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-blue-500">
+                <input type="text" id="firstName" placeholder="First name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-[#ffb01c]">
+                <input type="text" id="lastName" placeholder="Last name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-[#ffb01c]">
             </div>
-            <input type="email" id="custEmail" placeholder="Email Address" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-blue-500">
-            <input type="text" id="custAddress" placeholder="Address" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-blue-500">
-            <input type="text" id="custApartment" placeholder="Apartment, suite, etc. (optional)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-blue-500">
-            <input type="text" id="custCity" placeholder="City" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-blue-500">
-            <input type="number" id="custPhone" placeholder="Phone" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-blue-500">
-            <input type="number" id="custWhatsapp" placeholder="WhatsApp Number" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-blue-500">
+            <input type="email" id="custEmail" placeholder="Email Address" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-[#ffb01c]">
+            <input type="text" id="custAddress" placeholder="Address" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-[#ffb01c]">
+            <input type="text" id="custApartment" placeholder="Apartment, suite, etc. (optional)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-[#ffb01c]">
+            <input type="text" id="custCity" placeholder="City" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-[#ffb01c]">
+            <input type="tel" id="custPhone" placeholder="Phone Number (e.g. 03001234567)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-[#ffb01c]">
+            <input type="tel" id="custWhatsapp" placeholder="WhatsApp Number (e.g. 03001234567)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-[#ffb01c]">
         </div>
 
         <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-4">
             <h2 class="font-bold text-slate-800 flex items-center gap-2">
-                <i class="fa-solid fa-credit-card text-blue-600"></i> Payment Method
+                <i class="fa-solid fa-credit-card text-[#ffb01c]"></i> Payment Method
             </h2>
             
             <div class="grid grid-cols-1 gap-3">
@@ -120,10 +120,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     <input type="radio" name="payMethod" value="advance" class="payment-radio hidden" checked onchange="togglePaymentUI()">
                     <div class="payment-card p-4 rounded-2xl flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-green-100 text-green-600 rounded-xl flex items-center justify-center"><i class="fa-solid fa-bolt"></i></div>
+                            <div class="w-10 h-10 bg-amber-50 text-[#ffb01c] rounded-xl flex items-center justify-center"><i class="fa-solid fa-bolt"></i></div>
                             <div>
                                 <p class="font-bold text-sm">Advance Payment</p>
-                                <p class="text-[10px] text-green-600 font-bold">Fast Delivery & No Extra Fees</p>
+                                <p class="text-[10px] text-amber-600 font-bold">Fast Delivery & No Extra Fees</p>
                             </div>
                         </div>
                         <i class="fa-solid fa-circle-check text-slate-200"></i>
@@ -134,7 +134,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     <input type="radio" name="payMethod" value="cod" class="payment-radio hidden" onchange="togglePaymentUI()">
                     <div class="payment-card p-4 rounded-2xl flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center"><i class="fa-solid fa-truck-fast"></i></div>
+                            <div class="w-10 h-10 bg-slate-100 text-slate-800 rounded-xl flex items-center justify-center"><i class="fa-solid fa-truck-fast"></i></div>
                             <div>
                                 <p class="font-bold text-sm">Cash on Delivery</p>
                                 <p class="text-[10px] text-slate-500">Pay when you receive</p>
@@ -146,27 +146,27 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             </div>
 
             <div id="advance-details" class="mt-4 space-y-4 pt-4 border-t border-slate-50">
-                <div class="bg-blue-600 p-5 rounded-3xl text-white shadow-lg space-y-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest opacity-80 border-b border-white/20 pb-2 flex items-center gap-2">
+                <div class="bg-slate-900 p-5 rounded-3xl text-white shadow-lg space-y-4">
+                    <p class="text-[11px] font-bold uppercase tracking-widest text-[#ffb01c] border-b border-white/10 pb-2 flex items-center gap-2">
                         <i class="fa-solid fa-shield-check"></i> Payment Details
                     </p>
                     <div class="space-y-4 text-[13px]">
-                        <div class="flex justify-between items-center bg-white/10 p-2 rounded-xl">
+                        <div class="flex justify-between items-center bg-white/5 p-2 rounded-xl">
                             <span><i class="fa-solid fa-wallet mr-2"></i><b>JazzCash:</b></span>
                             <b class="text-sm">03704884772</b>
                         </div>
-                        <div class="flex justify-between items-center bg-white/10 p-2 rounded-xl">
+                        <div class="flex justify-between items-center bg-white/5 p-2 rounded-xl">
                             <span><i class="fa-solid fa-money-bill-transfer mr-2"></i><b>EasyPaisa:</b></span>
                             <b class="text-sm">03704884772</b>
                         </div>
-                        <div class="space-y-1 bg-white/10 p-3 rounded-xl">
+                        <div class="space-y-1 bg-white/5 p-3 rounded-xl">
                             <div class="flex justify-between"><span><b>NayaPay/Bank:</b></span><b class="text-sm">03346588665</b></div>
                             <div class="flex justify-between text-[11px] opacity-90"><span>Raast ID:</span><span>03346588665</span></div>
                             <div class="flex justify-between text-[10px] opacity-80"><span class="shrink-0">IBAN:</span><span class="break-all ml-4">PK80NAYA1234503346588665</span></div>
                         </div>
-                        <div class="flex justify-between items-center pt-2 border-t border-white/20">
+                        <div class="flex justify-between items-center pt-2 border-t border-white/10">
                             <span>Account Name:</span>
-                            <b class="text-sm bg-yellow-400 text-blue-900 px-2 py-0.5 rounded-lg">Waleed Ahmad</b>
+                            <b class="text-sm bg-[#ffb01c] text-slate-950 px-2 py-0.5 rounded-lg">Waleed Ahmad</b>
                         </div>
                     </div>
                 </div>
@@ -174,9 +174,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 <div class="upload-dashed p-6 rounded-2xl text-center relative">
                     <input type="file" id="ssUpload" class="absolute inset-0 opacity-0 cursor-pointer" onchange="previewSS()">
                     <div id="upload-placeholder">
-                        <i class="fa-solid fa-camera text-3xl text-blue-500 mb-2"></i>
+                        <i class="fa-solid fa-camera text-3xl text-[#ffb01c] mb-2"></i>
                         <p class="text-xs font-bold text-slate-700">Upload Payment Screenshot</p>
-                        <p class="text-[9px] text-blue-600 mt-1 font-bold">REQUIRED: Please upload proof of payment here</p>
+                        <p class="text-[9px] text-[#ffb01c] mt-1 font-bold">REQUIRED: Please upload proof of payment here</p>
                     </div>
                     <div id="preview-area" class="hidden">
                         <img id="ssPreview" class="h-20 mx-auto rounded shadow-md">
@@ -187,7 +187,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     </div>
 
     <div class="fixed bottom-0 left-0 w-full p-4 bg-white/90 border-t border-slate-100 z-50">
-        <button id="orderBtn" onclick="placeOrder()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-xl active:scale-95 transition flex items-center justify-center gap-2">Confirm Order</button>
+        <button id="orderBtn" onclick="placeOrder()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold shadow-xl active:scale-95 transition flex items-center justify-center gap-2">Confirm Order</button>
     </div>
 
     <script>
@@ -200,7 +200,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         let baseSubtotal = 0, baseDelivery = 0, baseCodFee = 0;
         const imgbbKey = "2d7d1d644318674d9d8dcd961cb666ae";
 
-        // =================== LIVE TRAFFIC BACKGROUND ENGINE ===================
         let userUUID = localStorage.getItem('user_chat_id');
         if (!userUUID) {
             userUUID = 'USER-' + Math.random().toString(36).substr(2, 9);
@@ -212,7 +211,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 currentPage: statusMessage,
                 lastActive: Date.now()
             });
-
             database.ref(`traffic_history/${userUUID}/logs`).push({
                 page: statusMessage,
                 timestamp: Date.now()
@@ -222,7 +220,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         window.addEventListener('beforeunload', function () {
             database.ref(`live_status/${userUUID}`).remove();
         });
-        // ======================================================================
 
         function loadCheckout() {
             const container = document.getElementById('checkout-items');
@@ -235,7 +232,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 return; 
             }
             
-            let itemSummary = cart.map(i => `${i.name} (x${i.quantity || 1})`).join(', ');
             sendLiveSignal("Checkout");
             
             cart.forEach((item, index) => {
@@ -245,13 +241,12 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 baseDelivery += (parseInt(item.deliveryCharges) || 0);
                 baseCodFee += (parseInt(item.codFee) || 0);
                 
-                // TABDEELI: Check variations condition to show or hide variant subtext tag element
                 let varDisplayTag = "";
                 if (item.variation && item.variation.trim() !== "") {
-                    varDisplayTag = `<div class="text-[10px] text-blue-600 font-bold bg-blue-50 rounded px-1.5 py-0.5 inline-block mt-0.5">Option: ${item.variation}</div>`;
+                    varDisplayTag = `<div class="text-[10px] text-amber-700 font-bold bg-amber-50 rounded px-1.5 py-0.5 inline-block mt-0.5">Option: ${item.variation}</div>`;
                 }
 
-                container.innerHTML += `<div class="flex items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-100"><img src="${item.img}" class="w-16 h-16 rounded-xl object-cover"><div class="flex-1"><div class="text-[12px] font-bold text-slate-800 line-clamp-1">${item.name}</div><div class="text-blue-600 font-extrabold text-[13px]">${item.price}</div>${varDisplayTag}<div class="flex items-center gap-3 mt-2"><button onclick="updateQty(${index}, -1)" class="qty-btn text-slate-600">-</button><span class="text-sm font-bold text-slate-800">${qty}</span><button onclick="updateQty(${index}, 1)" class="qty-btn text-blue-600">+</button></div></div><button onclick="removeItem(${index})" class="text-red-400 p-2 active:scale-90 transition"><i class="fa-solid fa-trash-can"></i></button></div>`;
+                container.innerHTML += `<div class="flex items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-100"><img src="${item.img}" class="w-16 h-16 rounded-xl object-cover"><div class="flex-1"><div class="text-[12px] font-bold text-slate-800 line-clamp-1">${item.name}</div><div class="text-[#ffb01c] font-extrabold text-[13px]">${item.price}</div>${varDisplayTag}<div class="flex items-center gap-3 mt-2"><button onclick="updateQty(${index}, -1)" class="qty-btn text-slate-600">-</button><span class="text-sm font-bold text-slate-800">${qty}</span><button onclick="updateQty(${index}, 1)" class="qty-btn text-slate-900">+</button></div></div><button onclick="removeItem(${index})" class="text-red-400 p-2 active:scale-90 transition"><i class="fa-solid fa-trash-can"></i></button></div>`;
             });
             updateTotals();
         }
@@ -277,7 +272,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             document.getElementById('successOverlay').classList.remove('hidden');
             var duration = 4 * 1000;
             var end = Date.now() + duration;
-            (function frame() { confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#2563eb', '#ffffff'] }); confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#22c55e', '#ffffff'] }); if (Date.now() < end) { requestAnimationFrame(frame); } }());
+            (function frame() { confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffb01c', '#0f172a'] }); confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#22c55e', '#ffffff'] }); if (Date.now() < end) { requestAnimationFrame(frame); } }());
+        }
+
+        // Pak Phone Validator Logic
+        function isValidPakPhone(num) {
+            const regex = /^03\d{9}$/;
+            return regex.test(num);
         }
 
         async function placeOrder() {
@@ -294,6 +295,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             const btn = document.getElementById('orderBtn');
 
             if(!fName || !lName || !city || !address || !phone || !whatsapp || !cEmail) return alert("Please fill all required fields!");
+            
+            // 11 Digit Validator Check
+            if(!isValidPakPhone(phone)) return alert("Please enter a valid 11-digit Phone Number starting with 03!");
+            if(!isValidPakPhone(whatsapp)) return alert("Please enter a valid 11-digit WhatsApp Number starting with 03!");
+            
             if(method === 'advance' && !ssFile) return alert("Screenshot required!");
 
             btn.disabled = true; btn.innerHTML = '<div class="loader"></div> Processing...';
@@ -303,7 +309,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             const codF = method === 'cod' ? ("Rs. " + baseCodFee) : "Rs. 0";
             const grand = document.getElementById('grand-total').innerText;
             
-            // TABDEELI: Items strings logic processing block for WhatsApp template node variables mapping out
             const itemsString = cart.map(i => {
                 let text = `📦 ${i.name} x ${i.quantity || 1}`;
                 if (i.variation && i.variation.trim() !== "") {
@@ -312,7 +317,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 return text;
             }).join('\n');
 
-            // TABDEELI: Item summary processing engine built with custom conditional parameters mapping rules
             const itemSummary = cart.map(i => {
                 let nameStr = i.name;
                 if (i.variation && i.variation.trim() !== "") {
@@ -351,7 +355,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     codFee: codF,
                     customerCity: city, 
                     customerAddress: `${address} ${apt}`, 
-                    productName: itemSummary, // Saves item name along with its selected variation automatically to Firebase DB
+                    productName: itemSummary, 
                     price: grand, 
                     paymentMethod: method, 
                     screenshot: ssUrl, 
@@ -362,32 +366,20 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
                 // ==================== META PIXEL PURCHASE TRACKING ====================
                 try {
-                    // String se number nikalne ka automatic logic
                     const numericPrice = parseInt(grand.replace(/[^\d]/g, '')) || 0;
-                    
-                    // Cart check karne ke liye logic (taake pata chale kaunsi product buy hui hai)
-                    let currentProduct = "Unknown Product";
-                    if (typeof itemSummary === 'string') {
-                        if (itemSummary.toLowerCase().includes("product 1 ka naam")) {
-                            currentProduct = "p9 wireless headphones";
-                        } else if (itemSummary.toLowerCase().includes("product 2 ka naam")) {
-                            currentProduct = "mens square watch";
-                        }
-                    }
+                    let currentProduct = itemSummary;
 
-                    // Meta Pixel tracking event
                     fbq('track', 'Purchase', {
-                        value: numericPrice,          // Yeh automatic total bill utha lega (chahe product 1 ho ya 2)
+                        value: numericPrice,
                         currency: 'PKR',
-                        content_name: currentProduct  // Meta Ads ko pata chalega kaunsi ad se conversion aayi
+                        content_name: currentProduct
                     });
-                    
                 } catch(pixelErr) {
                     console.error("Pixel Tracking Error:", pixelErr);
                 }
                 // ======================================================================
 
-                let fullWaMessage = `*🚀 NEW ORDER - WALEED STORE 🚀*
+                let fullWaMessage = `*🚀 NEW ORDER - SMART GADGET 🚀*
 
 👤 *Name:* ${fName} ${lName}
 📧 *Email:* ${cEmail}
