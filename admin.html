@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <script src="https://js.sentry-cdn.com/e8b693c77ef64ddf7ea2d61e0cfcc1bd.min.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waleed Store | Pro Admin</title>
+    <title>Brand Bazaar | Pro Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -88,7 +88,7 @@
     <div id="login-gate-overlay">
         <div class="gate-card">
             <div class="text-center mb-8">
-                <h2 class="text-2xl font-black tracking-tight text-white">Waleed Store Panel</h2>
+                <h2 class="text-2xl font-black tracking-tight text-white">Brand Bazaar Panel</h2>
                 <p class="text-xs text-slate-500 mt-1">Authentication Required to Access Panel</p>
             </div>
             <form id="gateLoginForm" onsubmit="verifyGateAccess(event)">
@@ -115,7 +115,7 @@
     <div id="master-dashboard-layout" class="hidden">
         <div id="sidebar" class="sidebar border-r border-slate-800 p-6">
             <div class="flex items-center justify-between mb-10">
-                <span class="text-xl font-bold text-blue-500">Waleed Store</span>
+                <span class="text-xl font-bold text-blue-500">Brand Bazaar</span>
                 <button onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <nav id="sidebar-nav-container" class="space-y-4">
@@ -421,7 +421,6 @@
 
         // Immediate Authentication Check Layer Execution Engine (With Cookie Validation Support)
         (function evaluateSessionState() {
-            // Check either temporary sessionStorage OR persistent security cookie token
             if (sessionStorage.getItem("w_panel_auth") === "true" || getPanelCookie("w_remember_token") === "active_session") {
                 document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById("login-gate-overlay").style.display = "none";
@@ -439,8 +438,6 @@
 
             if(u === ADMIN_USER && p === ADMIN_PASS) {
                 sessionStorage.setItem("w_panel_auth", "true");
-                
-                // If user selected remember me option, set a secure cookie that expires in 365 days
                 if (rememberMeChecked) {
                     setPanelCookie("w_remember_token", "active_session", 365);
                 }
@@ -466,6 +463,7 @@
         }
         // =================== END SECURITY LAYER ENGINE ===================
 
+        // NEW UPDATED FIREBASE CONFIGURATION (Matching checkout.html / Brand Bazaar)
         const firebaseConfig = {
             apiKey: "AIzaSyBYrmozXYLHxCmLsc8FX6aN6xSvORxXypo",
             authDomain: "waleed-store-f7369.firebaseapp.com",
@@ -477,7 +475,9 @@
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const imgbbKey = "2d7d1d644318674d9d8dcd961cb666ae";
+        
+        // NEW IMGBB API KEY
+        const imgbbKey = "6408d90314e10ab4bab623c99b6269c5";
 
         let activeChatUserID = null;
         let isBellOn = false;
@@ -487,11 +487,7 @@
 
         let globalOrdersCache = {};
         let globalTrafficCache = {};
-        
-        // Temporary holding array for product variations draft mode editing
         let currentEditingVariations = [];
-
-        // Active Filter Flag State Tracking Variable
         let currentOrderFilterTab = 'pending';
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
@@ -503,7 +499,6 @@
             const titles = {'store-statistics': 'Store Stats & Traffic', 'add-product': 'Add Product', 'view-orders': 'Customer Orders', 'manage-products': 'Manage Store', 'manage-slider': 'Manage Slider', 'user-messages': 'Support Inbox'};
             document.getElementById('page-title').innerText = titles[id];
             
-            // Highlight matching navigation tab with pure blue class dynamically
             document.querySelectorAll('.nav-tab-btn').forEach(btn => {
                 btn.classList.remove('tab-active');
             });
@@ -746,10 +741,9 @@
             document.getElementById('modal-title').innerText = "Edit Product";
             const content = document.getElementById('modal-content');
             
-            // Fix Auto-save logic: Check if we are already using the local draft state array, otherwise create deep clone
             if (!currentEditingVariations || currentEditingVariations._productKey !== key) {
                 currentEditingVariations = p.variations ? JSON.parse(JSON.stringify(p.variations)) : [];
-                currentEditingVariations._productKey = key; // Lock draft array state to current opened product key
+                currentEditingVariations._productKey = key;
             }
 
             let imagesHTML = '<label>Images (Click to Change | Arrows to Arrange)</label><div class="grid grid-cols-4 gap-2 mb-4">';
@@ -780,7 +774,6 @@
                 </div>
             `;
 
-            // Render local draft variations safely without firing database triggers instantly
             let variationsHTML = '';
             variationsHTML += `
                 <div class="mb-4 bg-slate-950/50 p-3 rounded-xl border border-slate-800/80">
@@ -853,7 +846,6 @@
 
         /* --- STABLE PRE-COMPILATION DRAFT SYSTEM ROUTINES --- */
         function addNewVariationToDraft(productKey) {
-            // Save inputs to cache first
             const p = globalProductsCache[productKey];
             p.name = document.getElementById('eName').value;
             p.price = document.getElementById('ePrice').value;
@@ -863,7 +855,6 @@
             p.desc = document.getElementById('eDesc').value;
             p.video = document.getElementById('eVideo').value;
 
-            // Push a default blank variation object
             currentEditingVariations.push({
                 name: '',
                 price: p.price,
@@ -876,7 +867,6 @@
         function moveVariationInDraft(productKey, index, direction) {
             const newIndex = index + direction;
             if (newIndex >= 0 && newIndex < currentEditingVariations.length) {
-                // Sync textual states first before swapping indexes
                 currentEditingVariations.forEach((v, idx) => {
                     const rowInputs = document.querySelectorAll(`input[oninput*="currentEditingVariations[${idx}].name"]`);
                     const priceInputs = document.querySelectorAll(`input[oninput*="currentEditingVariations[${idx}].price"]`);
@@ -884,7 +874,6 @@
                     if(priceInputs[0]) currentEditingVariations[idx].price = priceInputs[0].value;
                 });
 
-                // Swap rows locally
                 const temp = currentEditingVariations[index];
                 currentEditingVariations[index] = currentEditingVariations[newIndex];
                 currentEditingVariations[newIndex] = temp;
@@ -919,7 +908,6 @@
                         currentEditingVariations[index].image = d.data.url;
                         if(statusEl) statusEl.innerText = "Draft image parsed successfully!";
                         const p = globalProductsCache[productKey];
-                        // Cache text inputs onto parent memory stack dynamically to safely reload UI viewport
                         p.name = document.getElementById('eName').value;
                         p.price = document.getElementById('ePrice').value;
                         p.originalPrice = document.getElementById('eOldPrice').value;
@@ -1067,8 +1055,6 @@
 
         async function updateProduct(key) {
             const videoValue = document.getElementById('eVideo').value;
-            
-            // Clean dynamic framework validation payload bindings for current editing variations array slice
             let cleanVariationsPayload = null;
             if (currentEditingVariations && currentEditingVariations.length > 0) {
                 cleanVariationsPayload = currentEditingVariations.map(v => ({
@@ -1090,22 +1076,19 @@
             };
             
             await database.ref('products/' + key).update(updates);
-            
             if (globalProductsCache[key]) {
                 Object.assign(globalProductsCache[key], updates);
             }
             
             alert("Success!"); 
-            currentEditingVariations = []; // Clear draft references securely out of modal execution bounds
+            currentEditingVariations = []; 
             closeModal();
         }
 
         function deleteProduct(key) { if(confirm("Confirm Delete?")) { database.ref('products/' + key).remove(); closeModal(); } }
 
-        // Switch View Layout Dynamic Filtering Logic Function Engine
         function switchOrderFilterView(targetTab) {
             currentOrderFilterTab = targetTab;
-            
             const btnPending = document.getElementById('order-tab-pending');
             const btnConfirmed = document.getElementById('order-tab-confirmed');
             
@@ -1116,7 +1099,6 @@
                 btnConfirmed.className = "flex-1 text-center py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wide transition-all duration-300 bg-blue-600 text-white shadow-lg shadow-blue-950/50";
                 btnPending.className = "flex-1 text-center py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wide transition-all duration-300 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50";
             }
-            
             renderOrdersEngine();
         }
 
@@ -1131,26 +1113,22 @@
             filterMetricsByTimeRange();
         });
 
-        // Master UI Order Render Engine Core Isolation Execution Channel
         function renderOrdersEngine() {
             const list = document.getElementById('orders-list');
             if(!list) return;
             list.innerHTML = "";
-
             let ordersFound = false;
 
             Object.keys(globalOrdersCache).forEach(key => {
                 const o = globalOrdersCache[key];
                 if(!o) return;
 
-                // Status mapping extraction defaults evaluation
                 const currentStatus = o.status || 'pending';
                 if(currentStatus !== currentOrderFilterTab) return;
 
                 ordersFound = true;
                 const isAdvance = o.paymentMethod === 'advance';
                 
-                // --- FIXED TIME DISPLAY: Standard uniform conversion to 12-Hour AM/PM format ---
                 let formattedDateTimeStr = "N/A";
                 if(o.date) {
                     try {
@@ -1214,7 +1192,6 @@
             const deliveryCharges = o.deliveryCharges !== undefined ? o.deliveryCharges : (o.delivery_charges !== undefined ? o.delivery_charges : (o.delivery !== undefined ? o.delivery : '0'));
             const codFee = o.codFee !== undefined ? o.codFee : (o.cod_fee !== undefined ? o.cod_fee : '0');
 
-            // Dynamic Variation label extraction safely inside modal viewer
             let variationDetailHTML = "";
             if (o.variationSelected || o.variation) {
                 variationDetailHTML = `<p><b>Selected Variation:</b> <span class="text-blue-400 font-bold">${o.variationSelected || o.variation}</span></p>`;
@@ -1236,7 +1213,6 @@
                     </div>`;
             }
 
-            // Dynamic Contextual Action Execution Interface Block Routing Structure
             let orderActionButtonsHTML = "";
             if(currentStatus === 'pending') {
                 orderActionButtonsHTML = `
@@ -1284,13 +1260,12 @@
             document.getElementById('orderModal').classList.add('active');
         }
 
-        // Action Router to Shift Orders to Confirmed Node State
         async function markOrderAsConfirmed(key) {
             try {
                 await database.ref('orders/' + key).update({ status: 'confirmed' });
                 closeModal();
             } catch(err) {
-                alert("Failed to confirm structural order status state node assignment modification mapping data.");
+                alert("Failed to confirm order.");
             }
         }
 
@@ -1303,7 +1278,6 @@
             btn.disabled = true; btn.innerHTML = '<div class="loader"></div>';
             
             try {
-                // 1. Core Gallery Images Upload Sequence 
                 for (let input of fileInputs) {
                     if (input.files[0]) {
                         const formData = new FormData();
@@ -1316,7 +1290,6 @@
                     }
                 }
 
-                // 2. Dynamic Variations Node Processing & Mapping Array Sequence
                 let productVariationsArray = [];
                 const varRows = document.querySelectorAll('#variations-wrapper > div');
                 
@@ -1324,7 +1297,7 @@
                     const vName = row.querySelector('.var-name').value;
                     const vPrice = row.querySelector('.var-price').value || document.getElementById('pPrice').value;
                     const vFile = row.querySelector('.var-file').files[0];
-                    let vImgUrl = uploadedUrls[0] || 'https://placehold.co/400x400'; // Fallback if image not matched
+                    let vImgUrl = uploadedUrls[0] || 'https://placehold.co/400x400';
 
                     if(vName) {
                         if(vFile) {
@@ -1344,7 +1317,6 @@
                     }
                 }
 
-                // 3. Complete Relational Database Payload Assembly
                 await database.ref('products').push({ 
                     name: document.getElementById('pName').value, 
                     price: document.getElementById('pPrice').value, 
@@ -1363,7 +1335,6 @@
         }
 
         // =================== START STATISTICS BACKGROUND ENGINE LOGIC ===================
-
         database.ref('live_status').on('value', (snapshot) => {
             const liveTrafficCountEl = document.getElementById('liveTrafficCount');
             const livePagesListEl = document.getElementById('livePagesList');
@@ -1408,7 +1379,6 @@
             filterMetricsByTimeRange();
         });
 
-        /* --- DYNAMIC DROPDOWN INTERFACE SWITCHERS --- */
         function toggleSaleCardDisplay() {
             const selection = document.getElementById('saleCardViewSelect').value;
             const totalVal = document.getElementById('statTotalRevenue').innerText;
@@ -1445,8 +1415,6 @@
             const rangeDays = document.getElementById('statsTimeFilter')?.value || "30";
             const nowMs = Date.now();
             const filterLimitMs = rangeDays === 'all' ? 0 : nowMs - (parseInt(rangeDays) * 24 * 60 * 60 * 1000);
-
-            // --- ACCURATE DATE ISOLATION RE-EVALUATION LOGIC ---
             const todayLocaleStr = new Date().toLocaleDateString();
 
             let totalRevenueSum = 0;
@@ -1456,7 +1424,6 @@
 
             Object.values(globalOrdersCache).forEach(order => {
                 if(!order) return;
-
                 let rawPrice = 0;
                 if(order.price) {
                     rawPrice = parseInt(order.price.toString().replace(/\D/g, '')) || 0;
@@ -1465,8 +1432,6 @@
                 let orderTimestampMs = nowMs; 
                 if(order.date) {
                     orderTimestampMs = Date.parse(order.date) || nowMs;
-                    
-                    // Direct static locale date evaluation to strictly isolate actual calendar day logic logs
                     const orderLocaleDate = new Date(orderTimestampMs).toLocaleDateString();
                     if(orderLocaleDate === todayLocaleStr) {
                         todayRevenueSum += rawPrice;
@@ -1485,7 +1450,6 @@
             if (document.getElementById('statTotalRevenue')) document.getElementById('statTotalRevenue').innerText = 'Rs. ' + totalRevenueSum.toLocaleString();
             if (document.getElementById('statTotalOrders')) document.getElementById('statTotalOrders').innerText = totalOrdersCount;
 
-            // Trigger accurate state bindings on dynamic sub-cards layout
             toggleSaleCardDisplay();
             toggleOrderCardDisplay();
 
@@ -1539,19 +1503,16 @@
 
             try {
                 const targetWipeNodes = ['orders', 'user_chats', 'chat_history', 'site_traffic', 'live_status'];
-                
                 for (let node of targetWipeNodes) {
                     await database.ref(node).remove();
                 }
 
                 globalOrdersCache = {};
                 globalTrafficCache = {};
-
                 alert("🔥 Success! Store dashboard database statistics logs aur files successfully clear ho chuki hain.");
                 location.reload();
-
             } catch (runtimeError) {
-                alert("Wipe operation encountered a structural runtime configuration lock error.");
+                alert("Wipe operation encountered an error.");
                 console.error(runtimeError);
             }
         }
