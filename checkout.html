@@ -19,7 +19,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout | Smart Gadget</title>
+    <title>Checkout | Brand Bazaar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -191,14 +191,14 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     </div>
 
     <script>
-        (function(){ emailjs.init({ publicKey: "PwwMmU8XkwWQ1N4aL" }); })();
+        (function(){ emailjs.init({ publicKey: "hUB2Fd1u6Uxou_Na0" }); })();
         const firebaseConfig = { apiKey: "AIzaSyBYrmozXYLHxCmLsc8FX6aN6xSvORxXypo", authDomain: "waleed-store-f7369.firebaseapp.com", databaseURL: "https://waleed-store-f7369-default-rtdb.firebaseio.com/", projectId: "waleed-store-f7369", storageBucket: "waleed-store-f7369.appspot.com", messagingSenderId: "148677610444", appId: "1:148677610444:web:2a838575003504f216503c" };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let baseSubtotal = 0, baseDelivery = 0, baseCodFee = 0;
-        const imgbbKey = "2d7d1d644318674d9d8dcd961cb666ae";
+        const imgbbKey = "6408d90314e10ab4bab623c99b6269c5";
 
         let userUUID = localStorage.getItem('user_chat_id');
         if (!userUUID) {
@@ -341,8 +341,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 const promises = [];
                 
                 if (isEmailEnabled) {
-                    promises.push(emailjs.send("service_2bdv1fn", "template_cx6igm7", emailParams));
-                    promises.push(emailjs.send("service_2bdv1fn", "template_9mb6eop", emailParams));
+                    // Service ID: service_qk7vqye mapped with Admin (template_dznvwme) and Customer (template_r5r1vkr)
+                    promises.push(emailjs.send("service_qk7vqye", "template_dznvwme", emailParams));
+                    promises.push(emailjs.send("service_qk7vqye", "template_r5r1vkr", emailParams));
                 }
 
                 promises.push(database.ref('orders').push({ 
@@ -379,7 +380,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 }
                 // ======================================================================
 
-                let fullWaMessage = `*🚀 NEW ORDER - SMART GADGET 🚀*
+                let fullWaMessage = `*🚀 NEW ORDER - BRAND BAZAAR 🚀*
 
 👤 *Name:* ${fName} ${lName}
 📧 *Email:* ${cEmail}
