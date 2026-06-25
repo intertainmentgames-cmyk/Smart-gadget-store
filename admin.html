@@ -214,7 +214,7 @@
                                 </select>
                                 <h2 id="orderCardValueDisplay" class="text-3xl font-black text-blue-400 mt-2">0</h2>
                             </div>
-                            <div class="p-2 bg-blue-500/10 text-blue-400 rounded-xl text-sm"><i class="fa-solid fa-box"></i></div>
+                            <div class="p-2 bg-green-500/10 text-blue-400 rounded-xl text-sm"><i class="fa-solid fa-box"></i></div>
                         </div>
                         <div class="flex justify-between items-center mt-3 text-[10px] text-slate-400 border-t border-slate-800/60 pt-2">
                             <span id="orderCardSecondaryLabel">Today's Order:</span>
@@ -463,15 +463,16 @@
         }
         // =================== END SECURITY LAYER ENGINE ===================
 
-        // NEW UPDATED FIREBASE CONFIGURATION (Matching checkout.html / Brand Bazaar)
+        // NEW UPDATED FIREBASE CONFIGURATION (Matching your new smart-gadget database)
         const firebaseConfig = {
-            apiKey: "AIzaSyBYrmozXYLHxCmLsc8FX6aN6xSvORxXypo",
-            authDomain: "waleed-store-f7369.firebaseapp.com",
-            databaseURL: "https://waleed-store-f7369-default-rtdb.firebaseio.com/",
-            projectId: "waleed-store-f7369",
-            storageBucket: "waleed-store-f7369.appspot.com",
-            messagingSenderId: "148677610444",
-            appId: "1:148677610444:web:2a838575003504f216503c"
+            apiKey: "AIzaSyAfYl3nFIp59A_qCnWdNaIOxliZ2YlJMLM",
+            authDomain: "smart-gadget-dcce3.firebaseapp.com",
+            databaseURL: "https://smart-gadget-dcce3-default-rtdb.firebaseio.com",
+            projectId: "smart-gadget-dcce3",
+            storageBucket: "smart-gadget-dcce3.firebasestorage.app",
+            messagingSenderId: "710583742192",
+            appId: "1:710583742192:web:281c2b50b5f65cb6ba9c35",
+            measurementId: "G-MGPQ1GJ5CN"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
