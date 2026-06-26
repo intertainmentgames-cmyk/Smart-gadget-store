@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Gadget | Premium Quality</title>
+    <title>Brand Bazaar | Premium Quality</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -41,19 +41,20 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         html, body { max-width: 100%; overflow-x: hidden; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
         
-        :root { --primary-color: #ffb01c; }
+        /* UPDATED: Royal Blue theme */
+        :root { --primary-color: #1a56db; }
+
         .glass { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); }
         
-        /* FIX: Poori web ka background clear solid white jaisa 63488_2.jpg me tha */
         body { 
             background: #ffffff; 
         }
         
-        /* UPDATED: Yellow background gradient style jo end tak thoda yellow tone rakhta hai taake buttons blend rahain */
+        /* UPDATED: Royal Blue gradient header */
         header {
-            background: linear-gradient(to bottom, #ffb01c 0%, #ffb01c 55%, #ffd68a 100%);
+            background: linear-gradient(to bottom, #1a56db 0%, #1a56db 55%, #93b4f5 100%);
             position: relative;
-            padding-bottom: 70px; /* Badges ke liye gap taake half unke peeche yellow aaye */
+            padding-bottom: 70px;
         }
         
         .hero-bg { position: relative; }
@@ -72,8 +73,8 @@
 
         #chat-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 20000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
         #chat-modal.active { display: flex; }
-        .chat-bubble-admin { background: #fffbeb; color: #9c6200; align-self: flex-start; border-radius: 0 15px 15px 15px; border: 1px solid #fef3c7; }
-        .chat-bubble-user { background: var(--primary-color); color: #0f172a; font-weight: 600; align-self: flex-end; border-radius: 15px 15px 0 15px; }
+        .chat-bubble-admin { background: #eff6ff; color: #1e40af; align-self: flex-start; border-radius: 0 15px 15px 15px; border: 1px solid #bfdbfe; }
+        .chat-bubble-user { background: var(--primary-color); color: #ffffff; font-weight: 600; align-self: flex-end; border-radius: 15px 15px 0 15px; }
 
         .chat-input-container { padding: 12px; border-top: 1px solid #eee; background: white; display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 8px; align-items: center; width: 100%; overflow: hidden; }
         #userReplyInput { flex: 1 !important; min-width: 0; }
@@ -88,22 +89,21 @@
         .slider-img.active { opacity: 1; z-index: 10; }
 
         .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(0,0,0,0.15); transition: all 0.4s ease; cursor: default; }
-        .dot.active { background: var(--primary-color); width: 24px; border-radius: 10px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: all 0.4s ease; cursor: default; }
+        .dot.active { background: #ffffff; width: 24px; border-radius: 10px; }
 
-        /* FIX: Grid layout overlapping exact half yellow half white background */
         .badge-box { background: rgba(255, 255, 255, 1); padding: 12px 2px; border-radius: 1rem; border: 1px solid #f1f5f9; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
         .badge-box i { font-size: 1.3rem; margin-bottom: 4px; color: var(--primary-color); } 
         .badge-box h4 { font-size: 9px; font-weight: 800; color: #0f172a; margin-bottom: 1px; text-transform: uppercase; }
         .badge-box span { font-size: 7px; font-weight: 700; color: #64748b; text-transform: uppercase; }
 
         .product-card { background: white; border-radius: 1.2rem; border: 1px solid #f1f5f9; transition: all 0.3s ease; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .add-to-cart-btn { background: var(--primary-color); color: #0f172a; width: 100%; padding: 10px; border-radius: 0.8rem; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 8px; cursor: pointer; }
+        .add-to-cart-btn { background: var(--primary-color); color: #ffffff; width: 100%; padding: 10px; border-radius: 0.8rem; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 8px; cursor: pointer; }
 
         .brand-logo { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; gap: 1px; }
         .brand-icon { width: 46px; height: auto; display: block; margin-bottom: 2px; } 
         .brand-name { font-size: 11px; font-weight: 900; line-height: 1; display: flex; align-items: center; letter-spacing: -0.2px; white-space: nowrap; }
-        .brand-name span.text-custom-yellow { margin-left: 2px !important; color: var(--primary-color); }
+        .brand-name span.text-custom-blue { margin-left: 2px !important; color: var(--primary-color); }
 
         .qty-btn { background: #f1f5f9; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px; font-weight: bold; }
         .qty-input { width: 25px; text-align: center; font-size: 12px; font-weight: 700; }
@@ -136,6 +136,10 @@
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
             touch-action: translateY;
         }
+
+        /* Cart total in blue */
+        #cart-total { color: var(--primary-color) !important; }
+        #cart-count { background: var(--primary-color) !important; color: white !important; }
     </style>
 </head>
 <body>
@@ -150,11 +154,11 @@
                     <img src="https://i.ibb.co/hxWnL5QM/file-0000000016bc7246b7187faccdc83f85.png" alt="App Icon" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h4 class="text-xs font-bold tracking-wide text-white uppercase">Smart Gadget</h4>
+                    <h4 class="text-xs font-bold tracking-wide text-white uppercase">Brand Bazaar</h4>
                     <p class="text-[9px] text-slate-400">Fast & Premium Tech Store</p>
                 </div>
             </div>
-            <button id="pwa-install-action" class="bg-[#ffb01c] text-slate-900 text-[10px] font-extrabold uppercase px-4 py-2 rounded-lg shadow-md active:scale-95 transition">
+            <button id="pwa-install-action" class="bg-[#1a56db] text-white text-[10px] font-extrabold uppercase px-4 py-2 rounded-lg shadow-md active:scale-95 transition">
                 Install
             </button>
         </div>
@@ -166,12 +170,12 @@
 
     <div id="chat-modal">
         <div class="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[70vh]">
-            <div class="bg-[#ffb01c] p-4 text-slate-900 flex justify-between items-center">
+            <div class="bg-[#1a56db] p-4 text-white flex justify-between items-center">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-headset text-xl"></i>
                     <div>
-                        <h3 class="font-bold text-sm text-slate-900">Store Support</h3>
-                        <p class="text-[10px] text-slate-800 font-semibold">Online | We're here to help</p>
+                        <h3 class="font-bold text-sm text-white">Store Support</h3>
+                        <p class="text-[10px] text-blue-100 font-semibold">Online | We're here to help</p>
                     </div>
                 </div>
                 <button onclick="closeChat()"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -179,7 +183,7 @@
             <div id="chat-messages" class="flex-1 p-4 overflow-y-auto flex flex-col gap-3 bg-slate-50"></div>
             <div class="chat-input-container">
                 <input type="text" id="userReplyInput" class="flex-1 bg-slate-100 border-none p-3 rounded-xl outline-none text-xs" placeholder="Write a reply...">
-                <button onclick="sendReplyBack()" class="bg-[#ffb01c] text-slate-900 p-3 rounded-xl min-w-[50px] flex-shrink-0 flex items-center justify-center active:scale-95 transition">
+                <button onclick="sendReplyBack()" class="bg-[#1a56db] text-white p-3 rounded-xl min-w-[50px] flex-shrink-0 flex items-center justify-center active:scale-95 transition">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
@@ -187,7 +191,7 @@
     </div>
 
     <div id="side-menu">
-        <div class="p-6 border-b flex justify-between items-center bg-[#ffb01c] text-slate-900">
+        <div class="p-6 border-b flex justify-between items-center bg-[#1a56db] text-white">
             <h2 class="font-bold text-lg tracking-tight">Menu</h2>
             <button onclick="closeAllDrawers()"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
@@ -206,7 +210,7 @@
         <div class="p-4 border-t bg-slate-50">
             <div class="flex justify-between items-center mb-4">
                 <span class="text-slate-500 font-semibold">Total:</span>
-                <span id="cart-total" class="font-bold text-[#ffb01c]">Rs. 0</span>
+                <span id="cart-total" class="font-bold" style="color:#1a56db">Rs. 0</span>
             </div>
             <button onclick="window.location.href='checkout.html'" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold uppercase tracking-widest active:scale-95 transition">Check Out</button>
         </div>
@@ -227,29 +231,28 @@
                 <a href="#" class="brand-logo">
                     <img src="https://i.ibb.co/rRbDwhRk/42980-removebg-preview.png" alt="Logo" class="brand-icon">
                     <div class="brand-name">
-                        <span class="text-slate-900 uppercase">Smart</span>
-                        <span class="text-custom-yellow ml-1 uppercase">Gadget</span>
+                        <span class="text-slate-900 uppercase">Brand</span>
+                        <span class="text-custom-blue ml-1 uppercase">Bazaar</span>
                     </div>
                 </a>
             </div>
             <div class="flex justify-end items-center gap-3">
                 <div id="bell-container" class="relative hidden p-1 cursor-pointer" onclick="openChat()">
-                    <i class="fa-solid fa-bell text-xl text-[#ffb01c]"></i>
+                    <i class="fa-solid fa-bell text-xl" style="color:#1a56db"></i>
                     <span class="absolute top-0 right-0 bg-red-500 w-2.5 h-2.5 rounded-full border-2 border-white animate-pulse"></span>
                 </div>
                 <div class="relative p-1 cursor-pointer" onclick="toggleCart()">
                     <i class="fa-solid fa-cart-shopping text-xl text-slate-800"></i>
-                    <span id="cart-count" class="absolute -top-1 -right-1 bg-[#ffb01c] text-slate-900 text-[9px] px-1.5 rounded-full border border-white font-bold">0</span>
+                    <span id="cart-count" class="absolute -top-1 -right-1 text-white text-[9px] px-1.5 rounded-full border border-white font-bold" style="background:#1a56db">0</span>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Header section with new updated gradient style -->
     <header id="top" class="hero-bg pt-32 text-center px-4">
         <div data-aos="fade-down" class="mb-6">
-            <h1 class="text-3xl font-extrabold mb-2 text-slate-900">Premium Quality</h1>
-            <p class="text-slate-800 text-xs font-semibold opacity-80">Your trust is our priority. Order now.</p>
+            <h1 class="text-3xl font-extrabold mb-2 text-white">Premium Quality</h1>
+            <p class="text-blue-100 text-xs font-semibold opacity-90">Your trust is our priority. Order now.</p>
         </div>
         <div class="max-w-sm mx-auto mb-2" data-aos="zoom-in">
             <div class="slider-container" onclick="nextSlide()">
@@ -259,7 +262,6 @@
         </div>
     </header>
 
-    <!-- FIX: Negative margin keeps badges overlapping perfectly half-yellow, half-white exactly like image 63488_2.jpg -->
     <div class="relative z-20 max-w-md mx-auto px-4 -mt-10">
         <div class="grid grid-cols-3 gap-3" data-aos="fade-up">
             <div class="badge-box">
@@ -280,11 +282,10 @@
         </div>
     </div>
 
-    <!-- The rest of the page remains fully clean solid white -->
     <section id="products" class="py-4 pt-12 px-4">
         <div class="text-center mb-8">
             <h2 class="text-2xl font-bold text-slate-800">New Products</h2>
-            <div class="h-1 w-10 bg-[#ffb01c] mx-auto mt-2 rounded-full"></div>
+            <div class="h-1 w-10 mx-auto mt-2 rounded-full" style="background:#1a56db"></div>
         </div>
         <div id="product-grid" class="grid grid-cols-2 gap-4"></div>
     </section>
@@ -295,13 +296,13 @@
             <div class="bg-white/5 p-6 rounded-2xl border border-white/10 mb-6 text-left">
                 <input type="text" id="userName" placeholder="Your Full Name" class="w-full bg-transparent border-b border-white/20 py-3 outline-none text-white text-sm mb-4">
                 <textarea id="userMsg" placeholder="Type your order details here..." class="w-full bg-transparent border-b border-white/20 py-3 outline-none h-20 text-white text-sm mb-6 resize-none"></textarea>
-                <button onclick="sendSupportMessage()" class="w-full bg-[#ffb01c] text-slate-900 py-4 rounded-xl font-bold text-xs uppercase tracking-widest active:scale-95 transition">Send Message</button>
+                <button onclick="sendSupportMessage()" class="w-full text-white py-4 rounded-xl font-bold text-xs uppercase tracking-widest active:scale-95 transition" style="background:#1a56db">Send Message</button>
             </div>
             
             <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-6 border-b border-white/10 pb-6">
                 <div class="flex flex-col items-center">
-                    <i class="fa-solid fa-location-dot text-[#ffb01c] text-lg mb-1"></i>
-                    <h4 class="text-[10px] font-bold text-[#ffb01c] uppercase tracking-widest">Location</h4>
+                    <i class="fa-solid fa-location-dot text-lg mb-1" style="color:#1a56db"></i>
+                    <h4 class="text-[10px] font-bold uppercase tracking-widest" style="color:#1a56db">Location</h4>
                     <p class="text-xs opacity-80">Punjab, Pakistan</p>
                 </div>
                 <div class="flex flex-col items-center">
@@ -346,7 +347,7 @@
     </div>
 
     <footer class="py-8 text-center text-slate-500 text-[9px] bg-slate-900 tracking-widest uppercase border-t border-white/5">
-        © 2026 SMART GADGET. All rights reserved.
+        © 2026 BRAND BAZAAR. All rights reserved.
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -427,10 +428,7 @@
             }
         }
 
-        window.onscroll = function() {
-            adjustNavPosition();
-        };
-
+        window.onscroll = function() { adjustNavPosition(); };
         window.addEventListener('resize', adjustNavPosition);
 
         database.ref('announcement_bar').on('value', (snapshot) => {
@@ -564,9 +562,7 @@
             const appUri = "instagram://user?username=waleedstore.me";
             const webUri = "https://www.instagram.com/waleedstore.me?igsh=MWtlczNkMHludGxyYw==";
             window.location.href = appUri;
-            setTimeout(() => {
-                window.location.href = webUri;
-            }, 400);
+            setTimeout(() => { window.location.href = webUri; }, 400);
         }
 
         function openCustomModal(title, text, type, actionCallback) {
@@ -644,7 +640,7 @@
                         <img src="${item.img}" class="w-16 h-16 object-cover rounded-lg">
                         <div class="flex-grow">
                             <h4 class="font-bold text-[11px] truncate w-32">${item.name}</h4>
-                            <p class="text-[#ffb01c] font-bold text-xs">Rs. ${item.price}</p>
+                            <p class="font-bold text-xs" style="color:#1a56db">Rs. ${item.price}</p>
                             <div class="flex items-center mt-1 gap-2">
                                 <button onclick="updateQuantity(${index}, -1)" class="qty-btn"> - </button>
                                 <span class="qty-input">${item.quantity}</span>
@@ -685,7 +681,7 @@
                             <h3 class="font-bold text-[11px] text-slate-800 truncate">${p.name}</h3>
                             <div class="mt-1">
                                 ${showOriginalPrice ? `<span class="text-[10px] text-slate-400 line-through">Rs. ${p.originalPrice}</span>` : ''}
-                                <div class="text-sm font-extrabold text-[#ffb01c]">Rs. ${p.price}</div>
+                                <div class="text-sm font-extrabold" style="color:#1a56db">Rs. ${p.price}</div>
                             </div>
                             <button onclick="addToCart('${id}', '${p.name}', '${p.price}', '${firstImage}', '${finalOriginalPrice}')" class="add-to-cart-btn active:scale-95 transition">Add To Cart</button>
                         </div>
@@ -713,9 +709,7 @@
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
                     deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            dismissPWABanner();
-                        }
+                        if (choiceResult.outcome === 'accepted') { dismissPWABanner(); }
                         deferredPrompt = null;
                     });
                 } else {
@@ -726,16 +720,9 @@
 
         if (pwaBanner) {
             let touchStartY = 0;
-            let touchEndY = 0;
-            pwaBanner.addEventListener('touchstart', (e) => {
-                touchStartY = e.changedTouches[0].screenY;
-            }, { passive: true });
-            
+            pwaBanner.addEventListener('touchstart', (e) => { touchStartY = e.changedTouches[0].screenY; }, { passive: true });
             pwaBanner.addEventListener('touchend', (e) => {
-                touchEndY = e.changedTouches[0].screenY;
-                if (touchStartY - touchEndY > 40) {
-                    dismissPWABanner();
-                }
+                if (touchStartY - e.changedTouches[0].screenY > 40) { dismissPWABanner(); }
             }, { passive: true });
         }
 
