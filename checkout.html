@@ -19,6 +19,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- FIXED: Brand Name Restored -->
     <title>Checkout | Brand Bazaar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -192,7 +193,17 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     <script>
         (function(){ emailjs.init({ publicKey: "hUB2Fd1u6Uxou_Na0" }); })();
-        const firebaseConfig = { apiKey: "AIzaSyBYrmozXYLHxCmLsc8FX6aN6xSvORxXypo", authDomain: "waleed-store-f7369.firebaseapp.com", databaseURL: "https://waleed-store-f7369-default-rtdb.firebaseio.com/", projectId: "waleed-store-f7369", storageBucket: "waleed-store-f7369.appspot.com", messagingSenderId: "148677610444", appId: "1:148677610444:web:2a838575003504f216503c" };
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyAfYl3nFIp59A_qCnWdNaIOxliZ2YlJMLM",
+          authDomain: "smart-gadget-dcce3.firebaseapp.com",
+          databaseURL: "https://smart-gadget-dcce3-default-rtdb.firebaseio.com/",
+          projectId: "smart-gadget-dcce3",
+          storageBucket: "smart-gadget-dcce3.firebasestorage.app",
+          messagingSenderId: "710583742192",
+          appId: "1:710583742192:web:281c2b50b5f65cb6ba9c35",
+          measurementId: "G-MGPQ1GJ5CN"
+        };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -275,7 +286,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             (function frame() { confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffb01c', '#0f172a'] }); confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#22c55e', '#ffffff'] }); if (Date.now() < end) { requestAnimationFrame(frame); } }());
         }
 
-        // Pak Phone Validator Logic
         function isValidPakPhone(num) {
             const regex = /^03\d{9}$/;
             return regex.test(num);
@@ -296,7 +306,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
             if(!fName || !lName || !city || !address || !phone || !whatsapp || !cEmail) return alert("Please fill all required fields!");
             
-            // 11 Digit Validator Check
             if(!isValidPakPhone(phone)) return alert("Please enter a valid 11-digit Phone Number starting with 03!");
             if(!isValidPakPhone(whatsapp)) return alert("Please enter a valid 11-digit WhatsApp Number starting with 03!");
             
@@ -341,7 +350,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 const promises = [];
                 
                 if (isEmailEnabled) {
-                    // Service ID: service_qk7vqye mapped with Admin (template_dznvwme) and Customer (template_r5r1vkr)
                     promises.push(emailjs.send("service_qk7vqye", "template_dznvwme", emailParams));
                     promises.push(emailjs.send("service_qk7vqye", "template_r5r1vkr", emailParams));
                 }
@@ -365,7 +373,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
                 await Promise.all(promises);
 
-                // ==================== META PIXEL PURCHASE TRACKING ====================
                 try {
                     const numericPrice = parseInt(grand.replace(/[^\d]/g, '')) || 0;
                     let currentProduct = itemSummary;
@@ -378,8 +385,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 } catch(pixelErr) {
                     console.error("Pixel Tracking Error:", pixelErr);
                 }
-                // ======================================================================
 
+                // FIXED: Template string updated with Brand Bazaar
                 let fullWaMessage = `*🚀 NEW ORDER - BRAND BAZAAR 🚀*
 
 👤 *Name:* ${fName} ${lName}
