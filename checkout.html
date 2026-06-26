@@ -147,27 +147,38 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             </div>
 
             <div id="advance-details" class="mt-4 space-y-4 pt-4 border-t border-slate-50">
-                <div class="bg-slate-900 p-5 rounded-3xl text-white shadow-lg space-y-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest text-[#1d4ed8] border-b border-white/10 pb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-shield-check"></i> Payment Details
+                <!-- FIXED Layout & Colors Matching 65493.jpg exactly -->
+                <div class="bg-slate-900 p-6 rounded-[2.5rem] text-white shadow-lg space-y-5">
+                    <p class="text-[11px] font-black uppercase tracking-[0.15em] text-blue-500 border-b border-white/5 pb-3 flex items-center gap-2">
+                        PAYMENT DETAILS
                     </p>
-                    <div class="space-y-4 text-[13px]">
-                        <div class="flex justify-between items-center bg-white/5 p-2 rounded-xl">
-                            <span><i class="fa-solid fa-wallet mr-2"></i><b>JazzCash:</b></span>
-                            <b class="text-sm">03704884772</b>
+                    <div class="space-y-3.5 text-[14px]">
+                        <div class="flex justify-between items-center bg-white/5 px-4 py-3.5 rounded-2xl">
+                            <span class="flex items-center gap-2 text-slate-300"><i class="fa-solid fa-wallet text-sm"></i> JazzCash:</span>
+                            <b class="font-bold text-white tracking-wide">03704884772</b>
                         </div>
-                        <div class="flex justify-between items-center bg-white/5 p-2 rounded-xl">
-                            <span><i class="fa-solid fa-money-bill-transfer mr-2"></i><b>EasyPaisa:</b></span>
-                            <b class="text-sm">03704884772</b>
+                        <div class="flex justify-between items-center bg-white/5 px-4 py-3.5 rounded-2xl">
+                            <span class="flex items-center gap-2 text-slate-300"><i class="fa-solid fa-money-bill-transfer text-sm"></i> EasyPaisa:</span>
+                            <b class="font-bold text-white tracking-wide">03704884772</b>
                         </div>
-                        <div class="space-y-1 bg-white/5 p-3 rounded-xl">
-                            <div class="flex justify-between"><span><b>NayaPay/Bank:</b></span><b class="text-sm">03346588665</b></div>
-                            <div class="flex justify-between text-[11px] opacity-90"><span>Raast ID:</span><span>03346588665</span></div>
-                            <div class="flex justify-between text-[10px] opacity-80"><span class="shrink-0">IBAN:</span><span class="break-all ml-4">PK80NAYA1234503346588665</span></div>
+                        <div class="space-y-1.5 bg-white/5 px-4 py-3.5 rounded-2xl">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300 font-medium">NayaPay/Bank:</span>
+                                <b class="font-bold text-white tracking-wide">03346588665</b>
+                            </div>
+                            <div class="flex justify-between text-[11px] text-slate-400">
+                                <span>Raast ID:</span>
+                                <span>03346588665</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-slate-400 pt-0.5">
+                                <span class="shrink-0">IBAN:</span>
+                                <span class="break-all tracking-tight text-right pl-4">PK80NAYA1234503346588665</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center pt-2 border-t border-white/10">
-                            <span>Account Name:</span>
-                            <b class="text-sm bg-[#1d4ed8] text-white px-2 py-0.5 rounded-lg">Waleed Ahmad</b>
+                        <div class="flex justify-between items-center pt-3 border-t border-white/5 text-[14px]">
+                            <span class="text-slate-300">Account Name:</span>
+                            <!-- FIXED Yellow Box matching 65493.jpg -->
+                            <b class="text-xs bg-[#ffb01c] text-black px-3 py-1.5 rounded-xl font-extrabold shadow-sm">Waleed Ahmad</b>
                         </div>
                     </div>
                 </div>
@@ -386,7 +397,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     console.error("Pixel Tracking Error:", pixelErr);
                 }
 
-                // FIXED: Template string updated with Brand Bazaar
                 let fullWaMessage = `*🚀 NEW ORDER - BRAND BAZAAR 🚀*
 
 👤 *Name:* ${fName} ${lName}
