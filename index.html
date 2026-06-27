@@ -168,10 +168,10 @@
         }
         .section-title-line.visible { width: 48px; }
 
-        /* ===== BRAND LOGO ===== */
-        .brand-logo { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; gap: 1px; }
-        .brand-icon { width: 46px; height: auto; display: block; margin-bottom: 2px; }
-        .brand-name { font-size: 11px; font-weight: 900; line-height: 1; display: flex; align-items: center; letter-spacing: -0.2px; white-space: nowrap; }
+        /* ===== BRAND LOGO (MADE COMPACT & SHORTER) ===== */
+        .brand-logo { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; gap: 0px; }
+        .brand-icon { width: 34px; height: auto; display: block; margin-bottom: 1px; }
+        .brand-name { font-size: 10px; font-weight: 900; line-height: 1; display: flex; align-items: center; letter-spacing: -0.2px; white-space: nowrap; }
         .brand-name span.text-custom-blue { margin-left: 2px !important; color: var(--primary-color); }
 
         /* ===== QTY ===== */
@@ -297,12 +297,12 @@
         <i class="fa-brands fa-whatsapp text-2xl"></i>
     </a>
 
-    <!-- NAV -->
-    <nav id="main-nav" class="glass fixed w-full z-[5000] px-4 py-1 border-b border-slate-100/50">
+    <!-- NAV (PADDING REDUCED FOR LESS HEIGHT) -->
+    <nav id="main-nav" class="glass fixed w-full z-[5000] px-4 py-0.5 border-b border-slate-100/50">
         <div class="container mx-auto grid grid-cols-3 items-center">
             <div class="flex justify-start">
-                <button onclick="toggleMenu()" class="p-2">
-                    <i class="fa-solid fa-bars-staggered text-xl text-slate-800"></i>
+                <button onclick="toggleMenu()" class="p-1">
+                    <i class="fa-solid fa-bars-staggered text-lg text-slate-800"></i>
                 </button>
             </div>
             <div class="flex justify-center">
@@ -316,12 +316,12 @@
             </div>
             <div class="flex justify-end items-center gap-3">
                 <div id="bell-container" class="relative hidden p-1 cursor-pointer" onclick="openChat()">
-                    <i class="fa-solid fa-bell text-xl" style="color:#1a56db"></i>
-                    <span class="absolute top-0 right-0 bg-red-500 w-2.5 h-2.5 rounded-full border-2 border-white animate-pulse"></span>
+                    <i class="fa-solid fa-bell text-lg" style="color:#1a56db"></i>
+                    <span class="absolute top-0 right-0 bg-red-500 w-2 h-2 rounded-full border border-white animate-pulse"></span>
                 </div>
                 <div class="relative p-1 cursor-pointer" onclick="toggleCart()">
-                    <i class="fa-solid fa-cart-shopping text-xl text-slate-800"></i>
-                    <span id="cart-count" class="absolute -top-1 -right-1 text-white text-[9px] px-1.5 rounded-full border border-white font-bold" style="background:#1a56db">0</span>
+                    <i class="fa-solid fa-cart-shopping text-lg text-slate-800"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 text-white text-[8px] px-1 rounded-full border border-white font-bold" style="background:#1a56db">0</span>
                 </div>
             </div>
         </div>
@@ -491,7 +491,7 @@
                 nav.style.position = "absolute"; nav.style.top = totalHeaderOffset + "px"; nav.classList.remove('box-shadow');
             }
             if (heroHeader) {
-                heroHeader.style.paddingTop = (totalHeaderOffset + (nav.offsetHeight || 55) - 15) + "px";
+                heroHeader.style.paddingTop = (totalHeaderOffset + (nav.offsetHeight || 44) + 20) + "px";
             }
         }
         window.onscroll = adjustNavPosition;
