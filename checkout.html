@@ -145,26 +145,26 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
             <div id="advance-details" class="mt-4 space-y-4 pt-4 border-t border-slate-50">
                 <div class="bg-[#1d6bf3] p-6 rounded-[2rem] text-white shadow-md space-y-5">
-                    <p class="text-xs font-bold uppercase tracking-wider text-white/80 border-b border-white/20 pb-3">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-white/80 border-b border-white/20 pb-3">
                         PAYMENT DETAILS
                     </p>
                     <div class="space-y-4 text-sm">
-                        <div class="flex justify-between items-center bg-white/10 px-4 py-3.5 rounded-2xl border border-white/5">
-                            <span class="flex items-center gap-2 text-white/90"><i class="fa-solid fa-wallet text-sm"></i> JazzCash:</span>
-                            <b class="font-semibold tracking-wide">03704884772</b>
+                        <div class="flex justify-between items-center bg-white/10 px-4 py-3 rounded-2xl border border-white/5">
+                            <span class="text-white/90 flex items-center gap-2"><i class="fa-solid fa-wallet text-[13px]"></i> JazzCash:</span>
+                            <b class="font-semibold tracking-wide text-[15px]">03704884772</b>
                         </div>
-                        <div class="flex justify-between items-center bg-white/10 px-4 py-3.5 rounded-2xl border border-white/5">
+                        <div class="flex justify-between items-center bg-white/10 px-4 py-3 rounded-2xl border border-white/5">
                             <span class="text-white/90">EasyPaisa:</span>
-                            <b class="font-semibold tracking-wide">03704884772</b>
+                            <b class="font-semibold tracking-wide text-[15px]">03704884772</b>
                         </div>
-                        <div class="space-y-1.5 bg-white/10 px-4 py-4 rounded-3xl border border-white/5">
+                        <div class="space-y-1 bg-white/10 px-4 py-3.5 rounded-[1.25rem] border border-white/5">
                             <div class="flex justify-between items-center">
-                                <span class="text-white/90 font-medium">NayaPay/Bank:</span>
-                                <b class="font-semibold tracking-wide">03346588665</b>
+                                <span class="text-white/90">NayaPay/Bank:</span>
+                                <b class="font-semibold tracking-wide text-[15px]">03346588665</b>
                             </div>
-                            <div class="flex justify-between text-xs text-white/70 pt-1">
+                            <div class="flex justify-between text-xs text-white/70 pt-0.5">
                                 <span>Raast ID:</span>
-                                <span>03346588665</span>
+                                <span class="font-medium">03346588665</span>
                             </div>
                             <div class="flex justify-between text-[11px] text-white/60 pt-0.5">
                                 <span class="shrink-0">IBAN:</span>
@@ -172,8 +172,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                             </div>
                         </div>
                         <div class="flex justify-between items-center pt-3 border-t border-white/20">
-                            <span class="text-white/90 text-sm">Account Name:</span>
-                            <span class="bg-[#ffcc00] text-slate-900 px-4 py-2 rounded-xl font-bold shadow-sm whitespace-nowrap min-w-max text-sm">Waleed Ahmad</span>
+                            <span class="text-white/90 text-[13px] self-center">Account Name:</span>
+                            <span class="bg-[#ffcc00] text-slate-900 px-3.5 py-1.5 rounded-lg font-bold shadow-sm text-sm tracking-wide block whitespace-nowrap">Waleed Ahmad</span>
                         </div>
                     </div>
                 </div>
@@ -292,6 +292,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             (function frame() { confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#1d4ed8', '#0f172a'] }); confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#22c55e', '#ffffff'] }); if (Date.now() < end) { requestAnimationFrame(frame); } }());
         }
 
+        // NO OTHER RE-EDIT: All inputs and functionalities remain original
         function isValidPakPhone(num) {
             const regex = /^03\d{9}$/;
             return regex.test(num);
