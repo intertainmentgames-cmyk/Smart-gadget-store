@@ -491,7 +491,7 @@
                 nav.style.position = "absolute"; nav.style.top = totalHeaderOffset + "px"; nav.classList.remove('box-shadow');
             }
             if (heroHeader) {
-                heroHeader.style.paddingTop = (totalHeaderOffset + (nav.offsetHeight || 55) + 20) + "px";
+                heroHeader.style.paddingTop = (totalHeaderOffset + (nav.offsetHeight || 55) - 15) + "px";
             }
         }
         window.onscroll = adjustNavPosition;
