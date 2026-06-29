@@ -414,7 +414,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     </div>`;
             });
             document.getElementById('cartTotal').innerText = 'Rs. ' + total;
-            document.getElementById('cart-count').innerText = cart.length;
+            updateCartCount();
         }
 
         function removeFromCart(index) {
@@ -424,29 +424,44 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             renderCart();
         }
 
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const countElement = document.getElementById('cart-count');
+            if (countElement) {
+                countElement.innerText = cart.length;
+            }
+        }
+
         function handleAddToCart() {
             if(!currentProduct) return;
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let finalPrice = (selectedVariationPrice && selectedVariationPrice.trim() !== '') ? 'Rs. ' + selectedVariationPrice : currentProduct.price;
 
-            cart.push({ 
-                name: currentProduct.name, 
-                price: finalPrice, 
-                img: (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : (currentProduct.image || ''),
-                deliveryCharges: currentProduct.delivery || 0,
-                codFee: currentProduct.cod_fee || 0,
-                variation: selectedVariationName,
-                quantity: 1
-            });
+            // BUG FIX: Check if item already exists with the same name and variation
+            let existingItem = cart.find(item => item.name === currentProduct.name && item.variation === selectedVariationName);
+
+            if (existingItem) {
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
+            } else {
+                cart.push({ 
+                    name: currentProduct.name, 
+                    price: finalPrice, 
+                    img: (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : (currentProduct.image || ''),
+                    deliveryCharges: currentProduct.delivery || 0,
+                    codFee: currentProduct.cod_fee || 0,
+                    variation: selectedVariationName,
+                    quantity: 1
+                });
+            }
+
             localStorage.setItem('cart', JSON.stringify(cart));
-            document.getElementById('cart-count').innerText = cart.length;
+            updateCartCount();
             toggleCart();
         }
 
         function handleBuyNow() {
             if(!currentProduct) return;
             
-            // Single product details create kar rhe hain instant checkout k liye
             let finalPrice = (selectedVariationPrice && selectedVariationPrice.trim() !== '') ? 'Rs. ' + selectedVariationPrice : currentProduct.price;
             
             let buyNowCart = [{ 
@@ -459,12 +474,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 quantity: 1
             }];
             
-            // Purani cart ko touch kiye bina, instant purchase item save karke direct redirect
             localStorage.setItem('cart', JSON.stringify(buyNowCart));
             window.location.href = 'checkout.html';
         }
 
-        document.getElementById('cart-count').innerText = (JSON.parse(localStorage.getItem('cart')) || []).length;
+        // Fauri tor pr page load hotay hi dono pages ka cart sync krny k liye
+        window.addEventListener('DOMContentLoaded', updateCartCount);
+        updateCartCount();
     </script>
 </body>
 </html>
