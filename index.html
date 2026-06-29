@@ -677,8 +677,15 @@
             }
         }
         
+        // ===== AUTOMATIC CART SYNC (ON BACK BUTTON / PAGESHOW) =====
+        window.addEventListener('pageshow', (event) => {
+            updateCartCount();
+            if (document.getElementById('side-cart').classList.contains('active')) {
+                renderCart();
+            }
+        });
+
         // Fauri synchronization page load hotay hi run krnay k liye
-        window.addEventListener('DOMContentLoaded', updateCartCount);
         updateCartCount();
 
         // ===== PRODUCTS =====
