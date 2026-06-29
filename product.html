@@ -68,7 +68,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     <div id="overlay" class="overlay" onclick="closeAll()"></div>
 
-    <!-- MATCHED NAV STRUCTURE -->
     <nav class="main-nav glass px-4 py-0.5">
         <div class="nav-grid">
             <div class="flex justify-start">
@@ -378,12 +377,12 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                             const index = Math.round(slider.scrollLeft / slider.clientWidth);
                             const allThumbs = document.querySelectorAll('.thumb-item');
                             
-                            allThumbs.forEach((thumb, i) => {
+                            allThumbs.forEach((touch, i) => {
                                 if(i === index) {
-                                    thumb.classList.add('active');
-                                    thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                                    touch.classList.add('active');
+                                    touch.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                                 } else {
-                                    thumb.classList.remove('active');
+                                    touch.classList.remove('active');
                                 }
                             });
                         }, 60);
@@ -437,7 +436,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let finalPrice = (selectedVariationPrice && selectedVariationPrice.trim() !== '') ? 'Rs. ' + selectedVariationPrice : currentProduct.price;
 
-            // BUG FIX: Check if item already exists with the same name and variation
             let existingItem = cart.find(item => item.name === currentProduct.name && item.variation === selectedVariationName);
 
             if (existingItem) {
@@ -478,7 +476,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             window.location.href = 'checkout.html';
         }
 
-        // Fauri tor pr page load hotay hi dono pages ka cart sync krny k liye
         window.addEventListener('DOMContentLoaded', updateCartCount);
         updateCartCount();
     </script>
