@@ -154,7 +154,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     </div>
 
     <nav class="p-4 bg-white border-b border-slate-100 flex items-center gap-4 sticky top-0 z-50">
-        <button onclick="history.back()"><i class="fa-solid fa-arrow-left text-xl text-slate-800"></i></button>
+        <button onclick="window.history.length > 1 ? history.back() : window.location.href='index.html'"><i class="fa-solid fa-arrow-left text-xl text-slate-800"></i></button>
         <h1 class="text-xl font-bold text-slate-900">Checkout</h1>
     </nav>
 
@@ -206,7 +206,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             </h2>
             <div class="grid grid-cols-1 gap-3">
                 
-                <!-- Advance Payment: Background is ALWAYS Green (bg-green-50), Icon is ALWAYS Green (text-green-600) -->
                 <label class="relative cursor-pointer">
                     <input type="radio" name="payMethod" value="advance" class="payment-radio hidden" checked onchange="togglePaymentUI()">
                     <div class="payment-card p-4 rounded-2xl bg-green-50 flex items-center justify-between">
@@ -221,7 +220,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     </div>
                 </label>
                 
-                <!-- Cash on Delivery: Background is ALWAYS Blue (bg-blue-50), Icon is ALWAYS Blue (text-[#1d4ed8]) -->
                 <label class="relative cursor-pointer">
                     <input type="radio" name="payMethod" value="cod" class="payment-radio hidden" onchange="togglePaymentUI()">
                     <div class="payment-card p-4 rounded-2xl bg-blue-50 flex items-center justify-between">
@@ -238,13 +236,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             </div>
 
             <div id="advance-details" class="mt-4 space-y-4 pt-4 border-t border-slate-50">
-                <!-- PAYMENT CARD - FIXED LAYOUT -->
                 <div class="bg-[#1d6bf3] p-5 rounded-[2rem] text-white shadow-md">
                     <p class="text-[10px] font-bold uppercase tracking-widest text-white/70 border-b border-white/20 pb-3 mb-4">
                         PAYMENT DETAILS
                     </p>
 
-                    <!-- JazzCash -->
                     <div class="pay-row mb-3">
                         <span class="pay-label">
                             <i class="fa-solid fa-wallet text-xs"></i> JazzCash:
@@ -252,13 +248,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         <span class="pay-value">03704884772</span>
                     </div>
 
-                    <!-- EasyPaisa -->
                     <div class="pay-row mb-3">
                         <span class="pay-label">EasyPaisa:</span>
                         <span class="pay-value">03704884772</span>
                     </div>
 
-                    <!-- NayaPay/Bank -->
                     <div class="naya-box mb-4">
                         <div class="naya-main">
                             <span class="naya-label">NayaPay/Bank:</span>
@@ -274,14 +268,12 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         </div>
                     </div>
 
-                    <!-- Account Name -->
                     <div class="acc-name-row">
                         <span class="acc-name-label">Account Name:</span>
                         <span class="acc-name-badge">Waleed Ahmad</span>
                     </div>
                 </div>
 
-                <!-- Screenshot Upload -->
                 <div class="upload-dashed p-6 rounded-2xl text-center relative">
                     <input type="file" id="ssUpload" class="absolute inset-0 opacity-0 cursor-pointer" onchange="previewSS()">
                     <div id="upload-placeholder">
@@ -364,6 +356,14 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
         function togglePaymentUI() { updateTotals(); }
         function previewSS() { const file = document.getElementById('ssUpload').files[0]; if(file) { const reader = new FileReader(); reader.onload = (e) => { document.getElementById('ssPreview').src = e.target.result; document.getElementById('upload-placeholder').classList.add('hidden'); document.getElementById('preview-area').classList.remove('hidden'); }; reader.readAsDataURL(file); } }
+
+        // Added state handling to properly persist dynamic configurations on back navigation
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                cart = JSON.parse(localStorage.getItem('cart')) || [];
+                loadCheckout();
+            }
+        });
 
         function triggerSuccessEffects() {
             document.getElementById('successOverlay').classList.remove('hidden');
