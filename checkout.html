@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta Pixel Code -->
-<script>
+    <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -17,7 +16,6 @@ fbq('track', 'PageView');
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1919985155383138&ev=PageView&noscript=1"
 /></noscript>
-<!-- End Meta Pixel Code -->
 <meta charset="UTF-8">
     <script src="https://js.sentry-cdn.com/e8b693c77ef64ddf7ea2d61e0cfcc1bd.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -319,7 +317,6 @@ src="https://www.facebook.com/tr?id=1919985155383138&ev=PageView&noscript=1"
         let cart = [];
         let isBuyNowFlow = false;
         
-        // Dynamic loading logic based on whether user came from "Buy Now" or the generic cart.
         const buyNowData = localStorage.getItem('buyNowCart');
         if (buyNowData) {
             cart = JSON.parse(buyNowData) || [];
@@ -455,7 +452,19 @@ src="https://www.facebook.com/tr?id=1919985155383138&ev=PageView&noscript=1"
                 if (isEmailEnabled) { promises.push(emailjs.send("service_qk7vqye", "template_dznvwme", emailParams)); promises.push(emailjs.send("service_qk7vqye", "template_r5r1vkr", emailParams)); }
                 promises.push(database.ref('orders').push({ customerName: `${fName} ${lName}`, customerPhone: phone, whatsapp: whatsapp, whatsappNo: whatsapp, emailAddress: cEmail, deliveryCharges: del, codFee: codF, customerCity: city, customerAddress: `${address} ${apt}`, productName: itemSummary, price: grand, paymentMethod: method, screenshot: ssUrl, date: new Date().toLocaleString() }));
                 await Promise.all(promises);
-                try { const numericPrice = parseInt(grand.replace(/[^\d]/g, '')) || 0; fbq('track', 'Purchase', { value: numericPrice, currency: 'PKR', content_name: itemSummary }); } catch(pixelErr) { console.error("Pixel Tracking Error:", pixelErr); }
+                
+                // Meta Pixel Purchase Event integration matching your parameters dynamically
+                try { 
+                    const numericPrice = parseInt(grand.replace(/[^\d]/g, '')) || 0; 
+                    fbq('track', 'Purchase', { 
+                        value: numericPrice, 
+                        currency: 'PKR', 
+                        content_name: itemSummary 
+                    }); 
+                } catch(pixelErr) { 
+                    console.error("Pixel Tracking Error:", pixelErr); 
+                }
+                
                 let fullWaMessage = `*🚀 NEW ORDER - BRAND BAZAAR 🚀*\n\n👤 *Name:* ${fName} ${lName}\n📧 *Email:* ${cEmail}\n📞 *Phone:* ${phone}\n🟢 *WhatsApp:* ${whatsapp}\n📍 *City:* ${city}\n🏠 *Address:* ${address} ${apt}\n\n*--- ITEMS ---*\n${itemsString}\n\n*--- BILLING ---*\n💰 *Subtotal:* ${sub}\n🚚 *Delivery:* ${del}\n💳 *COD Fee:* ${codF}\n💵 *Total Bill:* ${grand}\n\n✅ *Method:* ${method.toUpperCase()}\n🖼️ *Screenshot:* ${ssUrl}`;
                 sendLiveSignal("Order Placed");
                 triggerSuccessEffects();
