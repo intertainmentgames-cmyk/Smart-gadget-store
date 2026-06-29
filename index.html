@@ -622,7 +622,7 @@
         // ===== CART =====
         function addToCart(id, name, price, img, originalPrice) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let existingItem = cart.find(item => item.id === id);
+            let existingItem = cart.find(item => item.id === id || item.name === name);
             if(existingItem) existingItem.quantity += 1;
             else cart.push({ id, name, price, img, quantity: 1, originalPrice });
             localStorage.setItem('cart', JSON.stringify(cart));
@@ -647,16 +647,18 @@
             container.innerHTML = cart.length === 0 ? '<p class="text-center text-slate-400 mt-10">Cart is empty</p>' : '';
             let total = 0;
             cart.forEach((item, index) => {
-                total += parseInt(item.price) * item.quantity;
+                const cleanPrice = parseInt(item.price.toString().replace(/\D/g, '')) || 0;
+                total += cleanPrice * (item.quantity || 1);
                 container.innerHTML += `
                     <div class="flex items-center gap-3 bg-slate-50 p-2 rounded-xl">
-                        <img src="${item.img}" class="w-16 h-16 object-cover rounded-lg">
-                        <div class="flex-grow">
-                            <h4 class="font-bold text-[11px] truncate w-32">${item.name}</h4>
-                            <p class="font-bold text-xs" style="color:#1a56db">Rs. ${item.price}</p>
+                        <img src="${item.img}" class="w-16 h-16 object-cover rounded-lg bg-white border">
+                        <div class="flex-grow min-w-0">
+                            <h4 class="font-bold text-[11px] truncate w-32 text-slate-800">${item.name}</h4>
+                            <p class="font-bold text-xs text-[#1a56db]">Rs. ${cleanPrice}</p>
+                            ${item.variation ? `<p class="text-slate-400 font-bold text-[9px]">Option: ${item.variation}</p>` : ''}
                             <div class="flex items-center mt-1 gap-2">
                                 <button onclick="updateQuantity(${index},-1)" class="qty-btn">-</button>
-                                <span class="qty-input">${item.quantity}</span>
+                                <span class="qty-input">${item.quantity || 1}</span>
                                 <button onclick="updateQuantity(${index},1)" class="qty-btn">+</button>
                             </div>
                         </div>
@@ -664,13 +666,19 @@
                     </div>`;
             });
             totalEl.innerText = `Rs. ${total}`;
+            updateCartCount();
         }
         function updateCartCount() {
             let cart = [];
             try { cart = JSON.parse(localStorage.getItem('cart')) || []; } catch(e){}
             const countEl = document.getElementById('cart-count');
-            if(countEl) countEl.innerText = cart.reduce((acc,item) => acc + (parseInt(item.quantity)||0), 0);
+            if(countEl) {
+                countEl.innerText = cart.length;
+            }
         }
+        
+        // Fauri synchronization page load hotay hi run krnay k liye
+        window.addEventListener('DOMContentLoaded', updateCartCount);
         updateCartCount();
 
         // ===== PRODUCTS =====
