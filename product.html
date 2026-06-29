@@ -444,10 +444,24 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         }
 
         function handleBuyNow() {
-            handleAddToCart();
-            setTimeout(() => {
-                window.location.href = 'checkout.html';
-            }, 100);
+            if(!currentProduct) return;
+            
+            // Single product details create kar rhe hain instant checkout k liye
+            let finalPrice = (selectedVariationPrice && selectedVariationPrice.trim() !== '') ? 'Rs. ' + selectedVariationPrice : currentProduct.price;
+            
+            let buyNowCart = [{ 
+                name: currentProduct.name, 
+                price: finalPrice, 
+                img: (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : (currentProduct.image || ''),
+                deliveryCharges: currentProduct.delivery || 0,
+                codFee: currentProduct.cod_fee || 0,
+                variation: selectedVariationName,
+                quantity: 1
+            }];
+            
+            // Purani cart ko touch kiye bina, instant purchase item save karke direct redirect
+            localStorage.setItem('cart', JSON.stringify(buyNowCart));
+            window.location.href = 'checkout.html';
         }
 
         document.getElementById('cart-count').innerText = (JSON.parse(localStorage.getItem('cart')) || []).length;
