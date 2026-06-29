@@ -308,7 +308,19 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let cart = [];
+        let isBuyNowFlow = false;
+        
+        // Dynamic loading logic based on whether user came from "Buy Now" or the generic cart.
+        const buyNowData = localStorage.getItem('buyNowCart');
+        if (buyNowData) {
+            cart = JSON.parse(buyNowData) || [];
+            isBuyNowFlow = true;
+        } else {
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+            isBuyNowFlow = false;
+        }
+
         let baseSubtotal = 0, baseDelivery = 0, baseCodFee = 0;
         const imgbbKey = "6408d90314e10ab4bab623c99b6269c5";
 
@@ -340,8 +352,27 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             updateTotals();
         }
 
-        function updateQty(index, change) { cart[index].quantity = (cart[index].quantity || 1) + change; if(cart[index].quantity < 1) cart[index].quantity = 1; localStorage.setItem('cart', JSON.stringify(cart)); loadCheckout(); }
-        function removeItem(index) { cart.splice(index, 1); localStorage.setItem('cart', JSON.stringify(cart)); loadCheckout(); }
+        function updateQty(index, change) { 
+            cart[index].quantity = (cart[index].quantity || 1) + change; 
+            if(cart[index].quantity < 1) cart[index].quantity = 1; 
+            
+            if(isBuyNowFlow) {
+                localStorage.setItem('buyNowCart', JSON.stringify(cart));
+            } else {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+            loadCheckout(); 
+        }
+        
+        function removeItem(index) { 
+            cart.splice(index, 1); 
+            if(isBuyNowFlow) {
+                localStorage.setItem('buyNowCart', JSON.stringify(cart));
+            } else {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+            loadCheckout(); 
+        }
 
         function updateTotals() {
             const method = document.querySelector('input[name="payMethod"]:checked').value;
@@ -357,10 +388,16 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         function togglePaymentUI() { updateTotals(); }
         function previewSS() { const file = document.getElementById('ssUpload').files[0]; if(file) { const reader = new FileReader(); reader.onload = (e) => { document.getElementById('ssPreview').src = e.target.result; document.getElementById('upload-placeholder').classList.add('hidden'); document.getElementById('preview-area').classList.remove('hidden'); }; reader.readAsDataURL(file); } }
 
-        // Added state handling to properly persist dynamic configurations on back navigation
         window.addEventListener('pageshow', function(event) {
             if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-                cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const checkBuyNow = localStorage.getItem('buyNowCart');
+                if (checkBuyNow) {
+                    cart = JSON.parse(checkBuyNow) || [];
+                    isBuyNowFlow = true;
+                } else {
+                    cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    isBuyNowFlow = false;
+                }
                 loadCheckout();
             }
         });
@@ -414,7 +451,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 let fullWaMessage = `*🚀 NEW ORDER - BRAND BAZAAR 🚀*\n\n👤 *Name:* ${fName} ${lName}\n📧 *Email:* ${cEmail}\n📞 *Phone:* ${phone}\n🟢 *WhatsApp:* ${whatsapp}\n📍 *City:* ${city}\n🏠 *Address:* ${address} ${apt}\n\n*--- ITEMS ---*\n${itemsString}\n\n*--- BILLING ---*\n💰 *Subtotal:* ${sub}\n🚚 *Delivery:* ${del}\n💳 *COD Fee:* ${codF}\n💵 *Total Bill:* ${grand}\n\n✅ *Method:* ${method.toUpperCase()}\n🖼️ *Screenshot:* ${ssUrl}`;
                 sendLiveSignal("Order Placed");
                 triggerSuccessEffects();
-                localStorage.removeItem('cart');
+                
+                if (isBuyNowFlow) {
+                    localStorage.removeItem('buyNowCart');
+                } else {
+                    localStorage.removeItem('cart');
+                }
+                
                 setTimeout(() => { window.location.href = `whatsapp://send?phone=923704884772&text=${encodeURIComponent(fullWaMessage)}`; }, 1000);
             } catch(e) { console.error(e); Sentry.captureException(e); alert("Error placing order."); btn.disabled = false; btn.innerHTML = 'Confirm Order'; }
         }
