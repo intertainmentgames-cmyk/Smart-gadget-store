@@ -31,14 +31,9 @@ src="https://www.facebook.com/tr?id=1919985155383138&ev=PageView&noscript=1"
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Poppins', sans-serif !important; }
         
-        /* Base Unselected Card Style (Grey Border) */
         .payment-card { transition: 0.3s; border: 2px solid #e2e8f0; cursor: pointer; }
-        
-        /* Active Selection Borders */
         .payment-radio[value="advance"]:checked + .payment-card { border-color: #22c55e; }
         .payment-radio[value="cod"]:checked + .payment-card { border-color: #1d4ed8; }
-        
-        /* Dynamic Tick Colors based on selection */
         .payment-radio[value="advance"]:checked + .payment-card .fa-circle-check { color: #22c55e; }
         .payment-radio[value="cod"]:checked + .payment-card .fa-circle-check { color: #1d4ed8; }
 
@@ -51,7 +46,6 @@ src="https://www.facebook.com/tr?id=1919985155383138&ev=PageView&noscript=1"
         @keyframes drawCheck { to { stroke-dashoffset: 0; } }
         .animate-draw { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawCheck 0.8s ease-out forwards; animation-delay: 0.2s; }
 
-        /* ===== PAYMENT DETAILS BLOCK INTERNAL FIXES ===== */
         .pay-row {
             display: flex;
             align-items: center;
@@ -453,7 +447,6 @@ src="https://www.facebook.com/tr?id=1919985155383138&ev=PageView&noscript=1"
                 promises.push(database.ref('orders').push({ customerName: `${fName} ${lName}`, customerPhone: phone, whatsapp: whatsapp, whatsappNo: whatsapp, emailAddress: cEmail, deliveryCharges: del, codFee: codF, customerCity: city, customerAddress: `${address} ${apt}`, productName: itemSummary, price: grand, paymentMethod: method, screenshot: ssUrl, date: new Date().toLocaleString() }));
                 await Promise.all(promises);
                 
-                // Meta Pixel Purchase Event integration matching your parameters dynamically
                 try { 
                     const numericPrice = parseInt(grand.replace(/[^\d]/g, '')) || 0; 
                     fbq('track', 'Purchase', { 
@@ -475,7 +468,7 @@ src="https://www.facebook.com/tr?id=1919985155383138&ev=PageView&noscript=1"
                     localStorage.removeItem('cart');
                 }
                 
-                setTimeout(() => { window.location.href = `whatsapp://send?phone=923704884772&text=${encodeURIComponent(fullWaMessage)}`; }, 1000);
+                setTimeout(() => { window.location.href = `whatsapp://send?phone=923065472228&text=${encodeURIComponent(fullWaMessage)}`; }, 1000);
             } catch(e) { console.error(e); Sentry.captureException(e); alert("Error placing order."); btn.disabled = false; btn.innerHTML = 'Confirm Order'; }
         }
 
