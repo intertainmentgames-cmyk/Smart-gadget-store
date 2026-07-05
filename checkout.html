@@ -334,22 +334,57 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         }
         window.addEventListener('beforeunload', function () { database.ref(`live_status/${userUUID}`).remove(); });
 
+        // Helper to trigger pixel events reliably with a tiny delay if needed
+        function trackPixelEvent(eventName, eventData) {
+            try {
+                if (window.fbq) {
+                    fbq('track', eventName, eventData);
+                }
+            } catch(err) {
+                console.error("Pixel tracking error for " + eventName + ":", err);
+            }
+        }
+
         function loadCheckout() {
             const container = document.getElementById('checkout-items');
             baseSubtotal = 0; baseDelivery = 0; baseCodFee = 0;
             container.innerHTML = '';
             if(cart.length === 0) { container.innerHTML = '<p class="text-center text-slate-400 py-4">Your cart is empty</p>'; updateTotals(); sendLiveSignal("Checkout"); return; }
             sendLiveSignal("Checkout");
+            
+            let contentIds = [];
+            let contentNames = [];
+
             cart.forEach((item, index) => {
                 const priceNum = parseInt(item.price.toString().replace(/[^\d]/g, '')) || 0;
                 const qty = item.quantity || 1;
                 baseSubtotal += (priceNum * qty);
                 baseDelivery += (parseInt(item.deliveryCharges) || 0);
                 baseCodFee += (parseInt(item.codFee) || 0);
+                
+                contentNames.push(item.name);
+                if(item.id) contentIds.push(item.id);
+
                 let varDisplayTag = "";
                 if (item.variation && item.variation.trim() !== "") { varDisplayTag = `<div class="text-[10px] text-blue-700 font-bold bg-blue-50 rounded px-1.5 py-0.5 inline-block mt-0.5">Option: ${item.variation}</div>`; }
                 container.innerHTML += `<div class="flex items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-100"><img src="${item.img}" class="w-16 h-16 rounded-xl object-cover"><div class="flex-1"><div class="text-[12px] font-bold text-slate-800 line-clamp-1">${item.name}</div><div class="text-[#1d4ed8] font-extrabold text-[13px]">${item.price}</div>${varDisplayTag}<div class="flex items-center gap-3 mt-2"><button onclick="updateQty(${index}, -1)" class="qty-btn text-slate-600">-</button><span class="text-sm font-bold text-slate-800">${qty}</span><button onclick="updateQty(${index}, 1)" class="qty-btn text-slate-900">+</button></div></div><button onclick="removeItem(${index})" class="text-red-400 p-2 active:scale-90 transition"><i class="fa-solid fa-trash-can"></i></button></div>`;
             });
+            
+            // Standard Events: InitiateCheckout and ViewContent when page loads
+            trackPixelEvent('ViewContent', {
+                content_names: contentNames,
+                content_type: 'product',
+                value: baseSubtotal,
+                currency: 'PKR'
+            });
+
+            trackPixelEvent('InitiateCheckout', {
+                content_names: contentNames,
+                value: baseSubtotal,
+                currency: 'PKR',
+                num_items: cart.length
+            });
+
             updateTotals();
         }
 
@@ -362,6 +397,18 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             } else {
                 localStorage.setItem('cart', JSON.stringify(cart));
             }
+
+            // Track AddToCart event if item quantity increases
+            if (change > 0 && cart[index]) {
+                const itemPrice = parseInt(cart[index].price.toString().replace(/[^\d]/g, '')) || 0;
+                trackPixelEvent('AddToCart', {
+                    content_name: cart[index].name,
+                    content_type: 'product',
+                    value: itemPrice,
+                    currency: 'PKR'
+                });
+            }
+
             loadCheckout(); 
         }
         
@@ -449,16 +496,14 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 promises.push(database.ref('orders').push({ customerName: `${fName} ${lName}`, customerPhone: phone, whatsapp: whatsapp, whatsappNo: whatsapp, emailAddress: cEmail, deliveryCharges: del, codFee: codF, customerCity: city, customerAddress: `${address} ${apt}`, productName: itemSummary, price: grand, paymentMethod: method, screenshot: ssUrl, date: new Date().toLocaleString() }));
                 await Promise.all(promises);
                 
-                try { 
-                    const numericPrice = parseInt(grand.replace(/[^\d]/g, '')) || 0; 
-                    fbq('track', 'Purchase', { 
-                        value: numericPrice, 
-                        currency: 'PKR', 
-                        content_name: itemSummary 
-                    }); 
-                } catch(pixelErr) { 
-                    console.error("Pixel Tracking Error:", pixelErr); 
-                }
+                // Purchase tracking with full verification
+                const numericPrice = parseInt(grand.replace(/[^\d]/g, '')) || 0; 
+                trackPixelEvent('Purchase', { 
+                    value: numericPrice, 
+                    currency: 'PKR', 
+                    content_name: itemSummary,
+                    num_items: cart.length
+                });
                 
                 let fullWaMessage = `*🚀 NEW ORDER - BRAND BAZAAR 🚀*\n\n👤 *Name:* ${fName} ${lName}\n📧 *Email:* ${cEmail}\n📞 *Phone:* ${phone}\n🟢 *WhatsApp:* ${whatsapp}\n📍 *City:* ${city}\n🏠 *Address:* ${address} ${apt}\n\n*--- ITEMS ---*\n${itemsString}\n\n*--- BILLING ---*\n💰 *Subtotal:* ${sub}\n🚚 *Delivery:* ${del}\n💳 *COD Fee:* ${codF}\n💵 *Total Bill:* ${grand}\n\n✅ *Method:* ${method.toUpperCase()}\n🖼️ *Screenshot:* ${ssUrl}`;
                 sendLiveSignal("Order Placed");
@@ -470,7 +515,8 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                     localStorage.removeItem('cart');
                 }
                 
-                setTimeout(() => { window.location.href = `whatsapp://send?phone=923065472228&text=${encodeURIComponent(fullWaMessage)}`; }, 1000);
+                // Redirection timer extended to 2.5 seconds to guarantee Pixel fires completely
+                setTimeout(() => { window.location.href = `whatsapp://send?phone=923065472228&text=${encodeURIComponent(fullWaMessage)}`; }, 2500);
             } catch(e) { console.error(e); Sentry.captureException(e); alert("Error placing order."); btn.disabled = false; btn.innerHTML = 'Confirm Order'; }
         }
 
