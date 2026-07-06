@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <!-- Meta Pixel Code -->
-<script>
+ <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -17,8 +16,7 @@ fbq('track', 'PageView');
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
 /></noscript>
-<!-- End Meta Pixel Code -->
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Brand Bazaar | Premium Quality</title>
     
@@ -448,6 +446,9 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // ===== OPENAI AUTOMATION VARIABLE SECRET SETTING =====
+        const openAIKey = "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";
+
         // ===== FIREBASE =====
         const firebaseConfig = {
             apiKey: "AIzaSyAfYl3nFIp59A_qCnWdNaIOxliZ2YlJMLM",
@@ -548,23 +549,89 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         }
         function closeChat() { document.getElementById('chat-modal').classList.remove('active'); }
 
+        // Escalation keywords filtering algorithm
+        function checkSeriousIssue(text) {
+            const lowText = text.toLowerCase();
+            const keywords = ['refund', 'return', 'exchange', 'wrong', 'defect', 'kharab', 'toota', 'fake', 'owner', 'admin', 'payment', 'paisa', 'fraud', 'dhoka', 'cancle', 'complain'];
+            return keywords.some(word => lowText.includes(word));
+        }
+
+        // Direct Core Async Integration Engine with OpenAI GPT Endpoint
+        async function processAIResponse(userText) {
+            const isEscalated = checkSeriousIssue(userText);
+            let aiText = "";
+
+            if (isEscalated) {
+                aiText = "Aapka message store owner ko forward kar diya gaya hai, jald hi aapse raabta kiya jayega.";
+                await database.ref(`user_chats/${userUUID}`).update({ needs_admin: true, ai_mode: "paused" });
+            } else {
+                try {
+                    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${openAIKey}`
+                        },
+                        body: JSON.stringify({
+                            model: "gpt-4o-mini",
+                            messages: [
+                                { role: "system", content: "You are the support AI for 'Brand Bazaar', a premium e-commerce tech store in Pakistan. Answer politely in simple Roman Urdu or mixed English. RULES: 1. Keep answers extremely short and concise (1-2 sentences maximum). 2. Never talk about return/refund policies; if asked, say the owner will contact you. 3. Help with shipping queries (takes 2-4 days across Pakistan)." },
+                                { role: "user", content: userText }
+                            ],
+                            max_tokens: 100
+                        })
+                    });
+
+                    const data = await response.json();
+                    if(data.choices && data.choices[0]) {
+                        aiText = data.choices[0].message.content;
+                    } else {
+                        aiText = "Ji, aapka message mil gaya hai. Humaray team member jald hi aap se rabta karenge.";
+                    }
+                } catch (error) {
+                    console.error("AI Logic Exception:", error);
+                    aiText = "Aapka message receive ho chuka hai. Hum jald hi aapse raabta karenge.";
+                }
+            }
+
+            const timeStr = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+            await database.ref(`chat_history/${userUUID}`).push({ role: 'admin', text: aiText, time: timeStr });
+            await database.ref(`user_chats/${userUUID}`).update({ last_message: aiText, admin_unread: false, last_update: Date.now() });
+        }
+
         async function sendSupportMessage() {
             const name = document.getElementById('userName').value;
             const msg = document.getElementById('userMsg').value;
             if(!name || !msg) return alert("Fill all fields");
             const msgObj = { role: 'user', text: msg, time: new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) };
+            
+            await database.ref(`user_chats/${userUUID}`).update({ senderName: name, last_message: msg, admin_unread: true, last_update: Date.now(), user_id: userUUID });
             await database.ref(`chat_history/${userUUID}`).push(msgObj);
-            await database.ref(`user_chats/${userUUID}`).update({ senderName: name, last_message: msg, admin_unread: true, last_update: Date.now() });
+            
             alert("Message sent!");
             document.getElementById('userMsg').value = "";
+
+            database.ref(`user_chats/${userUUID}/ai_mode`).once('value', async (snap) => {
+                if (snap.val() !== "paused") {
+                    setTimeout(() => processAIResponse(msg), 1000);
+                }
+            });
         }
+        
         async function sendReplyBack() {
             const input = document.getElementById('userReplyInput');
             if(!input.value) return;
-            const msgObj = { role: 'user', text: input.value, time: new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) };
+            const userText = input.value;
+            const msgObj = { role: 'user', text: userText, time: new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) };
             await database.ref(`chat_history/${userUUID}`).push(msgObj);
-            await database.ref(`user_chats/${userUUID}`).update({ last_message: input.value, admin_unread: true, last_update: Date.now() });
+            await database.ref(`user_chats/${userUUID}`).update({ last_message: userText, admin_unread: true, last_update: Date.now() });
             input.value = "";
+
+            database.ref(`user_chats/${userUUID}/ai_mode`).once('value', async (snap) => {
+                if (snap.val() !== "paused") {
+                    setTimeout(() => processAIResponse(userText), 1000);
+                }
+            });
         }
 
         // ===== DRAWERS =====
@@ -694,7 +761,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             }
         }
         
-        // ===== AUTOMATIC CART SYNC (ON BACK BUTTON / PAGESHOW) =====
         window.addEventListener('pageshow', (event) => {
             updateCartCount();
             if (document.getElementById('side-cart').classList.contains('active')) {
@@ -702,7 +768,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             }
         });
 
-        // Fauri synchronization page load hotay hi run krnay k liye
         updateCartCount();
 
         // ===== PRODUCTS =====
