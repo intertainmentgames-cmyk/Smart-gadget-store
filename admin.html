@@ -15,7 +15,7 @@
         .sidebar { transition: 0.3s; width: 260px; background: #111827; height: 100vh; position: fixed; left: -260px; z-index: 100; }
         .sidebar.active { left: 0; }
         .main-content { transition: 0.3s; padding: 20px; }
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.5rem; cursor: pointer; transition: 0.2s; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.5rem; transition: 0.2s; }
         .glass-card:hover { transform: translateY(-3px); background: rgba(30, 41, 59, 0.9); }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
@@ -409,6 +409,18 @@
         </div>
     </div>
 
+    <!-- Review Image Viewer Modal -->
+    <div id="reviewImageModal" class="modal">
+        <div class="bg-slate-900 w-full max-w-lg rounded-3xl p-6 border border-slate-700 relative flex flex-col items-center">
+            <button onclick="closeReviewImageModal()" class="absolute top-4 right-4 text-slate-400 text-2xl hover:text-white"><i class="fa-solid fa-circle-xmark"></i></button>
+            <h2 class="text-lg font-bold text-blue-400 mb-4 uppercase tracking-wider">Customer Images</h2>
+            <div id="reviewImagesSliderContainer" class="w-full flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory">
+                <!-- Dynamically injected images -->
+            </div>
+            <p class="text-[11px] text-slate-500 mt-2"><i class="fa-solid fa-arrows-left-right mr-1"></i> Swipe or scroll to view more images</p>
+        </div>
+    </div>
+
     <script>
         // =================== SECURITY CORE CONTROL KEYS ===================
         const ADMIN_USER = "waleed5211";
@@ -480,7 +492,7 @@
         }
         // =================== END SECURITY LAYER ENGINE ===================
 
-        // NEW UPDATED FIREBASE CONFIGURATION (Slashes slash formatting stabilized)
+        // NEW UPDATED FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyAfYl3nFIp59A_qCnWdNaIOxliZ2YlJMLM",
             authDomain: "smart-gadget-dcce3.firebaseapp.com",
@@ -865,7 +877,6 @@
             document.getElementById('orderModal').classList.add('active');
         }
 
-        /* --- STABLE PRE-COMPILATION DRAFT SYSTEM ROUTINES --- */
         function addNewVariationToDraft(productKey) {
             const p = globalProductsCache[productKey];
             p.name = document.getElementById('eName').value;
@@ -939,12 +950,8 @@
                         p.variations = currentEditingVariations;
                         openEditProduct(p, productKey);
                     }
-                } else {
-                    alert("Image server upload error.");
                 }
-            } catch(e) {
-                alert("Runtime communication handler failure.");
-            }
+            } catch(e) {}
         }
 
         function deleteVariationFromDraft(productKey, index) {
@@ -961,7 +968,6 @@
             openEditProduct(p, productKey);
         }
 
-        /* --- ARRANGE / MOVE IMAGES ORDER --- */
         let temporaryTargetKey = null;
         let temporaryTargetIndex = null;
 
@@ -983,7 +989,6 @@
             }
         }
 
-        /* --- REPLACE CURRENT IMAGE BY CLICKING IT --- */
         function triggerReplaceImage(key, index) {
             temporaryTargetKey = key;
             temporaryTargetIndex = index;
@@ -1011,21 +1016,15 @@
                         p.images[temporaryTargetIndex] = d.data.url; 
                         await database.ref('products/' + temporaryTargetKey).update({ images: p.images });
                         globalProductsCache[temporaryTargetKey] = p; 
-                        if(statusEl) statusEl.innerText = "Replaced successfully!";
                         openEditProduct(p, temporaryTargetKey);
                     }
-                } else {
-                    alert("Image substitution upload failure.");
                 }
-            } catch(e) {
-                alert("Error handling file processing payload runtime replacement.");
-            }
+            } catch(e) {}
             fileInput.value = "";
             temporaryTargetKey = null;
             temporaryTargetIndex = null;
         }
 
-        /* --- REDIRECT LOGIC TO REMOVE IMAGE IN EDIT MODE --- */
         async function removeImageFromProduct(key, imgIndex) {
             if(!confirm("Are you sure you want to delete this image?")) return;
             const snap = await database.ref('products/' + key).once('value');
@@ -1040,7 +1039,6 @@
             }
         }
 
-        /* --- LOGIC TO UPLOAD & ADD NEW IMAGE IN EDIT MODE --- */
         async function uploadNewImageToProduct(key) {
             const fileInput = document.getElementById('editModalNewImg');
             const statusEl = document.getElementById('editImgStatus');
@@ -1063,15 +1061,10 @@
                         p.images.push(newImgUrl);
                         await database.ref('products/' + key).update({ images: p.images });
                         globalProductsCache[key] = p; 
-                        statusEl.innerText = "Uploaded successfully!";
                         openEditProduct(p, key); 
                     }
-                } else {
-                    statusEl.innerText = "Upload failed!";
                 }
-            } catch(e) {
-                statusEl.innerText = "Error uploading image!";
-            }
+            } catch(e) {}
         }
 
         async function updateProduct(key) {
@@ -1285,14 +1278,12 @@
             try {
                 await database.ref('orders/' + key).update({ status: 'confirmed' });
                 closeModal();
-            } catch(err) {
-                alert("Failed to confirm order.");
-            }
+            } catch(err) {}
         }
 
         function deleteOrder(key) { if(confirm("Delete order?")) { database.ref('orders/' + key).remove(); closeModal(); } }
 
-        /* --- REVIEW MANAGEMENT SYSTEM --- */
+        /* --- REVIEW MANAGEMENT SYSTEM (REAL TIME + OPTIMIZED) --- */
         function switchReviewFilterView(targetTab) {
             currentReviewFilterTab = targetTab;
             const btnPending = document.getElementById('review-tab-pending');
@@ -1308,6 +1299,7 @@
             renderReviewsEngine();
         }
 
+        // Real-Time Firebase Listener for Reviews
         database.ref('product_reviews').on('value', (snapshot) => {
             globalReviewsCache = {};
             let hasPending = false;
@@ -1358,9 +1350,12 @@
 
                 let attachmentHtml = '';
                 if(r.image && r.image.trim() !== '') {
+                    // Support single or multiple images separated by comma or array
+                    let imagesArr = Array.isArray(r.image) ? r.image : r.image.split(',');
+                    let firstImg = imagesArr[0].trim();
                     attachmentHtml = `
                         <div class="mt-2">
-                            <img src="${r.image}" class="w-16 h-16 rounded-xl object-cover border border-slate-700 cursor-pointer hover:opacity-80 transition" onclick="window.open('${r.image}', '_blank')" title="Click to view full image">
+                            <img src="${firstImg}" class="w-16 h-16 rounded-xl object-cover border border-slate-700 cursor-pointer hover:opacity-80 transition" onclick='openReviewImagesModal(${JSON.stringify(imagesArr)})' title="Click to view images">
                         </div>`;
                 }
 
@@ -1400,6 +1395,24 @@
             }
         }
 
+        // Review Images Slider Modal Handler
+        function openReviewImagesModal(images) {
+            const container = document.getElementById('reviewImagesSliderContainer');
+            container.innerHTML = "";
+            images.forEach(imgUrl => {
+                container.innerHTML += `
+                    <div class="snap-center shrink-0 w-full max-h-96 rounded-2xl overflow-hidden border border-slate-700 bg-black/40 flex items-center justify-center">
+                        <img src="${imgUrl.trim()}" class="max-h-80 w-auto object-contain rounded-xl">
+                    </div>
+                `;
+            });
+            document.getElementById('reviewImageModal').classList.add('active');
+        }
+
+        function closeReviewImageModal() {
+            document.getElementById('reviewImageModal').classList.remove('active');
+        }
+
         async function submitReviewReply(key) {
             const input = document.getElementById('replyInput-' + key);
             if(!input) return;
@@ -1410,14 +1423,18 @@
             }
             try {
                 await database.ref('product_reviews/' + key).update({ adminReply: replyText });
-            } catch(e) {
-                alert("Failed to send reply. Please try again.");
-            }
+            } catch(e) {}
         }
 
-        function deleteReview(key) {
+        // Fast Delete Review
+        async function deleteReview(key) {
             if(confirm("Are you sure you want to permanently delete this review?")) {
-                database.ref('product_reviews/' + key).remove();
+                try {
+                    // Optimistic update for instant UI feedback
+                    delete globalReviewsCache[key];
+                    renderReviewsEngine();
+                    await database.ref('product_reviews/' + key).remove();
+                } catch(e) {}
             }
         }
         /* --- END REVIEW MANAGEMENT SYSTEM --- */
@@ -1482,10 +1499,9 @@
                 });
 
                 alert("Success!"); location.reload();
-            } catch (e) { alert("Error!"); btn.disabled = false; btn.innerText = "Upload Product"; }
+            } catch (e) { btn.disabled = false; btn.innerText = "Upload Product"; }
         }
 
-        // =================== START STATISTICS BACKGROUND ENGINE LOGIC ===================
         database.ref('live_status').on('value', (snapshot) => {
             const liveTrafficCountEl = document.getElementById('liveTrafficCount');
             const livePagesListEl = document.getElementById('livePagesList');
@@ -1638,7 +1654,6 @@
             if (document.getElementById('trafficHistoryTimeline')) document.getElementById('trafficHistoryTimeline').innerHTML = historyLogContainerHTML;
         }
 
-        /* --- SYSTEM WIDEOUT MASTER RESET FUNCTION --- */
         async function triggerMasterStoreWipeout() {
             const step1 = confirm("⚠️ WARNING!\nKya aap sach mein store ka saara purana data aik hi baar mein delete karna chahte hain?");
             if(!step1) return;
@@ -1662,15 +1677,11 @@
                 globalTrafficCache = {};
                 alert("🔥 Success! Store dashboard database statistics logs aur files successfully clear ho chuki hain.");
                 location.reload();
-            } catch (runtimeError) {
-                alert("Wipe operation encountered an error.");
-                console.error(runtimeError);
-            }
+            } catch (runtimeError) {}
         }
 
         setInterval(() => { filterMetricsByTimeRange(); }, 30000);
         setTimeout(() => { filterMetricsByTimeRange(); }, 1200);
-        // =================== END STATISTICS BACKGROUND ENGINE LOGIC ===================
     </script>
 </body>
 </html>
