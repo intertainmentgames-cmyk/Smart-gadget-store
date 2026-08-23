@@ -1122,7 +1122,7 @@
             renderOrdersEngine();
         }
 
-        // --- REVIEW MANAGEMENT FUNCTIONS ---
+        // --- REVIEW MANAGEMENT FUNCTIONS (FIXED) ---
         function switchReviewFilterView(targetTab) {
             currentReviewFilterTab = targetTab;
             const btnPending = document.getElementById('review-tab-pending');
@@ -1143,9 +1143,9 @@
             if(snapshot.exists()) {
                 snapshot.forEach(child => {
                     let revData = child.val();
-                    // Fallback to 'pending' if status property is missing in old database entries
+                    // Fallback to determine proper status if missing or legacy data exists
                     if (!revData.status) {
-                        revData.status = revData.adminReply ? 'confirmed' : 'pending';
+                        revData.status = (revData.adminReply && revData.adminReply.trim() !== "") ? 'confirmed' : 'pending';
                     }
                     globalReviewsCache[child.key] = revData;
                 });
