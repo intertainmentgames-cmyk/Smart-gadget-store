@@ -134,6 +134,9 @@
                 <button id="btn-view-orders" onclick="showSection('view-orders')" class="nav-tab-btn w-full text-left p-3 rounded-xl hover:bg-blue-600/10 hover:text-blue-400 transition flex items-center gap-3 font-semibold">
                     <i class="fa-solid fa-cart-shopping"></i> View Orders
                 </button>
+                <button id="btn-review-management" onclick="showSection('review-management')" class="nav-tab-btn w-full text-left p-3 rounded-xl hover:bg-blue-600/10 hover:text-blue-400 transition flex items-center gap-3 font-semibold">
+                    <i class="fa-solid fa-star"></i> Review Management
+                </button>
                 <button id="btn-user-messages" onclick="showSection('user-messages')" class="nav-tab-btn w-full text-left p-3 rounded-xl hover:bg-blue-600/10 hover:text-blue-400 transition flex items-center gap-3 font-semibold relative">
                     <i class="fa-solid fa-comment-dots"></i> User Messages
                     <span id="msg-notif-dot" class="hidden absolute right-4 w-2 h-2 bg-red-500 rounded-full"></span>
@@ -349,6 +352,20 @@
                 <div id="orders-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
 
+            <!-- REVIEW MANAGEMENT SECTION -->
+            <div id="review-management" class="hidden-section space-y-6">
+                <div class="flex items-center gap-3 bg-slate-900/80 p-2 rounded-2xl border border-slate-800 max-w-md">
+                    <button onclick="switchReviewFilterView('pending')" id="review-tab-pending" class="flex-1 text-center py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wide transition-all duration-300 bg-blue-600 text-white shadow-lg shadow-blue-950/50">
+                        <i class="fa-solid fa-clock-rotate-left mr-1.5"></i>Pending Reviews
+                    </button>
+                    <button onclick="switchReviewFilterView('confirmed')" id="review-tab-confirmed" class="flex-1 text-center py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wide transition-all duration-300 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50">
+                        <i class="fa-solid fa-circle-check mr-1.5"></i>Confirmed Reviews
+                    </button>
+                </div>
+                
+                <div id="reviews-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
             <div id="user-messages" class="hidden-section">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-[70vh]">
                     <div class="glass-card p-4 overflow-y-auto space-y-3 border border-slate-800">
@@ -487,9 +504,11 @@
         let globalProductsCache = {}; 
 
         let globalOrdersCache = {};
+        let globalReviewsCache = {};
         let globalTrafficCache = {};
         let currentEditingVariations = [];
         let currentOrderFilterTab = 'pending';
+        let currentReviewFilterTab = 'pending';
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
         function closeModal() { document.getElementById('orderModal').classList.remove('active'); }
@@ -497,7 +516,7 @@
         function showSection(id) {
             document.querySelectorAll('.main-content > div:not(.flex)').forEach(div => div.classList.add('hidden-section'));
             document.getElementById(id).classList.remove('hidden-section');
-            const titles = {'store-statistics': 'Store Stats & Traffic', 'add-product': 'Add Product', 'view-orders': 'Customer Orders', 'manage-products': 'Manage Store', 'manage-slider': 'Manage Slider', 'user-messages': 'Support Inbox'};
+            const titles = {'store-statistics': 'Store Stats & Traffic', 'add-product': 'Add Product', 'view-orders': 'Customer Orders', 'manage-products': 'Manage Store', 'manage-slider': 'Manage Slider', 'review-management': 'Review Management', 'user-messages': 'Support Inbox'};
             document.getElementById('page-title').innerText = titles[id];
             
             document.querySelectorAll('.nav-tab-btn').forEach(btn => {
@@ -692,7 +711,7 @@
         }
         function closeChat() { activeChatUserID = null; document.getElementById('chat-window').classList.add('hidden'); document.getElementById('chat-placeholder').classList.remove('hidden'); }
 
-        // --- Store Management (Slider, Products, Orders) ---
+        // --- Store Management (Slider, Products, Orders, Reviews) ---
         async function uploadSliderImage() {
             const file = document.getElementById('sliderFileInput').files[0];
             const status = document.getElementById('sliderUploadStatus');
@@ -1103,6 +1122,111 @@
             renderOrdersEngine();
         }
 
+        // --- REVIEW MANAGEMENT FUNCTIONS ---
+        function switchReviewFilterView(targetTab) {
+            currentReviewFilterTab = targetTab;
+            const btnPending = document.getElementById('review-tab-pending');
+            const btnConfirmed = document.getElementById('review-tab-confirmed');
+            
+            if(targetTab === 'pending') {
+                btnPending.className = "flex-1 text-center py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wide transition-all duration-300 bg-blue-600 text-white shadow-lg shadow-blue-950/50";
+                btnConfirmed.className = "flex-1 text-center py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wide transition-all duration-300 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50";
+            } else {
+                btnConfirmed.className = "flex-1 text-center py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wide transition-all duration-300 bg-blue-600 text-white shadow-lg shadow-blue-950/50";
+                btnPending.className = "flex-1 text-center py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wide transition-all duration-300 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50";
+            }
+            renderReviewsEngine();
+        }
+
+        database.ref('reviews').on('value', (snapshot) => {
+            globalReviewsCache = {};
+            if(snapshot.exists()) {
+                snapshot.forEach(child => {
+                    globalReviewsCache[child.key] = child.val();
+                });
+            }
+            renderReviewsEngine();
+        });
+
+        function renderReviewsEngine() {
+            const list = document.getElementById('reviews-list');
+            if(!list) return;
+            list.innerHTML = "";
+            let reviewsFound = false;
+
+            Object.keys(globalReviewsCache).forEach(key => {
+                const r = globalReviewsCache[key];
+                if(!r) return;
+
+                const currentStatus = r.status || 'pending';
+                if(currentStatus !== currentReviewFilterTab) return;
+
+                reviewsFound = true;
+                const reviewImageHTML = r.reviewImage ? `<div class="mt-2"><span class="text-[10px] text-slate-400 block mb-1">Attached Image:</span><img src="${r.reviewImage}" class="w-20 h-20 object-cover rounded-lg border border-slate-700"></div>` : '';
+                
+                let actionsHTML = '';
+                if(currentStatus === 'pending') {
+                    actionsHTML = `
+                        <div class="mt-4 space-y-2 border-t border-slate-800 pt-3">
+                            <textarea id="reply-input-${key}" placeholder="Type reply here..." class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-xl text-xs text-white outline-none h-20">${r.adminReply || ''}</textarea>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="submitReviewReply('${key}')" class="bg-green-600 hover:bg-green-500 text-white py-2 rounded-xl font-bold text-xs uppercase transition">OK / Reply</button>
+                                <button onclick="deleteReview('${key}')" class="bg-red-600/20 text-red-500 hover:bg-red-600 hover:text-white py-2 rounded-xl font-bold text-xs uppercase transition">Delete</button>
+                            </div>
+                        </div>`;
+                } else {
+                    actionsHTML = `
+                        <div class="mt-4 space-y-2 border-t border-slate-800 pt-3">
+                            <p class="text-xs text-blue-400"><b>Admin Reply:</b> ${r.adminReply || 'No reply'}</p>
+                            <button onclick="deleteReview('${key}')" class="w-full bg-red-600/20 text-red-500 hover:bg-red-600 hover:text-white py-2 rounded-xl font-bold text-xs uppercase transition">Delete Review</button>
+                        </div>`;
+                }
+
+                list.innerHTML += `
+                    <div class="glass-card p-4 flex flex-col justify-between border-l-4 ${currentStatus === 'pending' ? 'border-yellow-500' : 'border-green-500'}">
+                        <div>
+                            <div class="flex items-center gap-3 mb-3 border-b border-slate-800 pb-2">
+                                <img src="${r.productImage || 'https://placehold.co/50x50'}" class="w-12 h-12 object-cover rounded-lg border border-slate-700">
+                                <div>
+                                    <h4 class="font-bold text-sm text-white">${r.productName || 'Product Name'}</h4>
+                                    <span class="text-[10px] text-slate-400">By: <b class="text-slate-200">${r.userName || 'Anonymous'}</b></span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-300 bg-slate-900/50 p-2.5 rounded-xl border border-slate-800/80 mb-2">"${r.feedback || 'No feedback'}"</p>
+                            ${reviewImageHTML}
+                        </div>
+                        ${actionsHTML}
+                    </div>`;
+            });
+
+            if(!reviewsFound) {
+                list.innerHTML = `<p class="col-span-full text-center text-slate-500 py-12 text-xs font-semibold tracking-wide uppercase"><i class="fa-solid fa-folder-open mr-2"></i>No ${currentReviewFilterTab} reviews found.</p>`;
+            }
+        }
+
+        async function submitReviewReply(key) {
+            const replyText = document.getElementById(`reply-input-${key}`).value;
+            if(!replyText) {
+                alert("Please type a reply first.");
+                return;
+            }
+            try {
+                await database.ref('reviews/' + key).update({
+                    adminReply: replyText,
+                    status: 'confirmed'
+                });
+                alert("Reply saved and review moved to confirmed!");
+            } catch(e) {
+                alert("Failed to submit reply.");
+            }
+        }
+
+        async function deleteReview(key) {
+            if(confirm("Are you sure you want to delete this review?")) {
+                await database.ref('reviews/' + key).remove();
+            }
+        }
+
         database.ref('orders').on('value', (snapshot) => {
             globalOrdersCache = {}; 
             if(snapshot.exists()) {
@@ -1503,13 +1627,14 @@
             }
 
             try {
-                const targetWipeNodes = ['orders', 'user_chats', 'chat_history', 'site_traffic', 'live_status'];
+                const targetWipeNodes = ['orders', 'user_chats', 'chat_history', 'site_traffic', 'live_status', 'reviews'];
                 for (let node of targetWipeNodes) {
                     await database.ref(node).remove();
                 }
 
                 globalOrdersCache = {};
                 globalTrafficCache = {};
+                globalReviewsCache = {};
                 alert("🔥 Success! Store dashboard database statistics logs aur files successfully clear ho chuki hain.");
                 location.reload();
             } catch (runtimeError) {
