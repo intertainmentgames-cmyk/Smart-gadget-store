@@ -49,7 +49,7 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
 
         .sidebar { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 80%; max-width: 300px; background: white; height: 100vh; position: fixed; left: -110%; top: 0; z-index: 6000; }
         .sidebar.active { left: 0; }
-        .sidebar-header { background: var(--primary-color); color: #ffffff; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700 !important; font-size: 18px; }
+        .sidebar-header { background: var(--primary-color); color: #ffffff; padding: 18px 20px; display: flex; justify-between; align-items: center; font-weight: 700 !important; font-size: 18px; }
         
         .cart-drawer { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 85%; max-width: 350px; background: white; height: 100dvh; position: fixed; right: -110%; top: 0; z-index: 6000; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
         .cart-drawer.active { right: 0; }
@@ -257,16 +257,18 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 <textarea id="reviewFeedbackInput" rows="4" placeholder="What did you like or dislike about this product?" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-[#1a56db]"></textarea>
             </div>
 
-            <!-- Image Upload Feature (With Instant Base64 / Local Preview) -->
+            <!-- Image Upload Feature (Multiple Images with Change & Delete Functionality) -->
             <div class="mb-6">
-                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Attach Photo (Optional)</label>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Attach Photos (Optional)</label>
                 <div class="flex flex-wrap gap-3 items-center" id="reviewImagesPreviewContainer">
                     <label class="w-20 h-20 border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#1a56db] bg-slate-50 transition-all">
                         <i class="fa-solid fa-image text-slate-400 text-lg mb-1"></i>
                         <span class="text-[10px] font-bold text-slate-500">Add Pic</span>
-                        <input type="file" id="reviewImageInput" accept="image/*" class="hidden" onchange="handleReviewImageSelect(event)">
+                        <input type="file" accept="image/*" class="hidden" onchange="addNewReviewImage(event)">
                     </label>
                 </div>
+                <!-- Hidden Input for Editing Specific Existing Image -->
+                <input type="file" id="replaceImageFileInput" accept="image/*" class="hidden" onchange="handleReplaceImageSelect(event)">
             </div>
 
             <div class="flex gap-3">
@@ -334,7 +336,8 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         // Review Form States
         let currentSelectedRating = 5;
         let reviewFeedbackText = "";
-        let reviewBase64Image = ""; // Store image base64 directly to guarantee rendering
+        let reviewBase64Images = []; // Multiple images array
+        let indexToReplaceImage = -1; // Stores target image index when changing photo
 
         let userUUID = localStorage.getItem('user_chat_id');
         if (!userUUID) {
@@ -548,7 +551,7 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             });
         }
 
-        // --- REVIEW SYSTEM WITH UPDATED STEPS & ANIMATIONS ---
+        // --- REVIEW SYSTEM WITH MULTI-IMAGE & CHANGE CAPABILITY ---
         const ratingLabels = {
             1: "1 = Poor",
             2: "2 = Fair",
@@ -644,42 +647,67 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             showModalWithAnim('reviewModal1');
         }
 
-        // Image Select Handler (Compress & Convert to Base64 for guaranteed direct rendering)
-        function handleReviewImageSelect(event) {
+        // Add new image to the list
+        function addNewReviewImage(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    reviewBase64Image = e.target.result;
+                    reviewBase64Images.push(e.target.result);
                     renderReviewImagePreviews();
                 };
                 reader.readAsDataURL(file);
             }
+            event.target.value = ""; // Reset input
         }
 
+        // Click existing image to change/replace it
+        function openReplaceImagePicker(index) {
+            indexToReplaceImage = index;
+            document.getElementById('replaceImageFileInput').click();
+        }
+
+        function handleReplaceImageSelect(event) {
+            const file = event.target.files[0];
+            if (file && indexToReplaceImage !== -1) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    reviewBase64Images[indexToReplaceImage] = e.target.result;
+                    renderReviewImagePreviews();
+                    indexToReplaceImage = -1;
+                };
+                reader.readAsDataURL(file);
+            }
+            event.target.value = ""; // Reset input
+        }
+
+        // Render all image previews with Add, Edit, and Delete options
         function renderReviewImagePreviews() {
             const container = document.getElementById('reviewImagesPreviewContainer');
             container.innerHTML = `
                 <label class="w-20 h-20 border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#1a56db] bg-slate-50 transition-all">
                     <i class="fa-solid fa-image text-slate-400 text-lg mb-1"></i>
                     <span class="text-[10px] font-bold text-slate-500">Add Pic</span>
-                    <input type="file" id="reviewImageInput" accept="image/*" class="hidden" onchange="handleReviewImageSelect(event)">
+                    <input type="file" accept="image/*" class="hidden" onchange="addNewReviewImage(event)">
                 </label>
             `;
 
-            if (reviewBase64Image) {
+            reviewBase64Images.forEach((imgData, index) => {
                 const div = document.createElement('div');
-                div.className = 'relative w-20 h-20 rounded-xl border border-slate-200 overflow-hidden bg-slate-100';
+                div.className = 'relative w-20 h-20 rounded-xl border border-slate-200 overflow-hidden bg-slate-100 cursor-pointer group';
                 div.innerHTML = `
-                    <img src="${reviewBase64Image}" class="w-full h-full object-cover">
-                    <button type="button" onclick="removeReviewImage()" class="absolute top-1 right-1 bg-black/60 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px]"><i class="fa-solid fa-xmark"></i></button>
+                    <img src="${imgData}" class="w-full h-full object-cover" onclick="openReplaceImagePicker(${index})" title="Click to change photo">
+                    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                        <i class="fa-solid fa-pen text-white text-xs"></i>
+                    </div>
+                    <button type="button" onclick="removeReviewImage(${index}); event.stopPropagation();" class="absolute top-1 right-1 bg-black/60 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px]"><i class="fa-solid fa-xmark"></i></button>
                 `;
                 container.appendChild(div);
-            }
+            });
         }
 
-        function removeReviewImage() {
-            reviewBase64Image = "";
+        function removeReviewImage(index) {
+            reviewBase64Images.splice(index, 1);
             renderReviewImagePreviews();
         }
 
@@ -718,7 +746,8 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 productName: currentProduct ? currentProduct.name : "",
                 rating: currentSelectedRating,
                 feedback: reviewFeedbackText,
-                image: reviewBase64Image, // Guaranteed rendering via Base64 string
+                images: reviewBase64Images, // Saved as an array of images
+                image: reviewBase64Images.length > 0 ? reviewBase64Images[0] : "", // Backward compatibility for single image view
                 name: authorName,
                 email: authorEmail,
                 timestamp: Date.now(),
@@ -735,7 +764,7 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                     document.getElementById('reviewFeedbackInput').value = "";
                     document.getElementById('reviewAuthorName').value = "";
                     document.getElementById('reviewAuthorEmail').value = "";
-                    reviewBase64Image = "";
+                    reviewBase64Images = [];
                     renderReviewImagePreviews();
                     closeAllModals();
                 }
@@ -785,12 +814,16 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                             <p class="text-xs text-slate-700 leading-relaxed">${rev.feedback}</p>
                     `;
 
-                    if(rev.image && rev.image.trim() !== '') {
-                        itemHtml += `
-                            <div class="mt-2">
-                                <img src="${rev.image}" class="w-16 h-16 rounded-xl object-cover cursor-pointer border border-slate-200" onclick="openLightbox('${rev.image}')">
-                            </div>
-                        `;
+                    // Render multiple images if available, else render single image
+                    const revImages = rev.images || (rev.image ? [rev.image] : []);
+                    if(revImages.length > 0) {
+                        itemHtml += `<div class="mt-2 flex flex-wrap gap-2">`;
+                        revImages.forEach(imgUrl => {
+                            if(imgUrl && imgUrl.trim() !== '') {
+                                itemHtml += `<img src="${imgUrl}" class="w-16 h-16 rounded-xl object-cover cursor-pointer border border-slate-200" onclick="openLightbox('${imgUrl}')">`;
+                            }
+                        });
+                        itemHtml += `</div>`;
                     }
 
                     if(rev.adminReply && rev.adminReply.trim() !== '') {
