@@ -81,6 +81,31 @@
             from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* --- REVIEW IMAGE LIGHTBOX VIEWER --- */
+        #imageLightbox {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 500;
+            align-items: center; justify-content: center; padding: 30px;
+        }
+        #imageLightbox.active { display: flex; }
+        #imageLightbox img {
+            max-width: 90vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+            animation: gateHeroFade 0.25s ease-out forwards;
+        }
+        #lightboxCloseBtn {
+            position: fixed; top: 20px; right: 25px; z-index: 501; color: #fff; font-size: 32px;
+            background: rgba(255,255,255,0.08); width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
+        }
+        #lightboxCloseBtn:hover { background: rgba(239,68,68,0.8); transform: rotate(90deg); }
+        .lightbox-nav-btn {
+            position: fixed; top: 50%; transform: translateY(-50%); z-index: 501; color: #fff; font-size: 22px;
+            background: rgba(255,255,255,0.08); width: 46px; height: 46px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
+        }
+        .lightbox-nav-btn:hover { background: rgba(59,130,246,0.8); }
+        #lightboxPrevBtn { left: 20px; }
+        #lightboxNextBtn { right: 20px; }
     </style>
 </head>
 <body>
@@ -407,6 +432,14 @@
             <h2 id="modal-title" class="text-xl font-bold text-blue-400 mb-6 text-center uppercase tracking-wider">Details</h2>
             <div id="modal-content" class="space-y-4"></div>
         </div>
+    </div>
+
+    <!-- REVIEW IMAGE LIGHTBOX VIEWER -->
+    <div id="imageLightbox" onclick="if(event.target===this) closeImageLightbox()">
+        <div id="lightboxCloseBtn" onclick="closeImageLightbox()"><i class="fa-solid fa-xmark"></i></div>
+        <div id="lightboxPrevBtn" class="lightbox-nav-btn hidden" onclick="event.stopPropagation(); navigateLightbox(-1)"><i class="fa-solid fa-chevron-left"></i></div>
+        <img id="lightboxImage" src="" alt="Review Image">
+        <div id="lightboxNextBtn" class="lightbox-nav-btn hidden" onclick="event.stopPropagation(); navigateLightbox(1)"><i class="fa-solid fa-chevron-right"></i></div>
     </div>
 
     <script>
@@ -1323,6 +1356,45 @@
             renderReviewsEngine();
         });
 
+        /* --- REVIEW IMAGE LIGHTBOX VIEWER LOGIC --- */
+        let currentLightboxImages = [];
+        let currentLightboxIndex = 0;
+
+        function openImageLightbox(imagesOrUrl, startIndex) {
+            currentLightboxImages = Array.isArray(imagesOrUrl) ? imagesOrUrl.filter(Boolean) : [imagesOrUrl];
+            currentLightboxIndex = startIndex || 0;
+            if(currentLightboxImages.length === 0) return;
+
+            document.getElementById('imageLightbox').classList.add('active');
+            document.getElementById('lightboxPrevBtn').classList.toggle('hidden', currentLightboxImages.length <= 1);
+            document.getElementById('lightboxNextBtn').classList.toggle('hidden', currentLightboxImages.length <= 1);
+            updateLightboxImage();
+        }
+
+        function updateLightboxImage() {
+            document.getElementById('lightboxImage').src = currentLightboxImages[currentLightboxIndex];
+        }
+
+        function navigateLightbox(direction) {
+            if(currentLightboxImages.length <= 1) return;
+            currentLightboxIndex = (currentLightboxIndex + direction + currentLightboxImages.length) % currentLightboxImages.length;
+            updateLightboxImage();
+        }
+
+        function closeImageLightbox() {
+            document.getElementById('imageLightbox').classList.remove('active');
+            document.getElementById('lightboxImage').src = "";
+            currentLightboxImages = [];
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(!document.getElementById('imageLightbox').classList.contains('active')) return;
+            if(e.key === 'Escape') closeImageLightbox();
+            if(e.key === 'ArrowLeft') navigateLightbox(-1);
+            if(e.key === 'ArrowRight') navigateLightbox(1);
+        });
+        /* --- END REVIEW IMAGE LIGHTBOX VIEWER LOGIC --- */
+
         function renderReviewsEngine() {
             const list = document.getElementById('reviews-list');
             if(!list) return;
@@ -1360,7 +1432,7 @@
                 if(r.image && r.image.trim() !== '') {
                     attachmentHtml = `
                         <div class="mt-2">
-                            <img src="${r.image}" class="w-16 h-16 rounded-xl object-cover border border-slate-700 cursor-pointer hover:opacity-80 transition" onclick="window.open('${r.image}', '_blank')" title="Click to view full image">
+                            <img src="${r.image}" class="w-16 h-16 rounded-xl object-cover border border-slate-700 cursor-pointer hover:opacity-80 transition" onclick="openImageLightbox('${r.image}', 0)" title="Click to view full image">
                         </div>`;
                 }
 
