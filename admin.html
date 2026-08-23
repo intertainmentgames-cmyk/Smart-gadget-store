@@ -81,6 +81,10 @@
             from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* Review cards intentionally have NO entrance animation — with several images per
+           card, re-triggering a fade/translate animation on every tab switch was the source
+           of the visible lag/jank. Cards now appear instantly. */
+        .review-card { }
 
         /* --- REVIEW IMAGE LIGHTBOX VIEWER --- */
         #imageLightbox {
@@ -1375,6 +1379,17 @@
             document.getElementById('lightboxImage').src = currentLightboxImages[currentLightboxIndex];
         }
 
+        // Helper for review thumbnails: receives the full image list (URI-encoded JSON)
+        // plus which one was clicked, so the lightbox opens with slide/prev-next support.
+        function openImageLightboxFromData(encodedImagesJson, startIndex) {
+            try {
+                const images = JSON.parse(decodeURIComponent(encodedImagesJson));
+                openImageLightbox(images, startIndex);
+            } catch(e) {
+                console.error('Failed to open review images', e);
+            }
+        }
+
         function navigateLightbox(direction) {
             if(currentLightboxImages.length <= 1) return;
             currentLightboxIndex = (currentLightboxIndex + direction + currentLightboxImages.length) % currentLightboxImages.length;
@@ -1395,11 +1410,26 @@
         });
         /* --- END REVIEW IMAGE LIGHTBOX VIEWER LOGIC --- */
 
+        /* Extracts every image URL a review might carry — supports a real images[] array,
+           a single image string, or a comma/pipe separated string of multiple URLs — so
+           reviews with 1, 2, 3 or many photos all display correctly. */
+        function extractReviewImages(r) {
+            let raw = [];
+            if (Array.isArray(r.images)) raw = r.images;
+            else if (r.images && typeof r.images === 'object') raw = Object.values(r.images);
+            else if (typeof r.images === 'string') raw = r.images.split(/[,|]/);
+            else if (Array.isArray(r.image)) raw = r.image;
+            else if (r.image && typeof r.image === 'object') raw = Object.values(r.image);
+            else if (typeof r.image === 'string') raw = r.image.split(/[,|]/);
+
+            return raw.map(u => (u || '').toString().trim()).filter(u => u.length > 0);
+        }
+
         function renderReviewsEngine() {
             const list = document.getElementById('reviews-list');
             if(!list) return;
-            list.innerHTML = "";
             let reviewsFound = false;
+            const cardsHtml = [];
 
             const sortedKeys = Object.keys(globalReviewsCache).sort((a, b) => (globalReviewsCache[b].timestamp || 0) - (globalReviewsCache[a].timestamp || 0));
 
@@ -1428,20 +1458,24 @@
                     } catch(e) { dateStr = 'N/A'; }
                 }
 
+                const reviewImages = extractReviewImages(r);
                 let attachmentHtml = '';
-                if(r.image && r.image.trim() !== '') {
+                if(reviewImages.length > 0) {
+                    const imagesJsonAttr = encodeURIComponent(JSON.stringify(reviewImages));
+                    const thumbs = reviewImages.map((imgUrl, idx) => `
+                            <img src="${imgUrl}" loading="lazy" class="w-16 h-16 rounded-xl object-cover border border-slate-700 cursor-pointer hover:opacity-80 transition" onclick='openImageLightboxFromData("${imagesJsonAttr}", ${idx})' title="Click to view full image (${idx + 1}/${reviewImages.length})">`).join('');
                     attachmentHtml = `
-                        <div class="mt-2">
-                            <img src="${r.image}" class="w-16 h-16 rounded-xl object-cover border border-slate-700 cursor-pointer hover:opacity-80 transition" onclick="openImageLightbox('${r.image}', 0)" title="Click to view full image">
+                        <div class="mt-2 flex flex-wrap gap-2">
+                            ${thumbs}
                         </div>`;
                 }
 
                 const safeReplyValue = r.adminReply ? r.adminReply.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
 
-                list.innerHTML += `
-                    <div class="order-view-card glass-card p-5 cursor-default hover:transform-none border-l-4 ${hasReply ? 'border-green-500' : 'border-yellow-500'}">
+                cardsHtml.push(`
+                    <div class="review-card glass-card p-5 cursor-default hover:transform-none border-l-4 ${hasReply ? 'border-green-500' : 'border-yellow-500'}">
                         <div class="flex gap-3 items-start">
-                            <img src="${productImg}" class="w-12 h-12 rounded-xl object-cover border border-slate-700 shrink-0">
+                            <img src="${productImg}" loading="lazy" class="w-12 h-12 rounded-xl object-cover border border-slate-700 shrink-0">
                             <div class="flex-1 min-w-0">
                                 <h3 class="font-bold text-sm text-white truncate">${r.productName || 'N/A'}</h3>
                                 <div class="flex items-center justify-between mt-1">
@@ -1464,8 +1498,10 @@
                                 <button onclick="deleteReview('${key}')" class="w-full bg-red-600/20 text-red-500 hover:bg-red-600 hover:text-white py-2 rounded-xl font-bold text-[11px] uppercase tracking-wide transition"><i class="fa-solid fa-trash-can mr-1"></i> Delete Review</button>
                             </div>
                         </div>
-                    </div>`;
+                    </div>`);
             });
+
+            list.innerHTML = cardsHtml.join('');
 
             if(!reviewsFound) {
                 list.innerHTML = `<p class="col-span-full text-center text-slate-500 py-12 text-xs font-semibold tracking-wide uppercase"><i class="fa-solid fa-star-half-stroke mr-2"></i>No ${currentReviewFilterTab} reviews found.</p>`;
