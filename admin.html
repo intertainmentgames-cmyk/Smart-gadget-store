@@ -411,10 +411,10 @@
 
     <!-- Review Image Viewer Modal -->
     <div id="reviewImageModal" class="modal">
-        <div class="bg-slate-900 w-full max-w-lg rounded-3xl p-6 border border-slate-700 relative flex flex-col items-center">
-            <button onclick="closeReviewImageModal()" class="absolute top-4 right-4 text-slate-400 text-2xl hover:text-white"><i class="fa-solid fa-circle-xmark"></i></button>
+        <div class="bg-slate-900 w-full max-w-lg rounded-3xl p-6 border border-slate-700 relative flex flex-col items-center shadow-2xl">
+            <button onclick="closeReviewImageModal()" class="absolute top-4 right-4 text-slate-400 text-2xl hover:text-white z-10"><i class="fa-solid fa-circle-xmark"></i></button>
             <h2 class="text-lg font-bold text-blue-400 mb-4 uppercase tracking-wider">Customer Images</h2>
-            <div id="reviewImagesSliderContainer" class="w-full flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory">
+            <div id="reviewImagesSliderContainer" class="w-full flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin">
                 <!-- Dynamically injected images -->
             </div>
             <p class="text-[11px] text-slate-500 mt-2"><i class="fa-solid fa-arrows-left-right mr-1"></i> Swipe or scroll to view more images</p>
@@ -1350,12 +1350,15 @@
 
                 let attachmentHtml = '';
                 if(r.image && r.image.trim() !== '') {
-                    // Support single or multiple images separated by comma or array
                     let imagesArr = Array.isArray(r.image) ? r.image : r.image.split(',');
-                    let firstImg = imagesArr[0].trim();
+                    // Clean up whitespace/quotes from image URLs if any
+                    imagesArr = imagesArr.map(img => img.trim().replace(/^["']|["']$/g, ''));
+                    let firstImg = imagesArr[0];
+                    
                     attachmentHtml = `
-                        <div class="mt-2">
-                            <img src="${firstImg}" class="w-16 h-16 rounded-xl object-cover border border-slate-700 cursor-pointer hover:opacity-80 transition" onclick='openReviewImagesModal(${JSON.stringify(imagesArr)})' title="Click to view images">
+                        <div class="mt-2 flex items-center gap-2">
+                            <img src="${firstImg}" class="w-16 h-16 rounded-xl object-cover border border-slate-700 cursor-pointer hover:opacity-80 transition shadow-md" onclick='openReviewImagesModal(${JSON.stringify(imagesArr)})' title="Click to view images">
+                            ${imagesArr.length > 1 ? `<span class="text-[10px] bg-blue-500/10 text-blue-400 font-bold px-2 py-1 rounded-lg border border-blue-500/20">+${imagesArr.length - 1} more</span>` : ''}
                         </div>`;
                 }
 
@@ -1395,14 +1398,14 @@
             }
         }
 
-        // Review Images Slider Modal Handler
+        // Fixed Review Images Slider Modal Handler with horizontal scrolling and proper framing
         function openReviewImagesModal(images) {
             const container = document.getElementById('reviewImagesSliderContainer');
             container.innerHTML = "";
             images.forEach(imgUrl => {
                 container.innerHTML += `
-                    <div class="snap-center shrink-0 w-full max-h-96 rounded-2xl overflow-hidden border border-slate-700 bg-black/40 flex items-center justify-center">
-                        <img src="${imgUrl.trim()}" class="max-h-80 w-auto object-contain rounded-xl">
+                    <div class="snap-center shrink-0 w-full flex items-center justify-center p-2">
+                        <img src="${imgUrl.trim()}" class="max-h-[65vh] w-auto max-w-full object-contain rounded-xl border border-slate-700 shadow-2xl bg-black">
                     </div>
                 `;
             });
@@ -1430,7 +1433,6 @@
         async function deleteReview(key) {
             if(confirm("Are you sure you want to permanently delete this review?")) {
                 try {
-                    // Optimistic update for instant UI feedback
                     delete globalReviewsCache[key];
                     renderReviewsEngine();
                     await database.ref('product_reviews/' + key).remove();
