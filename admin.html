@@ -480,7 +480,7 @@
         }
         // =================== END SECURITY LAYER ENGINE ===================
 
-        // NEW UPDATED FIREBASE CONFIGURATION (Slashes slash formatting stabilized)
+        // NEW UPDATED FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyAfYl3nFIp59A_qCnWdNaIOxliZ2YlJMLM",
             authDomain: "smart-gadget-dcce3.firebaseapp.com",
@@ -1142,7 +1142,12 @@
             globalReviewsCache = {};
             if(snapshot.exists()) {
                 snapshot.forEach(child => {
-                    globalReviewsCache[child.key] = child.val();
+                    let revData = child.val();
+                    // Fallback to 'pending' if status property is missing in old database entries
+                    if (!revData.status) {
+                        revData.status = revData.adminReply ? 'confirmed' : 'pending';
+                    }
+                    globalReviewsCache[child.key] = revData;
                 });
             }
             renderReviewsEngine();
