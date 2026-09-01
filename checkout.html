@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <!-- Meta Pixel Code -->
+    <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -18,6 +18,20 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
+
+<!-- TikTok Pixel Code Start -->
+<script>
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+  ttq.load('DAB3ILRC77UES974BGB0');
+  ttq.page();
+}(window, document, 'ttq');
+</script>
+<!-- TikTok Pixel Code End -->
+
 <meta charset="UTF-8">
     <script src="https://js.sentry-cdn.com/e8b693c77ef64ddf7ea2d61e0cfcc1bd.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -339,6 +353,9 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 if (window.fbq) {
                     fbq('track', eventName, eventData);
                 }
+                if (window.ttq) {
+                    ttq.track(eventName, eventData);
+                }
             } catch(err) {
                 console.error("Pixel tracking error for " + eventName + ":", err);
             }
@@ -370,17 +387,16 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             });
             
             trackPixelEvent('ViewContent', {
-                content_names: contentNames,
+                contents: contentNames.map(name => ({ content_name: name })),
                 content_type: 'product',
                 value: baseSubtotal,
                 currency: 'PKR'
             });
 
             trackPixelEvent('InitiateCheckout', {
-                content_names: contentNames,
+                contents: contentNames.map(name => ({ content_name: name })),
                 value: baseSubtotal,
-                currency: 'PKR',
-                num_items: cart.length
+                currency: 'PKR'
             });
 
             updateTotals();
@@ -399,7 +415,7 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             if (change > 0 && cart[index]) {
                 const itemPrice = parseInt(cart[index].price.toString().replace(/[^\d]/g, '')) || 0;
                 trackPixelEvent('AddToCart', {
-                    content_name: cart[index].name,
+                    contents: [{ content_name: cart[index].name, quantity: 1, price: itemPrice }],
                     content_type: 'product',
                     value: itemPrice,
                     currency: 'PKR'
@@ -496,12 +512,34 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 // Fully Automated Dynamic Values for Purchase Tracking
                 const numericPrice = parseInt(grand.replace(/[^\d]/g, '')) || 0; 
                 
-                trackPixelEvent('Purchase', { 
-                    value: numericPrice, 
-                    currency: 'PKR', 
-                    content_name: itemSummary,
-                    num_items: cart.length
-                });
+                // Fire exact Purchase event for FB
+                if (window.fbq) {
+                    fbq('track', 'Purchase', { 
+                        value: numericPrice, 
+                        currency: 'PKR',
+                        content_type: 'product',
+                        contents: cart.map(item => ({
+                            id: item.name,
+                            quantity: item.quantity || 1,
+                            item_price: parseInt(item.price.toString().replace(/[^\d]/g, '')) || 0
+                        }))
+                    });
+                }
+                
+                // Fire exact CompletePayment event for TikTok
+                if (window.ttq) {
+                    ttq.track('CompletePayment', { 
+                        value: numericPrice, 
+                        currency: 'PKR',
+                        content_type: 'product',
+                        contents: cart.map(item => ({
+                            content_id: item.name,
+                            content_name: item.name,
+                            quantity: item.quantity || 1,
+                            price: parseInt(item.price.toString().replace(/[^\d]/g, '')) || 0
+                        }))
+                    });
+                }
                 
                 let fullWaMessage = `*🚀 NEW ORDER - BRAND BAZAAR 🚀*\n\n👤 *Name:* ${fName} ${lName}\n📧 *Email:* ${cEmail}\n📞 *Phone:* ${phone}\n🟢 *WhatsApp:* ${whatsapp}\n📍 *City:* ${city}\n🏠 *Address:* ${address} ${apt}\n\n*--- ITEMS ---*\n${itemsString}\n\n*--- BILLING ---*\n💰 *Subtotal:* ${sub}\n🚚 *Delivery:* ${del}\n💳 *COD Fee:* ${codF}\n💵 *Total Bill:* ${grand}\n\n== *Method:* ${method.toUpperCase()}\n🖼️ *Screenshot:* ${ssUrl}`;
                 sendLiveSignal("Order Placed");
@@ -513,7 +551,8 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                     localStorage.removeItem('cart');
                 }
                 
-                setTimeout(() => { window.location.href = `whatsapp://send?phone=923065472228&text=${encodeURIComponent(fullWaMessage)}`; }, 2500);
+                // Redirect time set to 500ms (0.5 seconds) for quick action
+                setTimeout(() => { window.location.href = `whatsapp://send?phone=923065472228&text=${encodeURIComponent(fullWaMessage)}`; }, 500);
             } catch(e) { console.error(e); Sentry.captureException(e); alert("Error placing order."); btn.disabled = false; btn.innerHTML = 'Confirm Order'; }
         }
 
