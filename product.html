@@ -416,6 +416,13 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                     sendLiveSignal(`Viewing: ${p.name}`);
                     setInterval(() => { sendLiveSignal(`Viewing: ${p.name}`); }, 25000);
 
+                    // Records this page view in Firebase so admin panel's "Total Page Traffic"
+                    // and "Traffic History Trend" can show it
+                    database.ref('site_traffic').push({
+                        timestamp: Date.now(),
+                        page: `Product: ${p.name}`
+                    });
+
                     loadProductReviews(productId);
 
                     const slider = document.getElementById('imageSlider');
