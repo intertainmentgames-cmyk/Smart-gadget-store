@@ -85,6 +85,12 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             opacity: 0;
             transform: scale(0.92) translateY(10px);
         }
+
+        /* Buy buttons visual state when product is out of stock */
+        .buy-btn-disabled {
+            opacity: 0.5;
+            filter: grayscale(30%);
+        }
     </style>
 </head>
 <body class="pt-[55px]">
@@ -160,10 +166,13 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
 
         <div class="pb-32">
             <h1 id="pName" class="text-xl font-bold text-slate-900 mb-1 tracking-tight">Loading...</h1>
-            <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center gap-3 mb-2">
                 <span id="pOldPrice" class="text-sm text-slate-400 line-through"></span>
                 <span id="pPrice" class="text-xl font-bold text-slate-900"></span>
             </div>
+
+            <!-- STOCK STATUS BADGE -->
+            <div id="stockStatusContainer" class="mb-4"></div>
 
             <div id="variationsSection" class="mb-6 hidden">
                 <h3 class="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em] mb-2">Select Option</h3>
@@ -305,14 +314,30 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         </div>
     </div>
 
+    <!-- OUT OF STOCK MODAL -->
+    <div id="outOfStockModal" class="fixed inset-0 z-[7000] bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="modal-wrapper modal-exit bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative text-center">
+            <button onclick="closeOutOfStockModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+
+            <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-box-open"></i>
+            </div>
+
+            <h3 class="text-base font-bold text-slate-900 mb-2">Product Out of Stock</h3>
+            <p class="text-xs text-slate-500 mb-6 leading-relaxed">Yeh product filhal out of stock hai. Baraye meherbani thora intezar karein, jald hi dobara available ho jayega.</p>
+
+            <button onclick="closeOutOfStockModal()" class="w-full bg-[#1a56db] text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-blue-100">OK, Got It</button>
+        </div>
+    </div>
+
     <!-- Lightbox Modal for Customer Image Viewing -->
     <div id="imageLightboxModal" class="fixed inset-0 z-[8000] bg-black/90 hidden items-center justify-center p-4" onclick="closeLightbox()">
         <img id="lightboxImg" src="" class="max-w-full max-h-full rounded-xl object-contain">
     </div>
 
     <div class="fixed bottom-0 left-0 w-full p-4 bg-white/95 backdrop-blur-md border-t border-slate-100 flex gap-3 z-40">
-        <button onclick="handleAddToCart()" class="flex-1 bg-slate-100 text-slate-900 py-4 rounded-xl font-bold text-[15px]">Add to Cart</button>
-        <button onclick="handleBuyNow()" class="flex-1 bg-[#1a56db] text-white py-4 rounded-xl font-bold text-[15px] shadow-lg shadow-blue-100/50">Buy Now</button>
+        <button id="addToCartBtn" onclick="handleAddToCart()" class="flex-1 bg-slate-100 text-slate-900 py-4 rounded-xl font-bold text-[15px]">Add to Cart</button>
+        <button id="buyNowBtn" onclick="handleBuyNow()" class="flex-1 bg-[#1a56db] text-white py-4 rounded-xl font-bold text-[15px] shadow-lg shadow-blue-100/50">Buy Now</button>
     </div>
 
     <script>
@@ -403,6 +428,57 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
 
+        // --- STOCK STATUS RENDERING ---
+        function renderStockStatus(p) {
+            const container = document.getElementById('stockStatusContainer');
+            if (!container) return;
+
+            const isInStock = p.inStock !== false; // default true if not explicitly set to false
+
+            if (!isInStock) {
+                container.innerHTML = `<span class="inline-flex items-center text-xs font-bold text-red-600 bg-red-50 px-3 py-1.5 rounded-full border border-red-100"><i class="fa-solid fa-circle-xmark mr-1.5"></i>Out of Stock</span>`;
+            } else {
+                const qty = (p.stockQty !== undefined && p.stockQty !== null && p.stockQty !== '') ? p.stockQty : null;
+                if (qty !== null) {
+                    container.innerHTML = `<span class="inline-flex items-center text-xs font-bold text-green-600 bg-green-50 px-3 py-1.5 rounded-full border border-green-100"><i class="fa-solid fa-circle-check mr-1.5"></i>Only ${qty} in stock</span>`;
+                } else {
+                    container.innerHTML = `<span class="inline-flex items-center text-xs font-bold text-green-600 bg-green-50 px-3 py-1.5 rounded-full border border-green-100"><i class="fa-solid fa-circle-check mr-1.5"></i>In Stock</span>`;
+                }
+            }
+
+            updateBuyButtonsState(isInStock);
+        }
+
+        function updateBuyButtonsState(isInStock) {
+            const addBtn = document.getElementById('addToCartBtn');
+            const buyBtn = document.getElementById('buyNowBtn');
+            if (!addBtn || !buyBtn) return;
+
+            if (!isInStock) {
+                addBtn.classList.add('buy-btn-disabled');
+                buyBtn.classList.add('buy-btn-disabled');
+            } else {
+                addBtn.classList.remove('buy-btn-disabled');
+                buyBtn.classList.remove('buy-btn-disabled');
+            }
+        }
+
+        function isCurrentProductInStock() {
+            if (!currentProduct) return true;
+            return currentProduct.inStock !== false;
+        }
+
+        function showOutOfStockModal() {
+            document.getElementById('overlay').classList.add('active');
+            showModalWithAnim('outOfStockModal');
+        }
+
+        function closeOutOfStockModal() {
+            hideModalWithAnim('outOfStockModal');
+            document.getElementById('overlay').classList.remove('active');
+        }
+        // --- END STOCK STATUS RENDERING ---
+
         if (productId) {
             database.ref('products/' + productId).once('value', (snapshot) => {
                 const p = snapshot.val();
@@ -412,6 +488,8 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                     document.getElementById('pPrice').innerText = 'Rs. ' + p.price;
                     if(p.originalPrice) document.getElementById('pOldPrice').innerText = 'Rs. ' + p.originalPrice;
                     document.getElementById('pDesc').innerText = p.desc;
+
+                    renderStockStatus(p);
                     
                     sendLiveSignal(`Viewing: ${p.name}`);
                     setInterval(() => { sendLiveSignal(`Viewing: ${p.name}`); }, 25000);
@@ -596,6 +674,7 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             hideModalWithAnim('reviewModal0');
             hideModalWithAnim('reviewModal1');
             hideModalWithAnim('reviewModal2');
+            hideModalWithAnim('outOfStockModal');
             document.getElementById('overlay').classList.remove('active');
         }
 
@@ -906,6 +985,12 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
 
         function handleAddToCart() {
             if(!currentProduct) return;
+
+            if(!isCurrentProductInStock()) {
+                showOutOfStockModal();
+                return;
+            }
+
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let finalPrice = (selectedVariationPrice && selectedVariationPrice.trim() !== '') ? 'Rs. ' + selectedVariationPrice : currentProduct.price;
 
@@ -932,6 +1017,11 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
 
         function handleBuyNow() {
             if(!currentProduct) return;
+
+            if(!isCurrentProductInStock()) {
+                showOutOfStockModal();
+                return;
+            }
             
             let finalPrice = (selectedVariationPrice && selectedVariationPrice.trim() !== '') ? 'Rs. ' + selectedVariationPrice : currentProduct.price;
             
