@@ -715,9 +715,14 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 const firstImage = (p.images ? p.images[0] : p.image) || 'https://placehold.co/400x400';
                 const showOriginalPrice = p.originalPrice && p.originalPrice !== p.price;
                 const finalOriginalPrice = showOriginalPrice ? p.originalPrice : p.price;
+                const stockIsIn = (p.inStock !== undefined) ? p.inStock : true;
+                const stockBadgeHtml = stockIsIn
+                    ? `<span class="absolute top-1.5 right-1.5 z-10 text-[8px] font-extrabold uppercase tracking-wide text-white bg-green-600 px-2 py-1 rounded-full shadow">In Stock</span>`
+                    : `<span class="absolute top-1.5 right-1.5 z-10 text-[8px] font-extrabold uppercase tracking-wide text-white bg-red-600 px-2 py-1 rounded-full shadow">Out of Stock</span>`;
                 grid.innerHTML += `
                     <div class="product-card p-2" data-aos="fade-up" data-aos-delay="${delay}">
                         <div class="rounded-xl overflow-hidden aspect-square mb-2 relative bg-slate-50" onclick="window.location.href='product.html?id=${id}'">
+                            ${stockBadgeHtml}
                             <img src="${firstImage}" class="w-full h-full object-cover">
                         </div>
                         <div class="px-1 flex flex-col justify-between flex-grow">
