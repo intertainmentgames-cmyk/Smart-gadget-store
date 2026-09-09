@@ -335,8 +335,24 @@
                     <div><label>Sale Price(Actual Price)</label><input type="number" id="pPrice" class="w-full bg-slate-900/50 border border-slate-700 p-3 rounded-xl outline-none" placeholder="e.g. 3500"></div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div><label>Delivery Charges</label><input type="number" id="pDelivery" class="w-full bg-slate-900/50 border border-slate-700 p-3 rounded-xl outline-none" value="200"></div>
+                    <div><label>Standard Delivery</label><input type="number" id="pDelivery" class="w-full bg-slate-900/50 border border-slate-700 p-3 rounded-xl outline-none" value="200"></div>
                     <div><label>COD Fee</label><input type="number" id="pCod" class="w-full bg-slate-900/50 border border-slate-700 p-3 rounded-xl outline-none" value="0"></div>
+                </div>
+                <div class="mb-6 bg-slate-900/40 p-4 rounded-2xl border border-slate-800">
+                    <label class="text-blue-400 mb-3 block">Stock Management</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label>Stock Quantity</label>
+                            <input type="number" id="pStockQty" class="w-full bg-slate-900/50 border border-slate-700 p-3 rounded-xl outline-none" placeholder="e.g. 10">
+                        </div>
+                        <div>
+                            <label>Stock Status</label>
+                            <select id="pStockToggle" class="w-full bg-slate-900/50 border border-slate-700 p-3 rounded-xl outline-none text-sm">
+                                <option value="on" selected>In Stock</option>
+                                <option value="off">Out of Stock</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-4"><label>Description</label><textarea id="pDesc" class="w-full bg-slate-900/50 border border-slate-700 p-3 rounded-xl h-24 outline-none" placeholder="Product description..."></textarea></div>
                 <div class="mb-6"><label>YouTube Video Link</label><input type="text" id="pVideo" class="w-full bg-slate-900/50 border border-slate-700 p-3 rounded-xl outline-none" placeholder="YouTube URL..."></div>
@@ -885,8 +901,21 @@
                         <div><label>Original Price</label><input type="number" id="eOldPrice" value="${p.originalPrice !== undefined ? p.originalPrice : ''}" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 outline-none" placeholder="Optional"></div>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <div><label>Delivery</label><input type="number" id="eDel" value="${p.delivery || 200}" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 outline-none"></div>
+                        <div><label>Standard Delivery</label><input type="number" id="eDel" value="${p.delivery || 200}" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 outline-none"></div>
                         <div><label>COD Fee</label><input type="number" id="eCod" value="${p.cod_fee || 0}" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 outline-none"></div>
+                    </div>
+                    <div class="mb-2 bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 grid grid-cols-2 gap-3">
+                        <div>
+                            <label>Stock Quantity</label>
+                            <input type="number" id="eStockQty" value="${p.stockQty !== undefined && p.stockQty !== null ? p.stockQty : ''}" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 outline-none" placeholder="e.g. 10">
+                        </div>
+                        <div>
+                            <label>Stock Status</label>
+                            <select id="eStockToggle" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 outline-none text-sm">
+                                <option value="on" ${p.inStock !== false ? 'selected' : ''}>In Stock</option>
+                                <option value="off" ${p.inStock === false ? 'selected' : ''}>Out of Stock</option>
+                            </select>
+                        </div>
                     </div>
                     <div><label>Description</label><textarea id="eDesc" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 h-24 outline-none">${cleanDesc}</textarea></div>
                     <div><label>YouTube Link</label><input type="text" id="eVideo" value="${youtubeVideoLink}" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 outline-none" placeholder="YouTube URL..."></div>
@@ -910,6 +939,8 @@
             p.originalPrice = document.getElementById('eOldPrice').value;
             p.delivery = document.getElementById('eDel').value;
             p.cod_fee = document.getElementById('eCod').value;
+            p.stockQty = document.getElementById('eStockQty') ? document.getElementById('eStockQty').value : p.stockQty;
+            p.inStock = document.getElementById('eStockToggle') ? (document.getElementById('eStockToggle').value === 'on') : p.inStock;
             p.desc = document.getElementById('eDesc').value;
             p.video = document.getElementById('eVideo').value;
 
@@ -942,6 +973,8 @@
                 p.originalPrice = document.getElementById('eOldPrice').value;
                 p.delivery = document.getElementById('eDel').value;
                 p.cod_fee = document.getElementById('eCod').value;
+                p.stockQty = document.getElementById('eStockQty') ? document.getElementById('eStockQty').value : p.stockQty;
+                p.inStock = document.getElementById('eStockToggle') ? (document.getElementById('eStockToggle').value === 'on') : p.inStock;
                 p.desc = document.getElementById('eDesc').value;
                 p.video = document.getElementById('eVideo').value;
                 p.variations = currentEditingVariations;
@@ -971,6 +1004,8 @@
                         p.originalPrice = document.getElementById('eOldPrice').value;
                         p.delivery = document.getElementById('eDel').value;
                         p.cod_fee = document.getElementById('eCod').value;
+                        p.stockQty = document.getElementById('eStockQty') ? document.getElementById('eStockQty').value : p.stockQty;
+                        p.inStock = document.getElementById('eStockToggle') ? (document.getElementById('eStockToggle').value === 'on') : p.inStock;
                         p.desc = document.getElementById('eDesc').value;
                         p.video = document.getElementById('eVideo').value;
                         p.variations = currentEditingVariations;
@@ -992,6 +1027,8 @@
             p.originalPrice = document.getElementById('eOldPrice').value;
             p.delivery = document.getElementById('eDel').value;
             p.cod_fee = document.getElementById('eCod').value;
+            p.stockQty = document.getElementById('eStockQty') ? document.getElementById('eStockQty').value : p.stockQty;
+            p.inStock = document.getElementById('eStockToggle') ? (document.getElementById('eStockToggle').value === 'on') : p.inStock;
             p.desc = document.getElementById('eDesc').value;
             p.video = document.getElementById('eVideo').value;
             p.variations = currentEditingVariations;
@@ -1128,6 +1165,8 @@
                 originalPrice: document.getElementById('eOldPrice').value, 
                 delivery: document.getElementById('eDel').value, 
                 cod_fee: document.getElementById('eCod').value, 
+                stockQty: document.getElementById('eStockQty').value.trim() !== '' ? document.getElementById('eStockQty').value.trim() : null,
+                inStock: document.getElementById('eStockToggle').value === 'on',
                 desc: document.getElementById('eDesc').value, 
                 video: videoValue,
                 variations: cleanVariationsPayload
@@ -1582,6 +1621,8 @@
                     originalPrice: document.getElementById('pOldPrice').value, 
                     delivery: document.getElementById('pDelivery').value, 
                     cod_fee: document.getElementById('pCod').value, 
+                    stockQty: document.getElementById('pStockQty').value.trim() !== '' ? document.getElementById('pStockQty').value.trim() : null,
+                    inStock: document.getElementById('pStockToggle').value === 'on',
                     desc: document.getElementById('pDesc').value, 
                     video: document.getElementById('pVideo').value, 
                     images: uploadedUrls, 
