@@ -340,15 +340,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
         function trackPixelEvent(eventName, eventData) {
             try {
-                if (window.fbq) {
-                    fbq('track', eventName, eventData);
-                }
-                if (window.ttq) {
-                    ttq.track(eventName, eventData);
-                }
-            } catch(err) {
-                console.error("Pixel tracking error for " + eventName + ":", err);
-            }
+                if (window.fbq) { fbq('track', eventName, eventData); }
+                if (window.ttq) { ttq.track(eventName, eventData); }
+            } catch(err) { console.error("Pixel error:", err); }
         }
 
         function loadCheckout() {
@@ -376,19 +370,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 container.innerHTML += `<div class="flex items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-100"><img src="${item.img}" class="w-16 h-16 rounded-xl object-cover"><div class="flex-1"><div class="text-[12px] font-bold text-slate-800 line-clamp-1">${item.name}</div><div class="text-[#1d4ed8] font-extrabold text-[13px]">${item.price}</div>${varDisplayTag}<div class="flex items-center gap-3 mt-2"><button onclick="updateQty(${index}, -1)" class="qty-btn text-slate-600">-</button><span class="text-sm font-bold text-slate-800">${qty}</span><button onclick="updateQty(${index}, 1)" class="qty-btn text-slate-900">+</button></div></div><button onclick="removeItem(${index})" class="text-red-400 p-2 active:scale-90 transition"><i class="fa-solid fa-trash-can"></i></button></div>`;
             });
             
-            trackPixelEvent('ViewContent', {
-                contents: contentNames.map(name => ({ content_name: name })),
-                content_type: 'product',
-                value: baseSubtotal,
-                currency: 'PKR'
-            });
-
-            trackPixelEvent('InitiateCheckout', {
-                contents: contentNames.map(name => ({ content_name: name })),
-                value: baseSubtotal,
-                currency: 'PKR'
-            });
-
+            trackPixelEvent('ViewContent', { contents: contentNames.map(name => ({ content_name: name })), content_type: 'product', value: baseSubtotal, currency: 'PKR' });
+            trackPixelEvent('InitiateCheckout', { contents: contentNames.map(name => ({ content_name: name })), value: baseSubtotal, currency: 'PKR' });
             updateTotals();
         }
 
@@ -396,32 +379,17 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             cart[index].quantity = (cart[index].quantity || 1) + change; 
             if(cart[index].quantity < 1) cart[index].quantity = 1; 
             
-            if(isBuyNowFlow) {
-                localStorage.setItem('buyNowCart', JSON.stringify(cart));
-            } else {
-                localStorage.setItem('cart', JSON.stringify(cart));
-            }
-
+            if(isBuyNowFlow) { localStorage.setItem('buyNowCart', JSON.stringify(cart)); } else { localStorage.setItem('cart', JSON.stringify(cart)); }
             if (change > 0 && cart[index]) {
                 const itemPrice = parseInt(cart[index].price.toString().replace(/[^\d]/g, '')) || 0;
-                trackPixelEvent('AddToCart', {
-                    contents: [{ content_name: cart[index].name, quantity: 1, price: itemPrice }],
-                    content_type: 'product',
-                    value: itemPrice,
-                    currency: 'PKR'
-                });
+                trackPixelEvent('AddToCart', { contents: [{ content_name: cart[index].name, quantity: 1, price: itemPrice }], content_type: 'product', value: itemPrice, currency: 'PKR' });
             }
-
             loadCheckout(); 
         }
         
         function removeItem(index) { 
             cart.splice(index, 1); 
-            if(isBuyNowFlow) {
-                localStorage.setItem('buyNowCart', JSON.stringify(cart));
-            } else {
-                localStorage.setItem('cart', JSON.stringify(cart));
-            }
+            if(isBuyNowFlow) { localStorage.setItem('buyNowCart', JSON.stringify(cart)); } else { localStorage.setItem('cart', JSON.stringify(cart)); }
             loadCheckout(); 
         }
 
@@ -442,13 +410,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         window.addEventListener('pageshow', function(event) {
             if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
                 const checkBuyNow = localStorage.getItem('buyNowCart');
-                if (checkBuyNow) {
-                    cart = JSON.parse(checkBuyNow) || [];
-                    isBuyNowFlow = true;
-                } else {
-                    cart = JSON.parse(localStorage.getItem('cart')) || [];
-                    isBuyNowFlow = false;
-                }
+                if (checkBuyNow) { cart = JSON.parse(checkBuyNow) || []; isBuyNowFlow = true; } else { cart = JSON.parse(localStorage.getItem('cart')) || []; isBuyNowFlow = false; }
                 loadCheckout();
             }
         });
@@ -485,15 +447,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             btn.classList.add("is-animating");
             
             const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            const waitTime = reduceMotion ? 0 : 5600; // Truck animation takes exactly 5.6s to drop package
+            // Truck tick animation takes exactly 5.84s to show up.
+            const tickWaitTime = reduceMotion ? 0 : 5840; 
 
             if (reduceMotion) { btn.classList.add("is-complete"); }
 
-            // Promise 1: The animation timer
-            const animationTimer = new Promise(resolve => setTimeout(resolve, waitTime));
-
-            // Promise 2: All backend tasks running silently in background
-            const backendTasks = (async () => {
+            // 3. START BACKEND TASKS SILENTLY IN THE BACKGROUND
+            const backendPromise = (async () => {
                 const sub = document.getElementById('subtotal').innerText;
                 const del = document.getElementById('delivery-total').innerText;
                 const codF = method === 'cod' ? ("Rs. " + baseCodFee) : "Rs. 0";
@@ -533,19 +493,23 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             })();
 
             try {
-                // 3. WAIT FOR BOTH ANIMATION & BACKEND TO FINISH
-                const [_, fullWaMessage] = await Promise.all([animationTimer, backendTasks]);
+                // 4. WAIT EXACTLY 5.84s (JUST FOR THE VISUAL TRUCK ANIMATION TO FINISH)
+                await new Promise(resolve => setTimeout(resolve, tickWaitTime));
                 
-                // 4. FIREWORKS AND SUCCESS OVERLAY
+                // 5. TRUCK HAS ARRIVED! INSTANTLY FIRE CONFETTI & SUCCESS OVERLAY
                 sendLiveSignal("Order Placed");
                 triggerSuccessEffects();
                 
-                if (isBuyNowFlow) { localStorage.removeItem('buyNowCart'); } else { localStorage.removeItem('cart'); }
+                // 6. WAIT FOR BACKEND (IF IT'S STILL RUNNING) + 1.5s EXTRA TO ENJOY THE FIREWORKS
+                const [fullWaMessage] = await Promise.all([
+                    backendPromise, 
+                    new Promise(resolve => setTimeout(resolve, 1500)) 
+                ]);
                 
-                // 5. REDIRECT AFTER 1.5 SECONDS OF FIREWORKS
-                setTimeout(() => { 
-                    window.location.href = `whatsapp://send?phone=923065472228&text=${encodeURIComponent(fullWaMessage)}`; 
-                }, 1500);
+                // 7. CLEAR CART & REDIRECT TO WHATSAPP
+                if (isBuyNowFlow) { localStorage.removeItem('buyNowCart'); } else { localStorage.removeItem('cart'); }
+                window.location.href = `whatsapp://send?phone=923065472228&text=${encodeURIComponent(fullWaMessage)}`; 
+
             } catch(e) { 
                 console.error(e); Sentry.captureException(e); 
                 alert("Error placing order. Please try again."); 
