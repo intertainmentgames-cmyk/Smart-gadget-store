@@ -130,7 +130,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         @media (prefers-reduced-motion: reduce) { .order-button, .button-label, .checkmark { transition-duration: 1ms; } .order-button.is-complete .button-label--default { --opacity: 0; } .order-button.is-complete .button-label--success, .order-button.is-complete .checkmark { transition-delay: 0ms; } }
     </style>
 </head>
-<body class="bg-slate-50 pb-32">
+<body class="bg-slate-50 pb-10">
 
     <div id="successOverlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/90 hidden backdrop-blur-sm">
         <div class="relative flex items-center justify-center bg-green-500 rounded-full w-24 h-24 shadow-[0_0_30px_rgba(34,197,94,0.4)] animate-bounce">
@@ -276,28 +276,29 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- REPLACED BOTTOM BUTTON AREA WITH ANIMATED BUTTON -->
-    <div class="fixed bottom-0 left-0 w-full p-4 bg-white/90 border-t border-slate-100 z-50 flex justify-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <button id="orderBtn" class="order-button" type="button" aria-label="Confirm Order" onclick="placeOrder()">
-            <span class="button-label button-label--default">Confirm Order</span>
-            <span class="button-label button-label--success">
-                Order Placed
-                <span class="checkmark" aria-hidden="true"></span>
-            </span>
-            <span class="package" aria-hidden="true"></span>
-            <span class="truck" aria-hidden="true">
-                <span class="truck__cargo"></span>
-                <span class="truck__cab">
-                    <span class="truck__window"></span>
+        <!-- BUTTON NOW INSIDE CONTAINER AT THE BOTTOM, NO LONGER FLOATING -->
+        <div class="mt-8 mb-6 flex justify-center w-full">
+            <button id="orderBtn" class="order-button" type="button" aria-label="Confirm Order" onclick="placeOrder()">
+                <span class="button-label button-label--default">Confirm Order</span>
+                <span class="button-label button-label--success">
+                    Order Placed
+                    <span class="checkmark" aria-hidden="true"></span>
                 </span>
-                <span class="truck__light truck__light--top"></span>
-                <span class="truck__light truck__light--bottom"></span>
-            </span>
-            <span class="road" aria-hidden="true"></span>
-        </button>
-    </div>
+                <span class="package" aria-hidden="true"></span>
+                <span class="truck" aria-hidden="true">
+                    <span class="truck__cargo"></span>
+                    <span class="truck__cab">
+                        <span class="truck__window"></span>
+                    </span>
+                    <span class="truck__light truck__light--top"></span>
+                    <span class="truck__light truck__light--bottom"></span>
+                </span>
+                <span class="road" aria-hidden="true"></span>
+            </button>
+        </div>
+
+    </div> <!-- End of max-w-lg mx-auto container -->
 
     <script>
         (function(){ emailjs.init({ publicKey: "hUB2Fd1u6Uxou_Na0" }); })();
@@ -423,7 +424,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
         function isValidPakPhone(num) { return /^03\d{9}$/.test(num); }
 
-        async function placeOrder() {
+        function placeOrder() {
             const fName = document.getElementById('firstName').value.trim();
             const lName = document.getElementById('lastName').value.trim();
             const cEmail = document.getElementById('custEmail').value.trim();
@@ -447,75 +448,63 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             btn.classList.add("is-animating");
             
             const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            // Truck tick animation takes exactly 5.84s to show up.
             const tickWaitTime = reduceMotion ? 0 : 5840; 
-
             if (reduceMotion) { btn.classList.add("is-complete"); }
 
-            // 3. START BACKEND TASKS SILENTLY IN THE BACKGROUND
-            const backendPromise = (async () => {
-                const sub = document.getElementById('subtotal').innerText;
-                const del = document.getElementById('delivery-total').innerText;
-                const codF = method === 'cod' ? ("Rs. " + baseCodFee) : "Rs. 0";
-                const grand = document.getElementById('grand-total').innerText;
-                const itemsString = cart.map(i => { let text = `📦 ${i.name} x ${i.quantity || 1}`; if (i.variation && i.variation.trim() !== "") { text += `\n   - Option: ${i.variation}`; } return text; }).join('\n');
-                const itemSummary = cart.map(i => { let nameStr = i.name; if (i.variation && i.variation.trim() !== "") { nameStr += ` (${i.variation})`; } return `${nameStr} (x${i.quantity || 1})`; }).join(', ');
+            const sub = document.getElementById('subtotal').innerText;
+            const del = document.getElementById('delivery-total').innerText;
+            const codF = method === 'cod' ? ("Rs. " + baseCodFee) : "Rs. 0";
+            const grand = document.getElementById('grand-total').innerText;
+            const itemsString = cart.map(i => { let text = `📦 ${i.name} x ${i.quantity || 1}`; if (i.variation && i.variation.trim() !== "") { text += `\n   - Option: ${i.variation}`; } return text; }).join('\n');
+            const itemSummary = cart.map(i => { let nameStr = i.name; if (i.variation && i.variation.trim() !== "") { nameStr += ` (${i.variation})`; } return `${nameStr} (x${i.quantity || 1})`; }).join(', ');
 
-                let ssUrl = method === 'cod' ? "No Screenshot (COD)" : "Not Uploaded";
-                
-                const statusSnap = await database.ref('settings/emailStatus').get();
-                const isEmailEnabled = statusSnap.val() === 'on';
-                
-                if(ssFile && method === 'advance') { 
-                    const formData = new FormData(); 
-                    formData.append("image", ssFile); 
-                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`, { method: "POST", body: formData }); 
-                    const data = await res.json(); 
-                    ssUrl = data.data.url; 
-                }
-                
-                const emailParams = { customer_name: (fName + " " + lName), customer_email: cEmail, customer_phone: phone, customer_whatsapp: whatsapp, customer_city: city, customer_address: (address + " " + apt), order_items: itemSummary, subtotal: sub, delivery_charges: del, cod_fee: codF, total_bill: grand, payment_method: method.toUpperCase(), screenshot_url: ssUrl };
-                const promises = [];
-                
-                if (isEmailEnabled) { 
-                    promises.push(emailjs.send("service_qk7vqye", "template_dznvwme", emailParams)); 
-                    promises.push(emailjs.send("service_qk7vqye", "template_r5r1vkr", emailParams)); 
-                }
-                promises.push(database.ref('orders').push({ customerName: `${fName} ${lName}`, customerPhone: phone, whatsapp: whatsapp, whatsappNo: whatsapp, emailAddress: cEmail, deliveryCharges: del, codFee: codF, customerCity: city, customerAddress: `${address} ${apt}`, productName: itemSummary, price: grand, paymentMethod: method, screenshot: ssUrl, date: new Date().toLocaleString() }));
-                
-                await Promise.all(promises);
-                
-                const numericPrice = parseInt(grand.replace(/[^\d]/g, '')) || 0; 
-                if (window.fbq) { fbq('track', 'Purchase', { value: numericPrice, currency: 'PKR', content_type: 'product', contents: cart.map(item => ({ id: item.name, quantity: item.quantity || 1, item_price: parseInt(item.price.toString().replace(/[^\d]/g, '')) || 0 })) }); }
-                if (window.ttq) { ttq.track('CompletePayment', { value: numericPrice, currency: 'PKR', content_type: 'product', contents: cart.map(item => ({ content_id: item.name, content_name: item.name, quantity: item.quantity || 1, price: parseInt(item.price.toString().replace(/[^\d]/g, '')) || 0 })) }); }
-                
-                return `*🚀 NEW ORDER - BRAND BAZAAR 🚀*\n\n👤 *Name:* ${fName} ${lName}\n📧 *Email:* ${cEmail}\n📞 *Phone:* ${phone}\n🟢 *WhatsApp:* ${whatsapp}\n📍 *City:* ${city}\n🏠 *Address:* ${address} ${apt}\n\n*--- ITEMS ---*\n${itemsString}\n\n*--- BILLING ---*\n💰 *Subtotal:* ${sub}\n🚚 *Delivery:* ${del}\n💳 *COD Fee:* ${codF}\n💵 *Total Bill:* ${grand}\n\n== *Method:* ${method.toUpperCase()}\n🖼️ *Screenshot:* ${ssUrl}`;
+            let ssUrl = method === 'cod' ? "No Screenshot (COD)" : "Not Uploaded";
+            let fullWaMessage = `*🚀 NEW ORDER - BRAND BAZAAR 🚀*\n\n👤 *Name:* ${fName} ${lName}\n📧 *Email:* ${cEmail}\n📞 *Phone:* ${phone}\n🟢 *WhatsApp:* ${whatsapp}\n📍 *City:* ${city}\n🏠 *Address:* ${address} ${apt}\n\n*--- ITEMS ---*\n${itemsString}\n\n*--- BILLING ---*\n💰 *Subtotal:* ${sub}\n🚚 *Delivery:* ${del}\n💳 *COD Fee:* ${codF}\n💵 *Total Bill:* ${grand}\n\n== *Method:* ${method.toUpperCase()}`;
+
+            // 3. BACKGROUND TASKS (DO NOT BLOCK ANIMATION)
+            (async () => {
+                try {
+                    const statusSnap = await database.ref('settings/emailStatus').get();
+                    const isEmailEnabled = statusSnap.val() === 'on';
+                    
+                    if(ssFile && method === 'advance') { 
+                        const formData = new FormData(); 
+                        formData.append("image", ssFile); 
+                        const res = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`, { method: "POST", body: formData }); 
+                        const data = await res.json(); 
+                        ssUrl = data.data.url; 
+                        fullWaMessage += `\n🖼️ *Screenshot:* ${ssUrl}`; 
+                    } else {
+                        fullWaMessage += `\n🖼️ *Screenshot:* ${ssUrl}`;
+                    }
+                    
+                    const emailParams = { customer_name: (fName + " " + lName), customer_email: cEmail, customer_phone: phone, customer_whatsapp: whatsapp, customer_city: city, customer_address: (address + " " + apt), order_items: itemSummary, subtotal: sub, delivery_charges: del, cod_fee: codF, total_bill: grand, payment_method: method.toUpperCase(), screenshot_url: ssUrl };
+                    const promises = [];
+                    
+                    if (isEmailEnabled) { 
+                        promises.push(emailjs.send("service_qk7vqye", "template_dznvwme", emailParams).catch(e=>console.log(e))); 
+                        promises.push(emailjs.send("service_qk7vqye", "template_r5r1vkr", emailParams).catch(e=>console.log(e))); 
+                    }
+                    promises.push(database.ref('orders').push({ customerName: `${fName} ${lName}`, customerPhone: phone, whatsapp: whatsapp, whatsappNo: whatsapp, emailAddress: cEmail, deliveryCharges: del, codFee: codF, customerCity: city, customerAddress: `${address} ${apt}`, productName: itemSummary, price: grand, paymentMethod: method, screenshot: ssUrl, date: new Date().toLocaleString() }).catch(e=>console.log(e)));
+                    
+                    await Promise.all(promises);
+                    
+                    const numericPrice = parseInt(grand.replace(/[^\d]/g, '')) || 0; 
+                    try { if (window.fbq) { fbq('track', 'Purchase', { value: numericPrice, currency: 'PKR', content_type: 'product', contents: cart.map(item => ({ id: item.name, quantity: item.quantity || 1, item_price: parseInt(item.price.toString().replace(/[^\d]/g, '')) || 0 })) }); } } catch(e){}
+                    try { if (window.ttq) { ttq.track('CompletePayment', { value: numericPrice, currency: 'PKR', content_type: 'product', contents: cart.map(item => ({ content_id: item.name, content_name: item.name, quantity: item.quantity || 1, price: parseInt(item.price.toString().replace(/[^\d]/g, '')) || 0 })) }); } } catch(e){}
+                } catch(e) { console.error("Background task error:", e); }
             })();
 
-            try {
-                // 4. WAIT EXACTLY 5.84s (JUST FOR THE VISUAL TRUCK ANIMATION TO FINISH)
-                await new Promise(resolve => setTimeout(resolve, tickWaitTime));
-                
-                // 5. TRUCK HAS ARRIVED! INSTANTLY FIRE CONFETTI & SUCCESS OVERLAY
+            // 4. FOREGROUND ANIMATION TIMING (GUARANTEED TO RUN)
+            setTimeout(() => {
                 sendLiveSignal("Order Placed");
                 triggerSuccessEffects();
                 
-                // 6. WAIT FOR BACKEND (IF IT'S STILL RUNNING) + 1.5s EXTRA TO ENJOY THE FIREWORKS
-                const [fullWaMessage] = await Promise.all([
-                    backendPromise, 
-                    new Promise(resolve => setTimeout(resolve, 1500)) 
-                ]);
-                
-                // 7. CLEAR CART & REDIRECT TO WHATSAPP
-                if (isBuyNowFlow) { localStorage.removeItem('buyNowCart'); } else { localStorage.removeItem('cart'); }
-                window.location.href = `whatsapp://send?phone=923065472228&text=${encodeURIComponent(fullWaMessage)}`; 
-
-            } catch(e) { 
-                console.error(e); Sentry.captureException(e); 
-                alert("Error placing order. Please try again."); 
-                btn.classList.remove("is-animating");
-                btn.disabled = false; 
-            }
+                setTimeout(() => {
+                    if (isBuyNowFlow) { localStorage.removeItem('buyNowCart'); } else { localStorage.removeItem('cart'); }
+                    window.location.href = `whatsapp://send?phone=923065472228&text=${encodeURIComponent(fullWaMessage)}`;
+                }, 1500);
+            }, tickWaitTime);
         }
 
         loadCheckout();
