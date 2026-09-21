@@ -224,12 +224,12 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
 
         @keyframes cart-cycle {
           0%, 3% { opacity: 1; transform: translateY(-50%) translateX(0) rotate(0deg) scale(1); }
-          17%, 59% { opacity: 1; transform: translateY(-50%) translateX(var(--cart-travel)) rotate(0deg) scale(1.05); }
-          65% { transform: translateY(-50%) translateX(var(--cart-travel)) rotate(-11deg) scale(1.08); }
-          70% { transform: translateY(-50%) translateX(calc(var(--cart-travel) + 0.2rem)) rotate(15deg) scale(1.08); }
-          75% { transform: translateY(-50%) translateX(calc(var(--cart-travel) - 0.15rem)) rotate(-8deg) scale(1.05); }
-          80% { opacity: 1; transform: translateY(-50%) translateX(var(--cart-travel)) rotate(0deg) scale(1); }
-          88% { opacity: 0; transform: translateY(-50%) translateX(calc(var(--cart-travel) + 6rem)) rotate(0deg) scale(0.94); }
+          17%, 59% { opacity: 1; transform: translateY(-50%) translateX(calc(50% - 1.25rem)) rotate(0deg) scale(1.05); } /* Center Alignment Fix */
+          65% { transform: translateY(-50%) translateX(calc(50% - 1.25rem)) rotate(-11deg) scale(1.08); }
+          70% { transform: translateY(-50%) translateX(calc(50% - 1.05rem)) rotate(15deg) scale(1.08); }
+          75% { transform: translateY(-50%) translateX(calc(50% - 1.4rem)) rotate(-8deg) scale(1.05); }
+          80% { opacity: 1; transform: translateY(-50%) translateX(calc(50% - 1.25rem)) rotate(0deg) scale(1); }
+          88% { opacity: 0; transform: translateY(-50%) translateX(calc(100% + 1.25rem)) rotate(0deg) scale(0.94); } /* Move Off Screen Right */
           89% { opacity: 0; transform: translateY(-50%) translateX(-3rem) rotate(0deg) scale(0.95); }
           100% { opacity: 1; transform: translateY(-50%) translateX(0) rotate(0deg) scale(1); }
         }
