@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +36,11 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
         
         body { font-family: 'Poppins', sans-serif !important; background: #ffffff; color: #0f172a; overflow-x: hidden; width: 100%; position: relative; }
-        :root { --primary-color: #1a56db; }
+        :root { 
+          --primary-color: #1a56db; 
+          --anim-duration: 2.45s;
+          --check: #22c55e;
+        }
         
         .glass { background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); }
         .main-nav { background: white; border-bottom: 1px solid rgba(241, 245, 249, 0.5); display: flex; align-items: center; position: fixed; top: 0; width: 100%; z-index: 5000; }
@@ -55,7 +57,7 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         
         .cart-drawer { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 85%; max-width: 350px; background: white; height: 100dvh; position: fixed; right: -110%; top: 0; z-index: 6000; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
         .cart-drawer.active { right: 0; }
-        .cart-header { padding: 15px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-weight: 700 !important; font-size: 16px; flex-shrink: 0; }
+        .cart-header { padding: 15px; border-bottom: 1px solid #f1f5f9; display: flex; justify-between; align-items: center; font-weight: 700 !important; font-size: 16px; flex-shrink: 0; }
 
         #cartItemsList { flex: 1; overflow-y: auto; padding: 1rem; }
         .cart-footer { padding: 15px; border-top: 1px solid #f1f5f9; background: white; flex-shrink: 0; padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
@@ -92,6 +94,168 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         .buy-btn-disabled {
             opacity: 0.5;
             filter: grayscale(30%);
+            pointer-events: none;
+        }
+
+        /* =============================================
+           FIXED & PERFECTLY CENTERED ANIMATION CSS
+           ============================================= */
+        .cart-button {
+          --button-width: 100%;
+          --button-bg: #f1f5f9;
+          --button-fg: #0f172a;
+
+          position: relative;
+          width: var(--button-width);
+          height: 3.5rem;
+          padding: 0;
+          overflow: hidden;
+          border: 0;
+          border-radius: 0.75rem;
+          color: var(--button-fg);
+          background: var(--button-bg);
+          font-weight: 700;
+          font-size: 15px;
+          cursor: pointer;
+          isolation: isolate;
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
+          transition: transform 170ms ease, background 200ms ease;
+        }
+
+        .cart-button:active:not(:disabled) {
+          transform: scale(0.97);
+        }
+
+        .cart-button__stage {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: inherit;
+          color: inherit;
+        }
+
+        .cart-button__label {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          white-space: nowrap;
+          line-height: 1;
+          opacity: 1;
+          padding-left: 1.5rem; /* Text ko center mein set karta hai cart ke sath idle state mein */
+          transition: opacity 200ms ease;
+        }
+
+        .cart-button__cart {
+          position: absolute;
+          top: 50%;
+          left: 1.25rem; /* Start position left side par */
+          width: 1.5rem;
+          height: 1.5rem;
+          overflow: visible;
+          fill: none;
+          stroke: currentColor;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          stroke-width: 2.1;
+          transform: translate(0, -50%);
+          transform-origin: 50% 70%;
+        }
+
+        .cart-button__basket-fill {
+          fill: currentColor;
+          stroke: none;
+          opacity: 0;
+        }
+
+        .cart-button__check {
+          fill: none;
+          stroke: var(--check);
+          stroke-dasharray: 9;
+          stroke-dashoffset: 9;
+          stroke-width: 2.4;
+        }
+
+        .cart-button__shirt {
+          position: absolute;
+          z-index: 3;
+          top: 50%;
+          left: 50%; /* Hamesha perfect center mein rahegi */
+          width: 1.15rem;
+          height: 1.15rem;
+          overflow: visible;
+          fill: #1a56db;
+          opacity: 0;
+          filter: drop-shadow(0 0.12rem 0.08rem rgba(0, 0, 0, 0.15));
+          pointer-events: none;
+        }
+
+        .cart-button.is-animating .cart-button__label {
+          animation: label-cycle var(--anim-duration) cubic-bezier(0.22, 0.7, 0.2, 1) both;
+        }
+
+        .cart-button.is-animating .cart-button__cart {
+          animation: cart-cycle var(--anim-duration) cubic-bezier(0.22, 0.72, 0.2, 1) both;
+        }
+
+        .cart-button.is-animating .cart-button__basket-fill {
+          animation: basket-fill var(--anim-duration) ease-in-out both;
+        }
+
+        .cart-button.is-animating .cart-button__check {
+          animation: check-draw var(--anim-duration) ease-in-out both;
+        }
+
+        .cart-button.is-animating .cart-button__shirt {
+          animation: shirt-cycle var(--anim-duration) cubic-bezier(0.22, 0.7, 0.2, 1) both;
+        }
+
+        /* Text ko fade kar ke chupane ki animation */
+        @keyframes label-cycle {
+          0%, 3% { opacity: 1; transform: scale(1); }
+          12% { opacity: 0; transform: scale(0.8) translateY(-10px); }
+          85% { opacity: 0; transform: scale(0.8) translateY(10px); }
+          94%, 100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Cart ko perfectly center me lane ki animation */
+        @keyframes cart-cycle {
+          0%, 3% { left: 1.25rem; transform: translate(0, -50%) rotate(0deg) scale(1); opacity: 1; }
+          17%, 59% { left: 50%; transform: translate(-50%, -50%) rotate(0deg) scale(1.05); opacity: 1; } /* Exact Center */
+          65% { left: 50%; transform: translate(-50%, -50%) rotate(-11deg) scale(1.08); }
+          70% { left: 50%; transform: translate(-50%, -50%) rotate(15deg) scale(1.08); }
+          75% { left: 50%; transform: translate(-50%, -50%) rotate(-8deg) scale(1.05); }
+          80% { left: 50%; transform: translate(-50%, -50%) rotate(0deg) scale(1); opacity: 1; }
+          88% { left: 100%; transform: translate(100%, -50%) rotate(0deg) scale(0.94); opacity: 0; }
+          89% { left: -2rem; transform: translate(0, -50%) rotate(0deg) scale(0.95); opacity: 0; }
+          100% { left: 1.25rem; transform: translate(0, -50%) rotate(0deg) scale(1); opacity: 1; }
+        }
+
+        @keyframes basket-fill {
+          0%, 53% { opacity: 0; }
+          59%, 79% { opacity: 1; }
+          87%, 100% { opacity: 0; }
+        }
+
+        @keyframes check-draw {
+          0%, 56% { opacity: 0; stroke-dashoffset: 9; }
+          62%, 80% { opacity: 1; stroke-dashoffset: 0; }
+          87%, 100% { opacity: 0; stroke-dashoffset: 0; }
+        }
+
+        /* Shirt ko center me girane ki animation */
+        @keyframes shirt-cycle {
+          0%, 8% { opacity: 0; transform: translate(-50%, -50%) translateY(0.35rem) scale(0.3); }
+          11% { opacity: 0.2; transform: translate(-50%, -50%) translateY(0) scale(0.38); }
+          16% { opacity: 1; transform: translate(-50%, -50%) translateY(-1.55rem) scale(0.76); }
+          25% { opacity: 1; transform: translate(-50%, -50%) translateY(-2.8rem) scale(1); }
+          38% { opacity: 1; transform: translate(-50%, -50%) translateY(-2.95rem) scale(1); }
+          52% { opacity: 1; transform: translate(-50%, -50%) translateY(-1.2rem) scale(0.9); }
+          60% { opacity: 1; transform: translate(-50%, -50%) translateY(-0.1rem) scale(0.65); }
+          65%, 100% { opacity: 0; transform: translate(-50%, -50%) translateY(0.2rem) scale(0.24); }
         }
     </style>
 </head>
@@ -337,9 +501,26 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         <img id="lightboxImg" src="" class="max-w-full max-h-full rounded-xl object-contain">
     </div>
 
-    <div class="fixed bottom-0 left-0 w-full p-4 bg-white/95 backdrop-blur-md border-t border-slate-100 flex gap-3 z-40">
-        <button id="addToCartBtn" onclick="handleAddToCart()" class="flex-1 bg-slate-100 text-slate-900 py-4 rounded-xl font-bold text-[15px]">Add to Cart</button>
-        <button id="buyNowBtn" onclick="handleBuyNow()" class="flex-1 bg-[#1a56db] text-white py-4 rounded-xl font-bold text-[15px] shadow-lg shadow-blue-100/50">Buy Now</button>
+    <!-- BOTTOM ACTION BAR WITH ANIMATED ADD TO CART BUTTON -->
+    <div class="fixed bottom-0 left-0 w-full p-4 bg-white/95 backdrop-blur-md border-t border-slate-100 flex gap-3 z-40 items-center">
+        
+        <button id="addToCartBtn" onclick="handleAddToCart()" class="cart-button flex-1" type="button" aria-label="Add item to cart">
+          <span class="cart-button__stage" aria-hidden="true">
+            <svg class="cart-button__cart" viewBox="0 0 32 32">
+              <path class="cart-button__basket-fill" d="M9.2 11.2h17.3l-2.1 8.5H11.3z"/>
+              <path d="M3.8 6.2h3.5l3.2 14.1a2.1 2.1 0 0 0 2.1 1.7h11.5a2.1 2.1 0 0 0 2-1.5l2.1-8.6H9.1"/>
+              <path d="M13.1 26.2h.1M23.4 26.2h.1"/>
+              <path class="cart-button__check" d="m14.1 15.7 2.1 2.1 4.3-4.6"/>
+            </svg>
+            <span class="cart-button__label">Add to Cart</span>
+          </span>
+
+          <svg class="cart-button__shirt" aria-hidden="true" viewBox="0 0 32 32">
+            <path d="M10.6 5.1 13 3.8c.7 1.5 1.7 2.2 3 2.2s2.3-.7 3-2.2l2.4 1.3 5.2 5-3.9 4-2.1-1.8V28h-9.2V12.3l-2.1 1.8-3.9-4z"/>
+          </svg>
+        </button>
+
+        <button id="buyNowBtn" onclick="handleBuyNow()" class="flex-1 bg-[#1a56db] text-white h-[3.5rem] rounded-xl font-bold text-[15px] shadow-lg shadow-blue-100/50">Buy Now</button>
     </div>
 
     <script>
@@ -363,8 +544,8 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         // Review Form States
         let currentSelectedRating = 5;
         let reviewFeedbackText = "";
-        let reviewBase64Images = []; // Multiple images array
-        let indexToReplaceImage = -1; // Stores target image index when changing photo
+        let reviewBase64Images = []; 
+        let indexToReplaceImage = -1; 
 
         let userUUID = localStorage.getItem('user_chat_id');
         if (!userUUID) {
@@ -430,12 +611,11 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
 
-        // --- STOCK STATUS RENDERING ---
         function renderStockStatus(p) {
             const container = document.getElementById('stockStatusContainer');
             if (!container) return;
 
-            const isInStock = p.inStock !== false; // default true if not explicitly set to false
+            const isInStock = p.inStock !== false;
 
             if (!isInStock) {
                 container.innerHTML = `<span class="inline-flex items-center text-xs font-bold text-red-600 bg-red-50 px-3 py-1.5 rounded-full border border-red-100"><i class="fa-solid fa-circle-xmark mr-1.5"></i>Out of Stock</span>`;
@@ -479,7 +659,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             hideModalWithAnim('outOfStockModal');
             document.getElementById('overlay').classList.remove('active');
         }
-        // --- END STOCK STATUS RENDERING ---
 
         if (productId) {
             database.ref('products/' + productId).once('value', (snapshot) => {
@@ -496,8 +675,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                     sendLiveSignal(`Viewing: ${p.name}`);
                     setInterval(() => { sendLiveSignal(`Viewing: ${p.name}`); }, 25000);
 
-                    // Records this page view in Firebase so admin panel's "Total Page Traffic"
-                    // and "Traffic History Trend" can show it
                     database.ref('site_traffic').push({
                         timestamp: Date.now(),
                         page: `Product: ${p.name}`
@@ -638,7 +815,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             });
         }
 
-        // --- REVIEW SYSTEM WITH MULTI-IMAGE & CHANGE CAPABILITY ---
         const ratingLabels = {
             1: "1 = Poor",
             2: "2 = Fair",
@@ -647,7 +823,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             5: "5 = Excellent"
         };
 
-        // Smooth Animation Helper
         function showModalWithAnim(modalId) {
             const modal = document.getElementById(modalId);
             const wrapper = modal.querySelector('.modal-wrapper');
@@ -680,9 +855,8 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             document.getElementById('overlay').classList.remove('active');
         }
 
-        // STEP 0: When clicking "Write a Review" button -> Ask Stars First
         function startReviewFlow() {
-            setModal0Stars(5); // Default 5 stars
+            setModal0Stars(5);
             document.getElementById('overlay').classList.add('active');
             showModalWithAnim('reviewModal0');
         }
@@ -710,7 +884,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             showModalWithAnim('reviewModal0');
         }
 
-        // Direct Click on page stars -> Goes directly to feedback popup (Step 1)
         function directStarClick(rating) {
             currentSelectedRating = rating;
             document.getElementById('overlay').classList.add('active');
@@ -735,7 +908,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             showModalWithAnim('reviewModal1');
         }
 
-        // Add new image to the list
         function addNewReviewImage(event) {
             const file = event.target.files[0];
             if (file) {
@@ -746,10 +918,9 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 };
                 reader.readAsDataURL(file);
             }
-            event.target.value = ""; // Reset input
+            event.target.value = "";
         }
 
-        // Click existing image to change/replace it
         function openReplaceImagePicker(index) {
             indexToReplaceImage = index;
             document.getElementById('replaceImageFileInput').click();
@@ -766,10 +937,9 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 };
                 reader.readAsDataURL(file);
             }
-            event.target.value = ""; // Reset input
+            event.target.value = "";
         }
 
-        // Render all image previews with Add, Edit, and Delete options
         function renderReviewImagePreviews() {
             const container = document.getElementById('reviewImagesPreviewContainer');
             container.innerHTML = `
@@ -834,8 +1004,8 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 productName: currentProduct ? currentProduct.name : "",
                 rating: currentSelectedRating,
                 feedback: reviewFeedbackText,
-                images: reviewBase64Images, // Saved as an array of images
-                image: reviewBase64Images.length > 0 ? reviewBase64Images[0] : "", // Backward compatibility for single image view
+                images: reviewBase64Images,
+                image: reviewBase64Images.length > 0 ? reviewBase64Images[0] : "",
                 name: authorName,
                 email: authorEmail,
                 timestamp: Date.now(),
@@ -902,7 +1072,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                             <p class="text-xs text-slate-700 leading-relaxed">${rev.feedback}</p>
                     `;
 
-                    // Render multiple images if available, else render single image
                     const revImages = rev.images || (rev.image ? [rev.image] : []);
                     if(revImages.length > 0) {
                         itemHtml += `<div class="mt-2 flex flex-wrap gap-2">`;
@@ -943,7 +1112,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             document.getElementById('imageLightboxModal').classList.remove('flex');
             document.getElementById('imageLightboxModal').classList.add('hidden');
         }
-        // --- END REVIEW SYSTEM ---
 
         function renderCart() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -993,28 +1161,41 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 return;
             }
 
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let finalPrice = (selectedVariationPrice && selectedVariationPrice.trim() !== '') ? 'Rs. ' + selectedVariationPrice : currentProduct.price;
+            const btn = document.getElementById('addToCartBtn');
+            if(btn.disabled) return;
 
-            let existingItem = cart.find(item => item.name === currentProduct.name && item.variation === selectedVariationName);
+            btn.disabled = true;
+            btn.classList.remove('is-animating');
+            void btn.offsetWidth;
+            btn.classList.add('is-animating');
 
-            if (existingItem) {
-                existingItem.quantity = (existingItem.quantity || 1) + 1;
-            } else {
-                cart.push({ 
-                    name: currentProduct.name, 
-                    price: finalPrice, 
-                    img: (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : (currentProduct.image || ''),
-                    deliveryCharges: currentProduct.delivery || 0,
-                    codFee: currentProduct.cod_fee || 0,
-                    variation: selectedVariationName,
-                    quantity: 1
-                });
-            }
+            setTimeout(() => {
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                let finalPrice = (selectedVariationPrice && selectedVariationPrice.trim() !== '') ? 'Rs. ' + selectedVariationPrice : currentProduct.price;
 
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount();
-            toggleCart();
+                let existingItem = cart.find(item => item.name === currentProduct.name && item.variation === selectedVariationName);
+
+                if (existingItem) {
+                    existingItem.quantity = (existingItem.quantity || 1) + 1;
+                } else {
+                    cart.push({ 
+                        name: currentProduct.name, 
+                        price: finalPrice, 
+                        img: (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : (currentProduct.image || ''),
+                        deliveryCharges: currentProduct.delivery || 0,
+                        codFee: currentProduct.cod_fee || 0,
+                        variation: selectedVariationName,
+                        quantity: 1
+                    });
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                
+                btn.classList.remove('is-animating');
+                btn.disabled = false;
+                toggleCart();
+            }, 2450);
         }
 
         function handleBuyNow() {
