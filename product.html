@@ -53,7 +53,7 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
 
         .sidebar { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 80%; max-width: 300px; background: white; height: 100vh; position: fixed; left: -110%; top: 0; z-index: 6000; }
         .sidebar.active { left: 0; }
-        .sidebar-header { background: var(--primary-color); color: #ffffff; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700 !important; font-size: 18px; }
+        .sidebar-header { background: var(--primary-color); color: #ffffff; padding: 18px 20px; display: flex; justify-between; align-items: center; font-weight: 700 !important; font-size: 18px; }
         
         .cart-drawer { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 85%; max-width: 350px; background: white; height: 100dvh; position: fixed; right: -110%; top: 0; z-index: 6000; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
         .cart-drawer.active { right: 0; }
@@ -98,12 +98,12 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         }
 
         /* =============================================
-           ANIMATED ADD TO CART BUTTON STYLES
+           FIXED & PERFECTLY ALIGNED ADD TO CART BUTTON
            ============================================= */
         .cart-button {
           --button-width: 100%;
           --cart-start: 1rem;
-          --cart-travel: 3.2rem;
+          --cart-travel: calc(50% - 1.75rem); /* Accurately travels to centre */
           --button-bg: #f1f5f9;
           --button-fg: #0f172a;
 
@@ -132,29 +132,29 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         .cart-button__stage {
           position: absolute;
           inset: 0;
-          display: block;
-          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           border-radius: inherit;
           color: inherit;
         }
 
         .cart-button__label {
-          position: absolute;
-          top: 50%;
-          left: 0;
-          right: 0;
-          text-align: center;
-          display: block;
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           white-space: nowrap;
           line-height: 1;
           opacity: 1;
-          transform: translateY(-50%);
+          margin-left: 1.5rem; /* Prevents overlapping with cart icon */
+          transition: opacity 200ms ease;
         }
 
         .cart-button__cart {
           position: absolute;
           top: 50%;
-          left: var(--cart-start);
+          left: 1.25rem;
           width: 1.5rem;
           height: 1.5rem;
           overflow: visible;
@@ -186,8 +186,8 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
           z-index: 3;
           top: 50%;
           left: 50%;
-          width: 1.1rem;
-          height: 1.1rem;
+          width: 1.15rem;
+          height: 1.15rem;
           overflow: visible;
           fill: #1a56db;
           opacity: 0;
@@ -216,20 +216,20 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         }
 
         @keyframes label-cycle {
-          0%, 3% { opacity: 1; transform: translateY(-50%) translateX(0); }
-          14% { opacity: 0; transform: translateY(-50%) translateX(-0.8rem); }
-          80% { opacity: 0; transform: translateY(-50%) translateX(1rem); }
-          94%, 100% { opacity: 1; transform: translateY(-50%) translateX(0); }
+          0%, 3% { opacity: 1; transform: translateX(0); }
+          14% { opacity: 0; transform: translateX(-0.8rem); }
+          80% { opacity: 0; transform: translateX(1rem); }
+          94%, 100% { opacity: 1; transform: translateX(0); }
         }
 
         @keyframes cart-cycle {
           0%, 3% { opacity: 1; transform: translateY(-50%) translateX(0) rotate(0deg) scale(1); }
-          17%, 59% { opacity: 1; transform: translateY(-50%) translateX(var(--cart-travel)) rotate(0deg) scale(1.04); }
+          17%, 59% { opacity: 1; transform: translateY(-50%) translateX(var(--cart-travel)) rotate(0deg) scale(1.05); }
           65% { transform: translateY(-50%) translateX(var(--cart-travel)) rotate(-11deg) scale(1.08); }
-          70% { transform: translateY(-50%) translateX(calc(var(--cart-travel) + 0.3rem)) rotate(15deg) scale(1.08); }
-          75% { transform: translateY(-50%) translateX(calc(var(--cart-travel) - 0.24rem)) rotate(-8deg) scale(1.05); }
+          70% { transform: translateY(-50%) translateX(calc(var(--cart-travel) + 0.2rem)) rotate(15deg) scale(1.08); }
+          75% { transform: translateY(-50%) translateX(calc(var(--cart-travel) - 0.15rem)) rotate(-8deg) scale(1.05); }
           80% { opacity: 1; transform: translateY(-50%) translateX(var(--cart-travel)) rotate(0deg) scale(1); }
-          88% { opacity: 0; transform: translateY(-50%) translateX(8rem) rotate(0deg) scale(0.94); }
+          88% { opacity: 0; transform: translateY(-50%) translateX(calc(var(--cart-travel) + 6rem)) rotate(0deg) scale(0.94); }
           89% { opacity: 0; transform: translateY(-50%) translateX(-3rem) rotate(0deg) scale(0.95); }
           100% { opacity: 1; transform: translateY(-50%) translateX(0) rotate(0deg) scale(1); }
         }
@@ -250,11 +250,11 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
           0%, 8% { opacity: 0; transform: translate(-50%, -50%) translateY(0.35rem) scale(0.3); }
           11% { opacity: 0.2; transform: translate(-50%, -50%) translateY(0) scale(0.38); }
           16% { opacity: 1; transform: translate(-50%, -50%) translateY(-1.55rem) scale(0.76); }
-          25% { opacity: 1; transform: translate(-50%, -50%) translateY(-3.15rem) scale(1); }
-          38% { opacity: 1; transform: translate(-50%, -50%) translateY(-3.3rem) scale(1); }
-          52% { opacity: 1; transform: translate(-50%, -50%) translateY(-1.5rem) scale(0.9); }
-          60% { opacity: 1; transform: translate(-50%, -50%) translateY(0.12rem) scale(0.58); }
-          65%, 100% { opacity: 0; transform: translate(-50%, -50%) translateY(0.5rem) scale(0.24); }
+          25% { opacity: 1; transform: translate(-50%, -50%) translateY(-2.8rem) scale(1); }
+          38% { opacity: 1; transform: translate(-50%, -50%) translateY(-2.95rem) scale(1); }
+          52% { opacity: 1; transform: translate(-50%, -50%) translateY(-1.2rem) scale(0.9); }
+          60% { opacity: 1; transform: translate(-50%, -50%) translateY(-0.1rem) scale(0.65); }
+          65%, 100% { opacity: 0; transform: translate(-50%, -50%) translateY(0.2rem) scale(0.24); }
         }
     </style>
 </head>
@@ -505,14 +505,13 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         
         <button id="addToCartBtn" onclick="handleAddToCart()" class="cart-button flex-1" type="button" aria-label="Add item to cart">
           <span class="cart-button__stage" aria-hidden="true">
-            <span class="cart-button__label">Add to Cart</span>
-
             <svg class="cart-button__cart" viewBox="0 0 32 32">
               <path class="cart-button__basket-fill" d="M9.2 11.2h17.3l-2.1 8.5H11.3z"/>
               <path d="M3.8 6.2h3.5l3.2 14.1a2.1 2.1 0 0 0 2.1 1.7h11.5a2.1 2.1 0 0 0 2-1.5l2.1-8.6H9.1"/>
               <path d="M13.1 26.2h.1M23.4 26.2h.1"/>
               <path class="cart-button__check" d="m14.1 15.7 2.1 2.1 4.3-4.6"/>
             </svg>
+            <span class="cart-button__label">Add to Cart</span>
           </span>
 
           <svg class="cart-button__shirt" aria-hidden="true" viewBox="0 0 32 32">
@@ -544,8 +543,8 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         // Review Form States
         let currentSelectedRating = 5;
         let reviewFeedbackText = "";
-        let reviewBase64Images = []; // Multiple images array
-        let indexToReplaceImage = -1; // Stores target image index when changing photo
+        let reviewBase64Images = []; 
+        let indexToReplaceImage = -1; 
 
         let userUUID = localStorage.getItem('user_chat_id');
         if (!userUUID) {
@@ -611,12 +610,11 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
 
-        // --- STOCK STATUS RENDERING ---
         function renderStockStatus(p) {
             const container = document.getElementById('stockStatusContainer');
             if (!container) return;
 
-            const isInStock = p.inStock !== false; // default true if not explicitly set to false
+            const isInStock = p.inStock !== false;
 
             if (!isInStock) {
                 container.innerHTML = `<span class="inline-flex items-center text-xs font-bold text-red-600 bg-red-50 px-3 py-1.5 rounded-full border border-red-100"><i class="fa-solid fa-circle-xmark mr-1.5"></i>Out of Stock</span>`;
@@ -660,7 +658,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             hideModalWithAnim('outOfStockModal');
             document.getElementById('overlay').classList.remove('active');
         }
-        // --- END STOCK STATUS RENDERING ---
 
         if (productId) {
             database.ref('products/' + productId).once('value', (snapshot) => {
@@ -677,7 +674,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                     sendLiveSignal(`Viewing: ${p.name}`);
                     setInterval(() => { sendLiveSignal(`Viewing: ${p.name}`); }, 25000);
 
-                    // Records page view in Firebase
                     database.ref('site_traffic').push({
                         timestamp: Date.now(),
                         page: `Product: ${p.name}`
@@ -818,7 +814,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             });
         }
 
-        // --- REVIEW SYSTEM ---
         const ratingLabels = {
             1: "1 = Poor",
             2: "2 = Fair",
@@ -1116,7 +1111,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             document.getElementById('imageLightboxModal').classList.remove('flex');
             document.getElementById('imageLightboxModal').classList.add('hidden');
         }
-        // --- END REVIEW SYSTEM ---
 
         function renderCart() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -1158,7 +1152,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             }
         }
 
-        // ANIMATED ADD TO CART HANDLER
         function handleAddToCart() {
             if(!currentProduct) return;
 
@@ -1170,13 +1163,11 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
             const btn = document.getElementById('addToCartBtn');
             if(btn.disabled) return;
 
-            // Trigger Animation
             btn.disabled = true;
             btn.classList.remove('is-animating');
-            void btn.offsetWidth; // Trigger Reflow
+            void btn.offsetWidth;
             btn.classList.add('is-animating');
 
-            // Save Cart Data & Open Drawer at completion
             setTimeout(() => {
                 let cart = JSON.parse(localStorage.getItem('cart')) || [];
                 let finalPrice = (selectedVariationPrice && selectedVariationPrice.trim() !== '') ? 'Rs. ' + selectedVariationPrice : currentProduct.price;
@@ -1200,7 +1191,6 @@ src="https://www.facebook.com/tr?id=979599958414541&ev=PageView&noscript=1"
                 localStorage.setItem('cart', JSON.stringify(cart));
                 updateCartCount();
                 
-                // Reset button for replay & open cart drawer
                 btn.classList.remove('is-animating');
                 btn.disabled = false;
                 toggleCart();
